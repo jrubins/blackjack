@@ -1,0 +1,10 @@
+.page-container {
+  max-width: $screen-lg-max;
+  margin: 60px auto 0;
+  padding: 0 20px 186px;
+
+  @media (max-width: $screen-md-max) {
+    margin-top: 30px;
+    padding: 0 $mobile-padding 60px;
+  }
+}
