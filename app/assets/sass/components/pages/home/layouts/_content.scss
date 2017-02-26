@@ -1,3 +1,26 @@
 .home-content-container {
+  .top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
+  .player-balance {
+    font-size: 18px;
+  }
+
+  .player-bet {
+    .input {
+      width: 100px;
+      margin-right: 15px;
+    }
+  }
+
+  .hands {
+    margin-top: 30px;
+  }
+
+  .hand-container {
+    margin-bottom: 20px;
+  }
 }

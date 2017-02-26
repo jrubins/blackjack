@@ -1,0 +1,19 @@
+.button {
+  position: relative;
+  max-width: 100%;
+  height: 40px;
+  padding: 0 15px;
+
+  border: 1px solid $light-grey;
+  border-radius: 4px;
+  outline: none;
+  background-color: $light-blue;
+  color: $white;
+
+  text-transform: uppercase;
+}
+
+.button-inverse {
+  background-color: $white;
+  color: $light-blue;
+}

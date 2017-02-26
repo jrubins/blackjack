@@ -1,0 +1,49 @@
+.hand-container {
+  display: flex;
+  flex-wrap: wrap;
+
+  .card-total {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+}
+
+.hand-waiting {
+  color: $light-grey;
+
+  font-size: 16px;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.hand-cards {
+  width: 75%;
+  height: $card-height;
+}
+
+.hand-card {
+  position: relative;
+
+  .card-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
+.player-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  width: 100%;
+  margin-top: 15px;
+
+  .button {
+    width: 48%;
+    margin-bottom: 15px;
+  }
+}

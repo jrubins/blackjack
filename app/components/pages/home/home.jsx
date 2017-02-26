@@ -4,8 +4,6 @@ import HomeContent from './layouts/content';
 
 const HomePage = () => (
   <div className="home-page-container page-container">
-    <h3>Blackjack</h3>
-
     <HomeContent />
   </div>
 );

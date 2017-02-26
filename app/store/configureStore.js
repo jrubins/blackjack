@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import ReduxThunk from 'redux-thunk';
+import persistState from 'redux-localstorage';
 
 import ReduxStoreSize from './middleware/reduxStoreSize';
 import {
@@ -21,6 +22,11 @@ export default function configureStore() {
     applyMiddleware(ReduxThunk),
 
     applyMiddleware(ReduxStoreSize),
+
+    // Persists specified state to local storage.
+    persistState([
+      'player',
+    ]),
 
     // Enables the Chrome Redux dev tools extension. It's awesome.
     ((process.env.APP_ENV === APP_ENV_LOCAL || process.env.APP_ENV === APP_ENV_STAGING) &&

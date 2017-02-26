@@ -1,5 +1,9 @@
 // Colors. Color names from: http://chir.ag/projects/name-that-color
+$dark-grey: #aaa;
 $light-black: #333;
+$light-blue: #42b4e6;
+$light-grey: #ddd;
+$red: #f00;
 $white: #fff;
 
 // Fonts.
@@ -12,6 +16,8 @@ $screen-md-max: 1024px;
 $screen-lg-min: 1230px;
 $screen-lg-max: 1366px;
 $mobile-padding: 15px;
+$card-width: 130px;
+$card-height: 180px;
 
 // Transitions.
 $bouncy-transition: cubic-bezier(.68, -.55, .27, 1.55);
