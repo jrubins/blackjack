@@ -214,7 +214,7 @@ HomeContent.propTypes = {
   playerBalance: PropTypes.number.isRequired,
   playerLost: PropTypes.func.isRequired,
   playerWon: PropTypes.func.isRequired,
-  setBet: PropTypes.fun.isRequired,
+  setBet: PropTypes.func.isRequired,
 };
 
 export default connect(state => ({
