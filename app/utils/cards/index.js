@@ -29,6 +29,13 @@ export function makeDeck(numDecks) {
 }
 
 export function dealCard() {
+  console.log('deck index:', deckIndex, deck.length);
+  if (deckIndex === deck.length) {
+    console.log('shuffling deck');
+    deck = _.shuffle(deck);
+    deckIndex = 0;
+  }
+
   return deck[deckIndex++];
 }
 
