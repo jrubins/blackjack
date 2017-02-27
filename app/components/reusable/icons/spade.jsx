@@ -2,7 +2,7 @@ import React from 'react';
 
 const SpadeIcon = () => (
   <svg
-    className="icon"
+    className="icon icon-spade"
     width="134"
     height="175"
     viewBox="0 0 134 175"

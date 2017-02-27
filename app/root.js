@@ -5,7 +5,6 @@ import { Router, browserHistory, applyRouterMiddleware } from 'react-router';
 import useScroll from 'react-router-scroll/lib/useScroll';
 
 import { ENV_DEV } from './utils/environment';
-import { setLogger } from './utils/logs';
 import routes from './routes';
 
 // Import our root SASS file to get built by Webpack.
@@ -15,9 +14,6 @@ import './assets/sass/app.scss';
 if (process.env.NODE_ENV === ENV_DEV) {
   window.Perf = Perf;
 }
-
-// Set our logger to be the browser console.
-setLogger(console);
 
 const Root = ({ store }) => (
   <Provider store={store}>

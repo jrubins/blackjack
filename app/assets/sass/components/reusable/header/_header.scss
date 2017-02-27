@@ -1,9 +1,75 @@
 header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   max-width: $max-width;
   margin: 0 auto;
   padding: $mobile-padding;
-  color: $light-blue;
+}
 
+.header-logo {
+  color: $light-blue;
   font-size: 18px;
   text-transform: uppercase;
+}
+
+.header-player {
+  display: flex;
+  align-items: center;
+
+  .player-balance {
+    margin-right: 20px;
+    color: $light-black;
+
+    font-size: 18px;
+  }
+}
+
+.mobile-navigation {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  left: 0;
+
+  width: 100%;
+  max-width: $max-width;
+  height: calc(100vh - 60px);
+  margin: 0 auto;
+  padding: 0 $mobile-padding;
+  transition: opacity 200ms ease, visibility 0s linear 200ms;
+  background-color: $white;
+  opacity: 0;
+  visibility: hidden;
+
+  z-index: $zindex-mobile-nav;
+
+  &.mobile-navigation-open {
+    transition-delay: 0s;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.ui-toggles {
+  h3 {
+    margin: 20px 0;
+    color: $light-grey;
+
+    font-size: 18px;
+    text-transform: uppercase;
+  }
+}
+
+.ui-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.ui-toggle-label {
+  display: inline-block;
+
+  width: 225px;
+
+  font-size: 22px;
 }

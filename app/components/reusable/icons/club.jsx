@@ -2,7 +2,7 @@ import React from 'react';
 
 const ClubIcon = () => (
   <svg
-    className="icon"
+    className="icon icon-club"
     width="240"
     height="260"
     viewBox="0 0 240 260"

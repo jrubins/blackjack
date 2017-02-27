@@ -11,14 +11,6 @@
   }
 }
 
-.hand-waiting {
-  color: $light-grey;
-
-  font-size: 16px;
-  font-style: italic;
-  font-weight: bold;
-}
-
 .hand-cards {
   width: 75%;
   height: $card-height;
@@ -31,19 +23,5 @@
     position: absolute;
     top: 0;
     left: 0;
-  }
-}
-
-.player-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-
-  width: 100%;
-  margin-top: 15px;
-
-  .button {
-    width: 48%;
-    margin-bottom: 15px;
   }
 }

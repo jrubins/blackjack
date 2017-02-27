@@ -1,23 +1,22 @@
 import { combineReducers } from 'redux';
 
 import {
+  DEDUCT_BALANCE,
   PLAYER_LOST,
   PLAYER_WON,
-  SET_BET,
 } from '../../actions';
 
 function balance(state = 100, action) {
   switch (action.type) {
-    case SET_BET:
+    case DEDUCT_BALANCE:
       return state - action.amount;
 
     case PLAYER_WON:
       return state + action.amount;
 
     case PLAYER_LOST:
+      // Temporary reset of balance when you run out.
       if (state === 0) {
-        console.log('Resetting money');
-
         return 100;
       }
 

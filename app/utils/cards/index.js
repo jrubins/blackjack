@@ -1,5 +1,26 @@
 import _ from 'lodash';
 
+import { debug } from '../logs';
+
+/**
+ * The current deck being used to deal cards.
+ *
+ * @type {Array}
+ */
+let deck = [];
+
+/**
+ * The current position in the deck.
+ *
+ * @type {Number}
+ */
+let deckIndex = 0;
+
+/**
+ * The different types of suits.
+ *
+ * @type {Object}
+ */
 export const SUITS = {
   CLUBS: 'clubs',
   DIAMONDS: 'diamonds',
@@ -7,9 +28,11 @@ export const SUITS = {
   SPADES: 'spades',
 };
 
-let deck = [];
-let deckIndex = 0;
-
+/**
+ * Creates a new deck with the number of decks provided.
+ *
+ * @param {Number} numDecks
+ */
 export function makeDeck(numDecks) {
   const suitKeys = _.values(SUITS);
 
@@ -25,13 +48,18 @@ export function makeDeck(numDecks) {
   }
 
   deck = _.shuffle(deck);
-  console.log(deck);
 }
 
+/**
+ * Deals the next card in the deck.
+ *
+ * @returns {Object}
+ */
 export function dealCard() {
-  console.log('deck index:', deckIndex, deck.length);
+  // Shuffle the deck if there are no more cards.
   if (deckIndex === deck.length) {
-    console.log('shuffling deck');
+    debug('Shuffling the deck...');
+
     deck = _.shuffle(deck);
     deckIndex = 0;
   }
@@ -39,6 +67,13 @@ export function dealCard() {
   return deck[deckIndex++];
 }
 
+/**
+ * Calculates the numerical total for the provided cards. Returns an object with a low and high value. If the two are
+ * not equal, then there is an ace in the cards.
+ *
+ * @param {Array} cards
+ * @returns {Object}
+ */
 export function sumCards(cards) {
   const cardTotal = cards.reduce((sum, { number }) => sum + Math.min(number, 10), 0);
   const hasAce = _.find(cards, { number: 1 });

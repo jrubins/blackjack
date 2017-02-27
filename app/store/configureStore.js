@@ -26,6 +26,7 @@ export default function configureStore() {
     // Persists specified state to local storage.
     persistState([
       'player',
+      'ui',
     ]),
 
     // Enables the Chrome Redux dev tools extension. It's awesome.

@@ -1,0 +1,64 @@
+.basic-strategy-notes {
+  display: flex;
+  position: relative;
+  flex-wrap: wrap;
+
+  padding: 10px;
+  box-shadow: 0 0 6px $light-grey;
+}
+
+.basic-strategy-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  padding: 10px 10px 0;
+
+  .icon {
+    width: 20px;
+    height: 20px;
+
+    path {
+      stroke-width: 2px;
+      stroke: $light-grey;
+    }
+  }
+}
+
+.basic-strategy-header {
+  width: 100%;
+  margin-bottom: 15px;
+
+  h3 {
+    margin: 0;
+
+    font-size: 16px;
+  }
+}
+
+.basic-strategy-content {
+  display: flex;
+}
+
+.basic-strategy-streak {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+
+  width: 70px;
+  height: 70px;
+  border: 1px solid $light-grey;
+  border-radius: 50%;
+
+  font-size: 24px;
+}
+
+.basic-strategy-comment {
+  display: flex;
+  align-items: center;
+
+  margin-left: 15px;
+
+  font-size: 16px;
+}

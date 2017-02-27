@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import _ from 'lodash';
 
 import { SUITS } from '../../../utils/cards';
 
@@ -63,7 +64,10 @@ const Card = ({ card, cardCovered }) => {
 };
 
 Card.propTypes = {
-  card: PropTypes.object.isRequired,
+  card: PropTypes.shape({
+    number: PropTypes.number.isRequired,
+    suit: PropTypes.oneOf(_.values(SUITS)).isRequired,
+  }).isRequired,
   cardCovered: PropTypes.bool,
 };
 
