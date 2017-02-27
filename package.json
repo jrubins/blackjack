@@ -5,7 +5,7 @@
   "author": "Jonathan Rubins <jonrubins@gmail.com>",
   "scripts": {
     "clean:deps": "rm -rf node_modules",
-    "build": "yarn run clean:deps && NODE_ENV=production webpack --config webpack.config.prod.js",
+    "build": "yarn run clean:deps && yarn && NODE_ENV=production webpack --config webpack.config.prod.js",
     "lint:js": "eslint app postcss.config.js webpack.config.dev.js webpack.config.prod.js --ext=.js,.jsx",
     "lint:sass": "sass-lint -v -q",
     "lint": "yarn lint:js && yarn lint:sass",
