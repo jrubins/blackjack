@@ -1,14 +1,13 @@
 import React, { PropTypes } from 'react';
 import Perf from 'react-addons-perf';
 import { Provider } from 'react-redux';
-import { Router, browserHistory, applyRouterMiddleware } from 'react-router';
-import useScroll from 'react-router-scroll/lib/useScroll';
-
-import { ENV_DEV } from './utils/environment';
-import routes from './routes';
 
 // Import our root SASS file to get built by Webpack.
 import './assets/sass/app.scss';
+
+import { ENV_DEV } from './utils/environment';
+
+import App from './components/app';
 
 // Include React performance add-on when on development.
 if (process.env.NODE_ENV === ENV_DEV) {
@@ -17,11 +16,7 @@ if (process.env.NODE_ENV === ENV_DEV) {
 
 const Root = ({ store }) => (
   <Provider store={store}>
-    <Router
-      history={browserHistory}
-      routes={routes}
-      render={applyRouterMiddleware(useScroll())}
-    />
+    <App />
   </Provider>
 );
 

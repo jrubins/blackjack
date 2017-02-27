@@ -1,17 +1,21 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 import Header from './reusable/header/header';
+import HomePage from './pages/home/home';
 
-const App = ({ children }) => (
-  <div className="app-container">
-    <Header />
+const App = () => (
+  <BrowserRouter>
+    <div className="app-container">
+      <Header />
 
-    {children}
-  </div>
+      <Route
+        exact
+        path="/"
+        component={HomePage}
+      />
+    </div>
+  </BrowserRouter>
 );
-
-App.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export default App;
