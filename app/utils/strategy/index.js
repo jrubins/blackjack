@@ -140,6 +140,63 @@ const SOFT_STRATEGY = [
 ];
 
 /**
+ * The basic strategy chart for when a player can split.
+ *
+ * @type {Array<Object>}
+ */
+const SPLIT_STRATEGY = [
+  {
+    player: [2, 3, 7],
+    action: PLAYER_DECISIONS.SPLIT,
+    exceptions: [
+      {
+        dealer: [8, 9, 10, 1],
+        action: PLAYER_DECISIONS.HIT,
+      },
+    ],
+    error: 'Split with 2s. Hit when dealer shows 8-Ace.',
+  },
+  {
+    player: [4],
+    action: PLAYER_DECISIONS.HIT,
+    exceptions: [
+      {
+        dealer: [5, 6],
+        action: PLAYER_DECISIONS.SPLIT,
+      },
+    ],
+    error: 'Hit with 4s. Split when dealer show 5 or 6.',
+  },
+  {
+    player: [6],
+    action: PLAYER_DECISIONS.SPLIT,
+    exceptions: [
+      {
+        dealer: [7, 8, 9, 10, 1],
+        action: PLAYER_DECISIONS.HIT,
+      },
+    ],
+    error: 'Split with 6s. Hit when dealer shows 7-Ace.',
+  },
+  {
+    player: [8, 1],
+    action: PLAYER_DECISIONS.SPLIT,
+    error: 'Always split 8s or Aces.',
+  },
+  {
+    player: [9],
+    action: PLAYER_DECISIONS.SPLIT,
+    exceptions: [
+      {
+        dealer: [7, 10, 1],
+        action: PLAYER_DECISIONS.STAND,
+      },
+    ],
+    error: 'Split with 9s. Stand when dealer shows 7, 10 or Ace.',
+  },
+];
+
+/**
  * Checks a player action against the basic strategy chart given the dealer's up card.
  *
  * @param {Object} opts
@@ -151,15 +208,29 @@ const SOFT_STRATEGY = [
  */
 export function checkBasicStrategy({ playerCards, dealerUpCardValue, playerAction, hasEnoughToDouble }) {
   const playerTotal = sumCards(playerCards);
-  let strategyTable = HARD_STRATEGY;
+  let strategy;
 
-  // If the totals do not equal each other, there's an Ace in the player hand.
-  if (playerTotal.low !== playerTotal.high) {
-    debug('Using soft basic strategy chart...');
-    strategyTable = SOFT_STRATEGY;
+  // Check if we should be splitting.
+  if (playerCards.length === 2 && playerCards[0].number === playerCards[1].number) {
+    debug('Using split basic strategy chart...');
+
+    strategy = _.find(SPLIT_STRATEGY, ({ player }) => _.includes(player, playerCards[0].number));
   }
 
-  const strategy = _.find(strategyTable, ({ player }) => _.includes(player, playerTotal.high));
+  // See if we shouldn't split or couldn't find a strategy for splitting with the player cards.
+  if (!strategy) {
+    let strategyTable = HARD_STRATEGY;
+
+    // If the totals do not equal each other, there's an Ace in the player hand.
+    if (playerTotal.low !== playerTotal.high) {
+      debug('Using soft total basic strategy chart...');
+      strategyTable = SOFT_STRATEGY;
+    } else {
+      debug('Using hard total basic strategy chart...');
+    }
+
+    strategy = _.find(strategyTable, ({ player }) => _.includes(player, playerTotal.high));
+  }
 
   if (strategy) {
     debug('Found strategy:', strategy);
