@@ -4,7 +4,8 @@
  * @type {Object}
  */
 export const PLAYER_DECISIONS = {
-  HIT: 'hit',
-  STAND: 'stand',
   DOUBLE: 'double',
+  HIT: 'hit',
+  SPLIT: 'split',
+  STAND: 'stand',
 };
