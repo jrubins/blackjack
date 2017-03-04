@@ -1,5 +1,6 @@
 import _ from 'lodash';
 
+import { PLAYER_DECISIONS } from '../constants';
 import { debug } from '../logs';
 import { sumCards } from '../cards';
 
@@ -11,61 +12,61 @@ import { sumCards } from '../cards';
 const HARD_STRATEGY = [
   {
     player: [5, 6, 7, 8],
-    action: 'hit',
+    action: PLAYER_DECISIONS.HIT,
     error: 'Always hit 5-8.',
   },
   {
     player: [9],
-    action: 'hit',
+    action: PLAYER_DECISIONS.HIT,
     exceptions: [
       {
         dealer: [3, 4, 5, 6],
-        action: 'double',
+        action: PLAYER_DECISIONS.DOUBLE,
       },
     ],
     error: 'Hit on 9. Double when dealer shows 3-6.',
   },
   {
     player: [10],
-    action: 'double',
+    action: PLAYER_DECISIONS.DOUBLE,
     exceptions: [
       {
         dealer: [10, 1],
-        action: 'hit',
+        action: PLAYER_DECISIONS.HIT,
       },
     ],
     error: 'Double on 10. Hit when dealer shows 10 or Ace.',
   },
   {
     player: [11],
-    action: 'double',
+    action: PLAYER_DECISIONS.DOUBLE,
     error: 'Always double on 11.',
   },
   {
     player: [12],
-    action: 'hit',
+    action: PLAYER_DECISIONS.HIT,
     exceptions: [
       {
         dealer: [4, 5, 6],
-        action: 'stand',
+        action: PLAYER_DECISIONS.STAND,
       },
     ],
     error: 'Hit on 12. Stand when dealer shows 4, 5 or 6.',
   },
   {
     player: [13, 14, 15, 16],
-    action: 'hit',
+    action: PLAYER_DECISIONS.HIT,
     exceptions: [
       {
         dealer: [2, 3, 4, 5, 6],
-        action: 'stand',
+        action: PLAYER_DECISIONS.STAND,
       },
     ],
     error: 'Hit on 13-16. Stand when dealer shows 2-6.',
   },
   {
     player: [17, 18, 19, 20, 21],
-    action: 'stand',
+    action: PLAYER_DECISIONS.STAND,
     error: 'Always stand on 17-21.',
   },
 ];
@@ -78,55 +79,55 @@ const HARD_STRATEGY = [
 const SOFT_STRATEGY = [
   {
     player: [13, 14],
-    action: 'hit',
+    action: PLAYER_DECISIONS.HIT,
     exceptions: [
       {
         dealer: [5, 6],
-        action: 'double',
+        action: PLAYER_DECISIONS.DOUBLE,
       },
     ],
     error: 'Hit on soft 13 or 14. Double when dealer shows 5 or 6.',
   },
   {
     player: [15, 16],
-    action: 'hit',
+    action: PLAYER_DECISIONS.HIT,
     exceptions: [
       {
         dealer: [4, 5, 6],
-        action: 'double',
+        action: PLAYER_DECISIONS.DOUBLE,
       },
     ],
     error: 'Hit on soft 15 or 16. Double when dealer shows 4, 5 or 6.',
   },
   {
     player: [17],
-    action: 'hit',
+    action: PLAYER_DECISIONS.HIT,
     exceptions: [
       {
         dealer: [3, 4, 5, 6],
-        action: 'double',
+        action: PLAYER_DECISIONS.DOUBLE,
       },
     ],
     error: 'Hit on soft 17. Double when dealer shows 3-6.',
   },
   {
     player: [18],
-    action: 'hit',
+    action: PLAYER_DECISIONS.HIT,
     exceptions: [
       {
         dealer: [3, 4, 5, 6],
-        action: 'double',
+        action: PLAYER_DECISIONS.DOUBLE,
       },
       {
         dealer: [2, 7, 8],
-        action: 'stand',
+        action: PLAYER_DECISIONS.STAND,
       },
     ],
     error: 'Hit on soft 18. Stand on 2, 7-8. Double on 3-6.',
   },
   {
     player: [19, 20, 21],
-    action: 'stand',
+    action: PLAYER_DECISIONS.STAND,
     error: 'Always stand on soft 19-21.',
   },
 ];
@@ -159,8 +160,18 @@ export function checkBasicStrategy(playerCards, dealerUpCardValue, playerAction)
 
     debug('Strategy exception applies:', exception);
 
+    let correctAction = exception ? exception.action : strategy.action;
+
+    // The user can't double if they have more than two cards or in some other scenarios (not
+    // enough money to double).
+    if (correctAction === PLAYER_DECISIONS.DOUBLE && playerCards.length > 2) {
+      debug('Player cannot double, suggesting hit. Num cards:', playerCards.length);
+
+      correctAction = PLAYER_DECISIONS.HIT;
+    }
+
     return {
-      correct: exception ? playerAction === exception.action : playerAction === strategy.action,
+      correct: playerAction === correctAction,
       error: strategy.error,
     };
   }

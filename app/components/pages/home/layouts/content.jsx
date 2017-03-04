@@ -210,6 +210,7 @@ class HomeContent extends Component {
 
     this.setState({
       activeBet: enteredBet,
+      basicStrategyError: null,
       dealerCards: [
         dealer1,
         dealer2,
