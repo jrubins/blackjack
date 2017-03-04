@@ -1,4 +1,4 @@
-import { ENV_DEV } from '../environment';
+import { isDevelopment } from '../environment';
 
 /**
  * The logging instance.
@@ -24,7 +24,7 @@ export function debug(...rest) {
  * @param {...String} rest
  */
 export function info(...rest) {
-  if (process.env.NODE_ENV === ENV_DEV) {
+  if (isDevelopment()) {
     logger.info(...rest);
   }
 }

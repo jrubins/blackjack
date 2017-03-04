@@ -5,12 +5,12 @@ import { Provider } from 'react-redux';
 // Import our root SASS file to get built by Webpack.
 import './assets/sass/app.scss';
 
-import { ENV_DEV } from './utils/environment';
+import { isDevelopment } from './utils/environment';
 
 import App from './components/app';
 
 // Include React performance add-on when on development.
-if (process.env.NODE_ENV === ENV_DEV) {
+if (isDevelopment()) {
   window.Perf = Perf;
 }
 

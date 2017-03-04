@@ -1,4 +1,9 @@
 import {
+  EVENT_NAMES,
+  customEvent,
+} from '../../utils/analytics';
+
+import {
   BASIC_STRATEGY_CLOSE,
   BASIC_STRATEGY_OPEN,
   MOBILE_NAV_CLOSE,
@@ -11,6 +16,8 @@ import {
  * @returns {Object}
  */
 export function closeBasicStrategy() {
+  customEvent(EVENT_NAMES.BASIC_STRATEGY_OFF);
+
   return {
     type: BASIC_STRATEGY_CLOSE,
   };
@@ -22,6 +29,8 @@ export function closeBasicStrategy() {
  * @returns {Object}
  */
 export function closeMobileNav() {
+  customEvent(EVENT_NAMES.MOBILE_NAV_CLOSE);
+
   return {
     type: MOBILE_NAV_CLOSE,
   };
@@ -33,6 +42,8 @@ export function closeMobileNav() {
  * @returns {Object}
  */
 export function openBasicStrategy() {
+  customEvent(EVENT_NAMES.BASIC_STRATEGY_ON);
+
   return {
     type: BASIC_STRATEGY_OPEN,
   };
@@ -44,6 +55,8 @@ export function openBasicStrategy() {
  * @returns {Object}
  */
 export function openMobileNav() {
+  customEvent(EVENT_NAMES.MOBILE_NAV_OPEN);
+
   return {
     type: MOBILE_NAV_OPEN,
   };

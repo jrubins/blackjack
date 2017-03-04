@@ -1,6 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
+import {
+  EVENT_NAMES,
+  customEvent,
+} from '../../../../utils/analytics';
 import { PLAYER_DECISIONS } from '../../../../utils/constants';
 import {
   dealCard,
@@ -201,6 +205,8 @@ class HomeContent extends Component {
     const dealer2 = dealCard();
 
     deductBalance(enteredBet);
+
+    customEvent(EVENT_NAMES.SET_BET(enteredBet));
 
     this.setState({
       activeBet: enteredBet,

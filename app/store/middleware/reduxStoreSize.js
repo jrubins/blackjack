@@ -2,7 +2,7 @@ import sizeOf from 'object-sizeof';
 
 import { formatBytes } from '../../utils/text';
 import { debug } from '../../utils/logs';
-import { ENV_DEV } from '../../utils/environment';
+import { isDevelopment } from '../../utils/environment';
 
 /**
  * This is a middleware to output the size of the Redux store in bytes. Useful to keep an
@@ -12,7 +12,7 @@ import { ENV_DEV } from '../../utils/environment';
  * @returns {Function}
  */
 const ReduxStoreSize = store => next => action => {
-  if (process.env.NODE_ENV === ENV_DEV) {
+  if (isDevelopment()) {
     debug('Store Size:', formatBytes(sizeOf(store.getState())));
   }
 
