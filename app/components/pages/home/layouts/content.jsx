@@ -416,6 +416,7 @@ class HomeContent extends Component {
       playerBalance,
     } = this.props;
     const {
+      activePlayerHandIndex,
       basicStrategyError,
       basicStrategyStreak,
       dealerCards,
@@ -445,6 +446,7 @@ class HomeContent extends Component {
               key={i}
               cards={hand.cards}
               playerActionsEnabled={playerDecision}
+              showActiveHandIndicator={playerDecision && playerHands.length > 1 && i === activePlayerHandIndex}
             />
           ))}
 

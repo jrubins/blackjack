@@ -12,6 +12,8 @@
 }
 
 .hand-cards {
+  position: relative;
+
   width: 75%;
   height: $card-height;
 }
@@ -23,5 +25,39 @@
     position: absolute;
     top: 0;
     left: 0;
+  }
+}
+
+.active-hand-indicator {
+  position: absolute;
+  top: 50%;
+  left: 0;
+
+  transform: translateY(-50%);
+
+  animation: 500ms infinite alternate active-indicator ease-in-out;
+
+  .icon {
+    width: 17px;
+    height: 17px;
+    margin-left: -7px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    path {
+      fill: $light-blue;
+    }
+  }
+}
+
+@keyframes active-indicator {
+  from {
+    margin-left: 0;
+  }
+
+  to {
+    margin-left: -10px;
   }
 }
