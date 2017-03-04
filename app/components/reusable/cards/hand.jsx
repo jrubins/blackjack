@@ -12,6 +12,19 @@ const Hand = ({
   showActiveHandIndicator,
 }) => {
   const cardTotal = sumCards(cards);
+  let cardTotalDisplay;
+
+  // Always show the highest value for the dealer. Also, show the highest value for the player
+  // when they are done deciding.
+  if (isDealer || !playerActionsEnabled) {
+    cardTotalDisplay = cardTotal.high;
+  } else if (playerActionsEnabled) { // Show both values when the player is still deciding.
+    cardTotalDisplay = (
+      cardTotal.low !== cardTotal.high
+        ? `${cardTotal.low}/${cardTotal.high}`
+        : cardTotal.low
+    );
+  }
 
   return (
     <div className="hand-container">
@@ -47,10 +60,7 @@ const Hand = ({
       </div>
       {cards.length > 0 && (!isDealer || !playerActionsEnabled) &&
         <div className="card-total">
-          {cardTotal.low !== cardTotal.high
-            ? `${cardTotal.low}/${cardTotal.high}`
-            : cardTotal.low
-          }
+          {cardTotalDisplay}
         </div>
       }
     </div>
