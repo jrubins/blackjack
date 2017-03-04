@@ -305,6 +305,7 @@ class HomeContent extends Component {
       playerBalance,
     } = this.props;
     const {
+      activePlayerHandIndex,
       dealerCards,
       enteredBet,
     } = this.state;
@@ -339,23 +340,27 @@ class HomeContent extends Component {
     } else if (action === PLAYER_DECISIONS.SPLIT) {
       deductBalance(enteredBet);
 
-      this.setState(() => ({
-        playerHands: [
-          {
-            bet: activePlayerHand.bet,
-            cards: [
-              activePlayerHand.cards[0],
-              dealCard(),
-            ],
-          },
-          {
-            bet: activePlayerHand.bet,
-            cards: [
-              activePlayerHand.cards[1],
-            ],
-          },
-        ],
-      }));
+      this.setState(prevState => {
+        const newPlayerHands = [...prevState.playerHands];
+
+        // Remove the current active hand and insert the split hands in its place.
+        newPlayerHands.splice(activePlayerHandIndex, 1, {
+          bet: enteredBet,
+          cards: [
+            activePlayerHand.cards[0],
+            dealCard(),
+          ],
+        }, {
+          bet: enteredBet,
+          cards: [
+            activePlayerHand.cards[1],
+          ],
+        });
+
+        return {
+          playerHands: newPlayerHands,
+        };
+      });
     }
   }
 
