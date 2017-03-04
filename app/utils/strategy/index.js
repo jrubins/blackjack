@@ -214,6 +214,8 @@ export function checkBasicStrategy({
   hasEnoughToDouble,
   hasEnoughToSplit,
 }) {
+  // Have to adjust dealer up card to make J, Q and K values worth 10.
+  const adjustedDealerUpCardValue = Math.min(dealerUpCardValue, 10);
   const playerTotal = sumCards(playerCards);
   let strategy;
 
@@ -243,7 +245,7 @@ export function checkBasicStrategy({
     debug('Found strategy:', strategy);
 
     // See if this strategy has exceptions and the dealer up card qualifies to use an exception.
-    const exception = strategy.exceptions && _.find(strategy.exceptions, ({ dealer }) => _.includes(dealer, dealerUpCardValue));
+    const exception = strategy.exceptions && _.find(strategy.exceptions, ({ dealer }) => _.includes(dealer, adjustedDealerUpCardValue));
 
     debug('Strategy exception applies:', exception);
 
@@ -263,5 +265,5 @@ export function checkBasicStrategy({
     };
   }
 
-  debug('No strategy found for cards:', playerCards, dealerUpCardValue, playerAction);
+  debug('No strategy found for cards:', playerCards, adjustedDealerUpCardValue, playerAction);
 }
