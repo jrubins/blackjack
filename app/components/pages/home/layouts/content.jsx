@@ -84,7 +84,6 @@ class HomeContent extends Component {
     }
 
     const activePlayerHand = this.getActivePlayerHand();
-    console.log('active hand:', activePlayerHand);
 
     // Nothing to check if the player doesn't yet have a hand.
     if (!activePlayerHand) {
@@ -101,7 +100,6 @@ class HomeContent extends Component {
 
     const dealerTotal = sumCards(dealerCards).high;
     const playerTotal = sumCards(activePlayerHand.cards).high;
-    console.log('playerTotal:', playerTotal);
 
     if (playerDecision) {
       // If either the dealer or player got 21, it's no longer the player's decision.
@@ -135,8 +133,6 @@ class HomeContent extends Component {
           } else if (handTotal === dealerTotal) { // A push.
             playerWinnings += bet;
           }
-
-          console.log('playerWinnings:', playerWinnings, bet);
         });
 
         this.roundOver(playerWinnings);
@@ -427,7 +423,6 @@ class HomeContent extends Component {
       activePlayerHand.cards.length === 2 &&
       activePlayerHand.cards[0].number === activePlayerHand.cards[1].number
     );
-    console.log('active player hand:', activePlayerHand);
 
     return (
       <div className="home-content-container">
