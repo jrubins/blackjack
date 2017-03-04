@@ -22,25 +22,28 @@ const HARD_STRATEGY = [
       {
         dealer: [3, 4, 5, 6],
         action: PLAYER_DECISIONS.DOUBLE,
+        noDoubleAction: PLAYER_DECISIONS.HIT,
       },
     ],
-    error: 'Hit on 9. Double when dealer shows 3-6.',
+    error: 'Hit on 9. Double when dealer shows 3-6 (hit if can\'t).',
   },
   {
     player: [10],
     action: PLAYER_DECISIONS.DOUBLE,
+    noDoubleAction: PLAYER_DECISIONS.HIT,
     exceptions: [
       {
         dealer: [10, 1],
         action: PLAYER_DECISIONS.HIT,
       },
     ],
-    error: 'Double on 10. Hit when dealer shows 10 or Ace.',
+    error: 'Double on 10 (hit if can\'t). Hit when dealer shows 10 or Ace.',
   },
   {
     player: [11],
     action: PLAYER_DECISIONS.DOUBLE,
-    error: 'Always double on 11.',
+    noDoubleAction: PLAYER_DECISIONS.HIT,
+    error: 'Always double on 11. Hit if can\'t double.',
   },
   {
     player: [12],
@@ -84,9 +87,10 @@ const SOFT_STRATEGY = [
       {
         dealer: [5, 6],
         action: PLAYER_DECISIONS.DOUBLE,
+        noDoubleAction: PLAYER_DECISIONS.HIT,
       },
     ],
-    error: 'Hit on soft 13 or 14. Double when dealer shows 5 or 6.',
+    error: 'Hit on soft 13 or 14. Double when dealer shows 5 or 6 (hit if can\'t).',
   },
   {
     player: [15, 16],
@@ -95,9 +99,10 @@ const SOFT_STRATEGY = [
       {
         dealer: [4, 5, 6],
         action: PLAYER_DECISIONS.DOUBLE,
+        noDoubleAction: PLAYER_DECISIONS.HIT,
       },
     ],
-    error: 'Hit on soft 15 or 16. Double when dealer shows 4, 5 or 6.',
+    error: 'Hit on soft 15 or 16. Double when dealer shows 4, 5 or 6 (hit if can\'t).',
   },
   {
     player: [17],
@@ -106,9 +111,10 @@ const SOFT_STRATEGY = [
       {
         dealer: [3, 4, 5, 6],
         action: PLAYER_DECISIONS.DOUBLE,
+        noDoubleAction: PLAYER_DECISIONS.HIT,
       },
     ],
-    error: 'Hit on soft 17. Double when dealer shows 3-6.',
+    error: 'Hit on soft 17. Double when dealer shows 3-6 (hit if can\'t).',
   },
   {
     player: [18],
@@ -117,13 +123,14 @@ const SOFT_STRATEGY = [
       {
         dealer: [3, 4, 5, 6],
         action: PLAYER_DECISIONS.DOUBLE,
+        noDoubleAction: PLAYER_DECISIONS.STAND,
       },
       {
         dealer: [2, 7, 8],
         action: PLAYER_DECISIONS.STAND,
       },
     ],
-    error: 'Hit on soft 18. Stand on 2, 7-8. Double on 3-6.',
+    error: 'Hit on soft 18. Stand on 2, 7-8. Double on 3-6 (stand if can\'t).',
   },
   {
     player: [19, 20, 21],
@@ -135,12 +142,14 @@ const SOFT_STRATEGY = [
 /**
  * Checks a player action against the basic strategy chart given the dealer's up card.
  *
- * @param {Array} playerCards
- * @param {Number} dealerUpCardValue
- * @param {String} playerAction
+ * @param {Object} opts
+ * @param {Array} opts.playerCards
+ * @param {Number} opts.dealerUpCardValue
+ * @param {String} opts.playerAction
+ * @param {Boolean} opts.hasEnoughToDouble
  * @returns {Object}
  */
-export function checkBasicStrategy(playerCards, dealerUpCardValue, playerAction) {
+export function checkBasicStrategy({ playerCards, dealerUpCardValue, playerAction, hasEnoughToDouble }) {
   const playerTotal = sumCards(playerCards);
   let strategyTable = HARD_STRATEGY;
 
@@ -164,10 +173,10 @@ export function checkBasicStrategy(playerCards, dealerUpCardValue, playerAction)
 
     // The user can't double if they have more than two cards or in some other scenarios (not
     // enough money to double).
-    if (correctAction === PLAYER_DECISIONS.DOUBLE && playerCards.length > 2) {
-      debug('Player cannot double, suggesting hit. Num cards:', playerCards.length);
+    if (correctAction === PLAYER_DECISIONS.DOUBLE && (playerCards.length > 2 || !hasEnoughToDouble)) {
+      debug('Player cannot double, suggesting hit. Num cards:', playerCards.length, 'Enough to double:', hasEnoughToDouble);
 
-      correctAction = PLAYER_DECISIONS.HIT;
+      correctAction = exception ? exception.noDoubleAction : strategy.noDoubleAction;
     }
 
     return {

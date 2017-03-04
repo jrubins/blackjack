@@ -17,3 +17,10 @@
   background-color: $white;
   color: $light-blue;
 }
+
+.button-disabled {
+  background-color: $off-white;
+  color: $light-grey;
+
+  cursor: not-allowed;
+}

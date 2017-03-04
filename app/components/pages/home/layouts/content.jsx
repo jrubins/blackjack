@@ -232,13 +232,19 @@ class HomeContent extends Component {
   handlePlayerAction(action) {
     const {
       deductBalance,
+      playerBalance,
     } = this.props;
     const {
       dealerCards,
       enteredBet,
       playerCards,
     } = this.state;
-    const basicStrategyResult = checkBasicStrategy(playerCards, dealerCards[0].number, action);
+    const basicStrategyResult = checkBasicStrategy({
+      playerCards,
+      dealerUpCardValue: dealerCards[0].number,
+      playerAction: action,
+      hasEnoughToDouble: playerBalance >= enteredBet,
+    });
 
     if (basicStrategyResult) {
       this.setState(prevState => ({
@@ -269,6 +275,9 @@ class HomeContent extends Component {
   }
 
   render() {
+    const {
+      playerBalance,
+    } = this.props;
     const {
       basicStrategyError,
       basicStrategyStreak,
@@ -331,6 +340,7 @@ class HomeContent extends Component {
               text="Double"
               handleClick={() => this.handlePlayerAction(PLAYER_DECISIONS.DOUBLE)}
               inverse={true}
+              isDisabled={playerCards.length > 2 || playerBalance < enteredBet}
             />
           </div>
         }
