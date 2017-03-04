@@ -315,6 +315,7 @@ class HomeContent extends Component {
       dealerUpCardValue: dealerCards[0].number,
       playerAction: action,
       hasEnoughToDouble: playerBalance >= enteredBet,
+      hasEnoughToSplit: playerBalance >= enteredBet,
     });
 
     if (basicStrategyResult) {
@@ -424,9 +425,11 @@ class HomeContent extends Component {
       playerHasPlacedFirstBet,
     } = this.state;
     const activePlayerHand = this.getActivePlayerHand();
+    const canDoubleActiveHand = activePlayerHand.cards.length === 2 && playerBalance >= enteredBet;
     const canSplitActiveHand = (
       activePlayerHand.cards.length === 2 &&
-      activePlayerHand.cards[0].number === activePlayerHand.cards[1].number
+      activePlayerHand.cards[0].number === activePlayerHand.cards[1].number &&
+      playerBalance >= enteredBet
     );
 
     return (
@@ -484,7 +487,7 @@ class HomeContent extends Component {
               text="Double"
               handleClick={() => this.handlePlayerAction(PLAYER_DECISIONS.DOUBLE)}
               inverse={true}
-              isDisabled={activePlayerHand.cards.length > 2 || playerBalance < enteredBet}
+              isDisabled={!canDoubleActiveHand}
             />
             <Button
               text="Split"

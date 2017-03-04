@@ -204,14 +204,21 @@ const SPLIT_STRATEGY = [
  * @param {Number} opts.dealerUpCardValue
  * @param {String} opts.playerAction
  * @param {Boolean} opts.hasEnoughToDouble
+ * @param {Boolean} opts.hasEnoughToSplit
  * @returns {Object}
  */
-export function checkBasicStrategy({ playerCards, dealerUpCardValue, playerAction, hasEnoughToDouble }) {
+export function checkBasicStrategy({
+  playerCards,
+  dealerUpCardValue,
+  playerAction,
+  hasEnoughToDouble,
+  hasEnoughToSplit,
+}) {
   const playerTotal = sumCards(playerCards);
   let strategy;
 
   // Check if we should be splitting.
-  if (playerCards.length === 2 && playerCards[0].number === playerCards[1].number) {
+  if (playerCards.length === 2 && playerCards[0].number === playerCards[1].number && hasEnoughToSplit) {
     debug('Using split basic strategy chart...');
 
     strategy = _.find(SPLIT_STRATEGY, ({ player }) => _.includes(player, playerCards[0].number));
