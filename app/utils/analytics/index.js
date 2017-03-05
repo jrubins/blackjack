@@ -42,6 +42,12 @@ export const EVENT_NAMES = {
       eventLabel: amount,
     };
   },
+
+  // Sharing.
+  SHARE_FACEBOOK: {
+    eventCategory: 'Share',
+    eventAction: 'Share - Facebook',
+  },
 };
 
 /**

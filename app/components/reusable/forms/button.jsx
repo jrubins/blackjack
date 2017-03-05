@@ -16,9 +16,9 @@ const Button = ({
       'button-inverse': inverse,
     })}
     type={type}
-    onClick={() => {
+    onClick={event => {
       if (!isDisabled) {
-        handleClick();
+        handleClick(event);
       }
     }}
   >
@@ -34,10 +34,7 @@ Button.propTypes = {
   isDisabled: PropTypes.bool,
   isLoading: PropTypes.bool,
   type: PropTypes.string,
-  text: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.array,
-  ]).isRequired,
+  text: PropTypes.node.isRequired,
 };
 
 Button.defaultProps = {

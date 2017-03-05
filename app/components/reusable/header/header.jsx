@@ -24,6 +24,7 @@ import {
 } from '../../../actions/ui';
 import { setNumDecks } from '../../../actions/gameplay';
 
+import FacebookShare from '../forms/fbShare';
 import HamburgerIcon from '../icons/hamburger';
 import SlidingToggle from '../forms/slidingToggle';
 import TagPicker from '../forms/tagPicker';
@@ -113,11 +114,16 @@ class Header extends Component {
 
     return (
       <header>
-        <div className="header-logo">
-          Blackjack
+        <div className="left-header">
+          <div className="header-logo">
+            Blackjack
+          </div>
+          <FacebookShare
+            shareUrl={process.env.APP_BASE_URL}
+          />
         </div>
 
-        <div className="header-player">
+        <div className="right-header">
           <div className="player-balance">
             ${formatThousands(playerBalance)}
           </div>
