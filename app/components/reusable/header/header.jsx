@@ -11,12 +11,15 @@ import {
   getNumDecks,
   getPlayerBalance,
   isBasicStrategyOpen,
+  isCardCounterOpen,
   isMobileNavOpen,
 } from '../../../reducers';
 import {
   closeBasicStrategy,
-  openBasicStrategy,
+  closeCardCounter,
   closeMobileNav,
+  openBasicStrategy,
+  openCardCounter,
   openMobileNav,
 } from '../../../actions/ui';
 import { setNumDecks } from '../../../actions/gameplay';
@@ -30,6 +33,7 @@ class Header extends Component {
     super(props);
 
     this.toggleBasicStrategy = this.toggleBasicStrategy.bind(this);
+    this.toggleCardCounter = this.toggleCardCounter.bind(this);
     this.toggleMobileNav = this.toggleMobileNav.bind(this);
     this.setNumDecks = this.setNumDecks.bind(this);
   }
@@ -48,6 +52,23 @@ class Header extends Component {
       closeBasicStrategy();
     } else {
       openBasicStrategy();
+    }
+  }
+
+  /**
+   * Toggles the card counter advice.
+   */
+  toggleCardCounter() {
+    const {
+      closeCardCounter,
+      isCardCounterOpen,
+      openCardCounter,
+    } = this.props;
+
+    if (isCardCounterOpen) {
+      closeCardCounter();
+    } else {
+      openCardCounter();
     }
   }
 
@@ -84,6 +105,7 @@ class Header extends Component {
   render() {
     const {
       isBasicStrategyOpen,
+      isCardCounterOpen,
       isMobileNavOpen,
       numDecks,
       playerBalance,
@@ -172,6 +194,25 @@ class Header extends Component {
                 value={isBasicStrategyOpen}
               />
             </div>
+            <div className="setting">
+              <span className="setting-label">
+                Card Counter
+              </span>
+              <SlidingToggle
+                handleChange={this.toggleCardCounter}
+                options={[
+                  {
+                    label: 'On',
+                    value: true,
+                  },
+                  {
+                    label: 'Off',
+                    value: false,
+                  },
+                ]}
+                value={isCardCounterOpen}
+              />
+            </div>
           </div>
         </div>
       </header>
@@ -181,11 +222,14 @@ class Header extends Component {
 
 Header.propTypes = {
   closeBasicStrategy: PropTypes.func.isRequired,
+  closeCardCounter: PropTypes.func.isRequired,
   closeMobileNav: PropTypes.func.isRequired,
   isBasicStrategyOpen: PropTypes.bool.isRequired,
+  isCardCounterOpen: PropTypes.bool.isRequired,
   isMobileNavOpen: PropTypes.bool.isRequired,
   numDecks: PropTypes.number.isRequired,
   openBasicStrategy: PropTypes.func.isRequired,
+  openCardCounter: PropTypes.func.isRequired,
   openMobileNav: PropTypes.func.isRequired,
   playerBalance: PropTypes.number.isRequired,
   setNumDecks: PropTypes.func.isRequired,
@@ -193,13 +237,16 @@ Header.propTypes = {
 
 export default connect(state => ({
   isBasicStrategyOpen: isBasicStrategyOpen(state),
+  isCardCounterOpen: isCardCounterOpen(state),
   isMobileNavOpen: isMobileNavOpen(state),
   numDecks: getNumDecks(state),
   playerBalance: getPlayerBalance(state),
 }), {
   closeBasicStrategy,
+  closeCardCounter,
   closeMobileNav,
   openBasicStrategy,
+  openCardCounter,
   openMobileNav,
   setNumDecks,
 })(Header);

@@ -6,6 +6,8 @@ import {
 import {
   BASIC_STRATEGY_CLOSE,
   BASIC_STRATEGY_OPEN,
+  CARD_COUNTER_CLOSE,
+  CARD_COUNTER_OPEN,
   MOBILE_NAV_CLOSE,
   MOBILE_NAV_OPEN,
 } from '../';
@@ -20,6 +22,17 @@ export function closeBasicStrategy() {
 
   return {
     type: BASIC_STRATEGY_CLOSE,
+  };
+}
+
+/**
+ * Turns off the card counter advisor.
+ *
+ * @returns {Object}
+ */
+export function closeCardCounter() {
+  return {
+    type: CARD_COUNTER_CLOSE,
   };
 }
 
@@ -46,6 +59,17 @@ export function openBasicStrategy() {
 
   return {
     type: BASIC_STRATEGY_OPEN,
+  };
+}
+
+/**
+ * Turns on the card counter advisor.
+ *
+ * @returns {Object}
+ */
+export function openCardCounter() {
+  return {
+    type: CARD_COUNTER_OPEN,
   };
 }
 

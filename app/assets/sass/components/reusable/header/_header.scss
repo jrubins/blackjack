@@ -65,6 +65,8 @@ header {
 .setting {
   display: flex;
   align-items: center;
+
+  margin-bottom: 10px;
 }
 
 .setting-wrap {
@@ -85,8 +87,6 @@ header {
 }
 
 .setting-balance {
-  margin-bottom: 10px;
-
   .player-full-balance {
     color: $light-blue;
 

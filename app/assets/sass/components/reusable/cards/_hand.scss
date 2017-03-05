@@ -1,6 +1,5 @@
 .hand-container {
   display: flex;
-  flex-wrap: wrap;
 }
 
 .hand-cards {
@@ -8,6 +7,10 @@
 
   width: 75%;
   height: $card-height;
+
+  @media (max-width: $screen-tiny-max) {
+    width: 70%;
+  }
 }
 
 .hand-card {

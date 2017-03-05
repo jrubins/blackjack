@@ -25,12 +25,17 @@ import {
   getPlayerBalance,
 } from '../../../../reducers';
 import {
+  cardDealt,
+  cardRevealed,
+} from '../../../../actions/gameplay';
+import {
   deductBalance,
   playerLost,
   playerWon,
 } from '../../../../actions/player';
 
 import BasicStrategyAdvice from '../../../reusable/advice/basicStrategy';
+import CardCounterAdvice from '../../../reusable/advice/cardCounter';
 import Button from '../../../reusable/forms/button';
 import Hand from '../../../reusable/cards/hand';
 import Input from '../../../reusable/forms/input';
@@ -43,6 +48,7 @@ class HomeContent extends Component {
       activePlayerHandIndex: 0,
       basicStrategyError: null,
       basicStrategyStreak: 0,
+      countGuess: null,
       dealerCards: [],
       enteredBet: null,
       playerDecision: false,
@@ -61,6 +67,7 @@ class HomeContent extends Component {
     this.deal = this.deal.bind(this);
     this.handleBetChange = this.handleBetChange.bind(this);
     this.handlePlayerAction = this.handlePlayerAction.bind(this);
+    this.handleCountGuess = this.handleCountGuess.bind(this);
   }
 
   componentDidMount() {
@@ -69,6 +76,7 @@ class HomeContent extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {
+      cardRevealed,
       numDecks,
     } = this.props;
     const {
@@ -81,11 +89,18 @@ class HomeContent extends Component {
       roundOver,
     } = this.state;
     const {
+      playerDecision: prevPlayerDecision,
       roundOver: prevRoundOver,
     } = prevState;
 
+    // Create a new deck if they changed the number of decks to use.
     if (numDecks !== prevNumDecks) {
       this.createDeck();
+    }
+
+    // If it's no longer the player's decision, the dealer card has been revealed.
+    if (!playerDecision && playerDecision !== prevPlayerDecision) {
+      cardRevealed(dealerCards[1].number);
     }
 
     if (roundOver) {
@@ -108,7 +123,8 @@ class HomeContent extends Component {
     // after a split.
     if (activePlayerHand.cards.length < 2) {
       this.setState(prevState => ({
-        playerHands: this.getNewCardPlayerHandState(prevState, dealCard()),
+        countGuess: null,
+        playerHands: this.getNewCardPlayerHandState(prevState, this.getNextCard()),
       }));
     }
 
@@ -153,6 +169,33 @@ class HomeContent extends Component {
   }
 
   /**
+   * Gets the next card from the deck.
+   *
+   * @param {Object} opts
+   * @param {Boolean} [opts.visible]
+   * @returns {Object}
+   */
+  getNextCard(opts = {}) {
+    const {
+      cardDealt,
+    } = this.props;
+    const {
+      visible = true,
+    } = opts;
+    const newCard = dealCard();
+
+    cardDealt(newCard.number, {
+      visible,
+    });
+
+    this.setState({
+      countGuess: null,
+    });
+
+    return newCard;
+  }
+
+  /**
    * Indicates the round has ended.
    */
   roundOver() {
@@ -194,6 +237,7 @@ class HomeContent extends Component {
     }
 
     this.setState({
+      countGuess: null,
       playerDecision: false,
       playerHands: newPlayerHands,
       roundOver: true,
@@ -206,7 +250,7 @@ class HomeContent extends Component {
    * @param {Boolean} [isDealer]
    */
   addCardToHand(isDealer = false) {
-    const newCard = dealCard();
+    const newCard = this.getNextCard();
 
     this.setState(prevState => {
       if (isDealer) {
@@ -301,10 +345,12 @@ class HomeContent extends Component {
     }
 
     // Order here to mimic an actual deal at a casino.
-    const player1 = dealCard();
-    const dealer1 = dealCard();
-    const player2 = dealCard();
-    const dealer2 = dealCard();
+    const player1 = this.getNextCard();
+    const dealer1 = this.getNextCard();
+    const player2 = this.getNextCard();
+    const dealer2 = this.getNextCard({
+      visible: false,
+    });
 
     deductBalance(enteredBet);
 
@@ -313,6 +359,7 @@ class HomeContent extends Component {
     this.setState({
       activePlayerHandIndex: 0,
       basicStrategyError: null,
+      countGuess: null,
       dealerCards: [
         dealer1,
         dealer2,
@@ -372,7 +419,8 @@ class HomeContent extends Component {
       deductBalance(enteredBet);
 
       this.setState(prevState => ({
-        playerHands: this.getNewCardPlayerHandState(prevState, dealCard(), true),
+        countGuess: null,
+        playerHands: this.getNewCardPlayerHandState(prevState, this.getNextCard(), true),
       }));
 
       // Once you double, you're done with deciding anything else.
@@ -388,7 +436,7 @@ class HomeContent extends Component {
           bet: enteredBet,
           cards: [
             activePlayerHand.cards[0],
-            dealCard(),
+            this.getNextCard(),
           ],
           result: activePlayerHand.result,
         }, {
@@ -400,6 +448,7 @@ class HomeContent extends Component {
         });
 
         return {
+          countGuess: null,
           playerHands: newPlayerHands,
         };
       });
@@ -452,6 +501,17 @@ class HomeContent extends Component {
     return _.every(playerHands, playerHand => sumCards(playerHand.cards).low > 21);
   }
 
+  /**
+   * Handles when the user guesses the count.
+   *
+   * @param {Boolean} countGuess
+   */
+  handleCountGuess(countGuess) {
+    this.setState({
+      countGuess,
+    });
+  }
+
   render() {
     const {
       numDecks,
@@ -461,6 +521,7 @@ class HomeContent extends Component {
       activePlayerHandIndex,
       basicStrategyError,
       basicStrategyStreak,
+      countGuess,
       dealerCards,
       enteredBet,
       playerDecision,
@@ -552,16 +613,25 @@ class HomeContent extends Component {
           </div>
         }
 
-        <BasicStrategyAdvice
-          basicStrategyError={basicStrategyError}
-          basicStrategyStreak={basicStrategyStreak}
-        />
+        <div className="advice">
+          <BasicStrategyAdvice
+            basicStrategyError={basicStrategyError}
+            basicStrategyStreak={basicStrategyStreak}
+          />
+
+          <CardCounterAdvice
+            countGuess={countGuess}
+            handleCountGuess={this.handleCountGuess}
+          />
+        </div>
       </div>
     );
   }
 }
 
 HomeContent.propTypes = {
+  cardDealt: PropTypes.func.isRequired,
+  cardRevealed: PropTypes.func.isRequired,
   deductBalance: PropTypes.func.isRequired,
   numDecks: PropTypes.number.isRequired,
   playerBalance: PropTypes.number.isRequired,
@@ -573,6 +643,8 @@ export default connect(state => ({
   numDecks: getNumDecks(state),
   playerBalance: getPlayerBalance(state),
 }), {
+  cardDealt,
+  cardRevealed,
   deductBalance,
   playerLost,
   playerWon,

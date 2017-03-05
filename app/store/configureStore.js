@@ -28,7 +28,20 @@ export default function configureStore() {
       'gameplay',
       'player',
       'ui',
-    ]),
+    ], {
+      slicer: () => state => ({
+        gameplay: {
+          numDecks: state.gameplay.numDecks,
+        },
+        player: {
+          balance: state.player.balance,
+        },
+        ui: {
+          basicStrategyOpen: state.ui.basicStrategyOpen,
+          cardCounterOpen: state.ui.cardCounterOpen,
+        },
+      }),
+    }),
 
     // Enables the Chrome Redux dev tools extension. It's awesome.
     ((process.env.APP_ENV === APP_ENV_LOCAL || process.env.APP_ENV === APP_ENV_STAGING) &&
