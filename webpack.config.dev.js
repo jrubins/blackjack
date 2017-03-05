@@ -47,6 +47,9 @@ module.exports = {
       sample: '.env',
       path: '.env',
     }),
+    new webpack.DefinePlugin({
+      __DEBUG__: process.env.DEBUG,
+    }),
     new HtmlWebpackPlugin({
       favicon: buildConfig.paths.app.favicon,
       template: buildConfig.paths.app.html,

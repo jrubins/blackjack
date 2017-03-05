@@ -13,7 +13,7 @@ const logger = console;
  * @param {...String} rest
  */
 export function debug(...rest) {
-  if (process.env.DEBUG) {
+  if (__DEBUG__) {
     logger.debug(...rest);
   }
 }

@@ -18,8 +18,8 @@
     "commonjs": true
   },
   "globals": {
-    "FB": true,
-    "gapi": true
+    "__DEBUG__": true,
+    "FB": true
   },
   "rules": {
     "array-bracket-spacing": 2,

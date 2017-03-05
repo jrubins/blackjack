@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import cn from 'classnames';
 
+import { debug } from '../../../utils/logs';
+
 import {
   getCount,
   isCardCounterOpen,
@@ -48,10 +50,24 @@ class CardCounter extends Component {
       return;
     }
 
-    const countAlternativeValue1 = _.random(1, 4);
-    const countAlternativeValue2 = _.random(1, 4);
-    const countAlternative1 = (_.random(0, 1) === 1) ? (trueCount + countAlternativeValue1) : (trueCount - countAlternativeValue1);
-    const countAlternative2 = (_.random(0, 1) === 1) ? (trueCount + countAlternativeValue2) : (trueCount - countAlternativeValue2);
+    // Choose random increments for the count between 1-4.
+    const countIncrement1 = _.random(1, 4);
+    let countIncrement2 = _.random(1, 4);
+
+    // Make sure our count alternative increments are not the same value.
+    if (countIncrement2 === countIncrement1) {
+      countIncrement2 += 1;
+    }
+
+    debug('Count increments:', countIncrement1, countIncrement2);
+
+    // Randomly choose whether to add or subtract the random values to the true count.
+    const countAlternative1 = (_.random(0, 1) === 1) ? (trueCount + countIncrement1) : (trueCount - countIncrement1);
+    const countAlternative2 = (_.random(0, 1) === 1) ? (trueCount + countIncrement2) : (trueCount - countIncrement2);
+
+    debug('True count value:', trueCount);
+    debug('Count alternative values:', countAlternative1, countAlternative2);
+
     const countOptions = _.sortBy([
       {
         label: `${trueCount}`,
