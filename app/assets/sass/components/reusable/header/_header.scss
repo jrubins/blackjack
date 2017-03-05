@@ -4,6 +4,7 @@ header {
   justify-content: space-between;
 
   max-width: $max-width;
+  height: $header-height;
   margin: 0 auto;
   padding: $mobile-padding;
 }
@@ -28,13 +29,13 @@ header {
 
 .mobile-navigation {
   position: absolute;
-  top: 60px;
+  top: $header-height;
   right: 0;
   left: 0;
 
   width: 100%;
   max-width: $max-width;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 55px);
   margin: 0 auto;
   padding: 0 $mobile-padding;
   transition: opacity 200ms ease, visibility 0s linear 200ms;
@@ -51,7 +52,7 @@ header {
   }
 }
 
-.ui-toggles {
+.settings {
   h3 {
     margin: 20px 0;
     color: $light-grey;
@@ -61,15 +62,45 @@ header {
   }
 }
 
-.ui-toggle {
+.setting {
   display: flex;
   align-items: center;
 }
 
-.ui-toggle-label {
+.setting-wrap {
+  flex-wrap: wrap;
+
+  .setting-label {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+.setting-label {
   display: inline-block;
 
   width: 225px;
 
   font-size: 22px;
+}
+
+.setting-balance {
+  margin-bottom: 10px;
+
+  .player-full-balance {
+    color: $light-blue;
+
+    font-size: 22px;
+    font-weight: bold;
+  }
+}
+
+.setting-num-decks {
+  .tag {
+    margin-right: 15px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 }

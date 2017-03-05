@@ -4,7 +4,28 @@
   }
 
   .basic-strategy-notes {
+    width: 48%;
     margin-top: 20px;
+  }
+}
+
+.deck-details {
+  display: flex;
+  align-items: center;
+
+  color: $dark-grey;
+
+  font-size: 11px;
+  text-transform: uppercase;
+
+  .bullet {
+    display: inline-block;
+
+    width: 5px;
+    height: 5px;
+    margin: 0 7px;
+    border-radius: 50%;
+    background-color: $dark-grey;
   }
 }
 

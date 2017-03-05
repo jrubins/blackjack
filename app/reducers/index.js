@@ -1,14 +1,19 @@
 import { combineReducers } from 'redux';
 
+import gameplay, * as fromGameplay from './gameplay';
 import player, * as fromPlayer from './player';
 import ui, * as fromUi from './ui';
 
 const reducers = combineReducers({
+  gameplay,
   player,
   ui,
 });
 
 export default reducers;
+
+// Gameplay selectors.
+export const getNumDecks = state => fromGameplay.getNumDecks(state.gameplay);
 
 // Player selectors.
 export const getPlayerBalance = state => fromPlayer.getPlayerBalance(state.player);

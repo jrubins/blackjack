@@ -9,3 +9,14 @@ export const PLAYER_DECISIONS = {
   SPLIT: 'split',
   STAND: 'stand',
 };
+
+/**
+ * The different types of result for a player's hand.
+ *
+ * @type {Object}
+ */
+export const HAND_RESULTS = {
+  LOST: 'lost',
+  PUSH: 'push',
+  WON: 'won',
+};

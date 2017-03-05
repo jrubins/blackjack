@@ -36,6 +36,9 @@ export const SUITS = {
 export function makeDeck(numDecks) {
   const suitKeys = _.values(SUITS);
 
+  // Reset our deck to be empty.
+  deck = [];
+
   for (let i = 0; i < numDecks; i++) {
     for (let j = 0; j < 4; j++) {
       for (let k = 0; k < 13; k++) {
@@ -82,4 +85,13 @@ export function sumCards(cards) {
     low: cardTotal,
     high: hasAce ? (cardTotal + 10 > 21 ? cardTotal : cardTotal + 10) : cardTotal,
   };
+}
+
+/**
+ * Returns the number of cards remaining in the deck.
+ *
+ * @returns {Number}
+ */
+export function getNumCardsRemainingInDeck() {
+  return deck.length - deckIndex;
 }

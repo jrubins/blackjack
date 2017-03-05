@@ -3,6 +3,12 @@ import { connect } from 'react-redux';
 import cn from 'classnames';
 
 import {
+  formatCurrency,
+  formatThousands,
+} from '../../../utils/text';
+
+import {
+  getNumDecks,
   getPlayerBalance,
   isBasicStrategyOpen,
   isMobileNavOpen,
@@ -13,9 +19,11 @@ import {
   closeMobileNav,
   openMobileNav,
 } from '../../../actions/ui';
+import { setNumDecks } from '../../../actions/gameplay';
 
 import HamburgerIcon from '../icons/hamburger';
 import SlidingToggle from '../forms/slidingToggle';
+import TagPicker from '../forms/tagPicker';
 
 class Header extends Component {
   constructor(props) {
@@ -23,6 +31,7 @@ class Header extends Component {
 
     this.toggleBasicStrategy = this.toggleBasicStrategy.bind(this);
     this.toggleMobileNav = this.toggleMobileNav.bind(this);
+    this.setNumDecks = this.setNumDecks.bind(this);
   }
 
   /**
@@ -59,10 +68,24 @@ class Header extends Component {
     }
   }
 
+  /**
+   * Sets the number of decks in use.
+   *
+   * @param {Number} numDecks
+   */
+  setNumDecks(numDecks) {
+    const {
+      setNumDecks,
+    } = this.props;
+
+    setNumDecks(numDecks);
+  }
+
   render() {
     const {
       isBasicStrategyOpen,
       isMobileNavOpen,
+      numDecks,
       playerBalance,
     } = this.props;
 
@@ -74,7 +97,7 @@ class Header extends Component {
 
         <div className="header-player">
           <div className="player-balance">
-            ${playerBalance}
+            ${formatThousands(playerBalance)}
           </div>
           <HamburgerIcon
             isOpen={isMobileNavOpen}
@@ -87,10 +110,51 @@ class Header extends Component {
             'mobile-navigation-open': isMobileNavOpen,
           })}
         >
-          <div className="ui-toggles">
+          <div className="settings">
+            <h3>Gameplay</h3>
+            <div className="setting setting-balance">
+              <span className="setting-label">
+                Balance:
+              </span>
+              <span className="player-full-balance">
+                {formatCurrency(playerBalance)}
+              </span>
+            </div>
+            <div className="setting setting-wrap setting-num-decks">
+              <span className="setting-label">
+                # of Decks
+              </span>
+              <TagPicker
+                handleChange={this.setNumDecks}
+                options={[
+                  {
+                    label: '1',
+                    value: 1,
+                  },
+                  {
+                    label: '2',
+                    value: 2,
+                  },
+                  {
+                    label: '4',
+                    value: 4,
+                  },
+                  {
+                    label: '6',
+                    value: 6,
+                  },
+                  {
+                    label: '8',
+                    value: 8,
+                  },
+                ]}
+                value={numDecks}
+              />
+            </div>
+
             <h3>Customize UI</h3>
-            <div className="ui-toggle">
-              <span className="ui-toggle-label">
+            <div className="setting">
+              <span className="setting-label">
                 Basic Strategy
               </span>
               <SlidingToggle
@@ -120,18 +184,22 @@ Header.propTypes = {
   closeMobileNav: PropTypes.func.isRequired,
   isBasicStrategyOpen: PropTypes.bool.isRequired,
   isMobileNavOpen: PropTypes.bool.isRequired,
+  numDecks: PropTypes.number.isRequired,
   openBasicStrategy: PropTypes.func.isRequired,
   openMobileNav: PropTypes.func.isRequired,
   playerBalance: PropTypes.number.isRequired,
+  setNumDecks: PropTypes.func.isRequired,
 };
 
 export default connect(state => ({
   isBasicStrategyOpen: isBasicStrategyOpen(state),
   isMobileNavOpen: isMobileNavOpen(state),
+  numDecks: getNumDecks(state),
   playerBalance: getPlayerBalance(state),
 }), {
   closeBasicStrategy,
   closeMobileNav,
   openBasicStrategy,
   openMobileNav,
+  setNumDecks,
 })(Header);

@@ -33,6 +33,9 @@ const BasicStrategyAdvice = ({
       </div>
       <div className="basic-strategy-content">
         <div className="basic-strategy-streak">
+          <span className="streak-label">
+            Streak
+          </span>
           x{basicStrategyStreak}
         </div>
         <div className="basic-strategy-comment">

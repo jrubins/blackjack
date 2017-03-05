@@ -1,3 +1,6 @@
+// Gameplay action types.
+export const NUM_DECKS_SET = 'NUM_DECKS_SET';
+
 // Player action types.
 export const DEDUCT_BALANCE = 'DEDUCT_BALANCE';
 export const PLAYER_LOST = 'PLAYER_LOST';

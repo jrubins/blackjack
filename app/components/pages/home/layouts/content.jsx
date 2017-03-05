@@ -6,9 +6,13 @@ import {
   EVENT_NAMES,
   customEvent,
 } from '../../../../utils/analytics';
-import { PLAYER_DECISIONS } from '../../../../utils/constants';
+import {
+  HAND_RESULTS,
+  PLAYER_DECISIONS,
+} from '../../../../utils/constants';
 import {
   dealCard,
+  getNumCardsRemainingInDeck,
   makeDeck,
   sumCards,
 } from '../../../../utils/cards';
@@ -17,6 +21,7 @@ import {
 } from '../../../../utils/strategy';
 
 import {
+  getNumDecks,
   getPlayerBalance,
 } from '../../../../reducers';
 import {
@@ -46,6 +51,7 @@ class HomeContent extends Component {
           // Need this field since the bet may change during the round (double, split, etc.).
           bet: null,
           cards: [],
+          result: null,
         },
       ],
       playerHasPlacedFirstBet: false,
@@ -58,21 +64,29 @@ class HomeContent extends Component {
   }
 
   componentDidMount() {
-    // Make our deck of cards.
-    makeDeck(1);
+    this.createDeck();
   }
 
   componentDidUpdate(prevProps, prevState) {
     const {
+      numDecks,
+    } = this.props;
+    const {
+      numDecks: prevNumDecks,
+    } = prevProps;
+    const {
       dealerCards,
       enteredBet,
       playerDecision,
-      playerHands,
       roundOver,
     } = this.state;
     const {
       roundOver: prevRoundOver,
     } = prevState;
+
+    if (numDecks !== prevNumDecks) {
+      this.createDeck();
+    }
 
     if (roundOver) {
       if (roundOver !== prevRoundOver) {
@@ -121,35 +135,57 @@ class HomeContent extends Component {
       if (dealerTotal < 17) {
         this.addCardToHand(true);
       } else { // Dealer is done hitting.
-        let playerWinnings = 0;
-        playerHands.forEach(({ bet, cards }) => {
-          const handTotal = sumCards(cards).high;
-
-          // Check to see if player got blackjack.
-          if (handTotal === 21 && cards.length === 2) {
-            playerWinnings += Math.round(bet + (bet * 3 / 2));
-          } else if ((handTotal <= 21 && handTotal > dealerTotal) || dealerTotal > 21) { // Straight win or dealer bust.
-            playerWinnings += bet * 2;
-          } else if (handTotal === dealerTotal) { // A push.
-            playerWinnings += bet;
-          }
-        });
-
-        this.roundOver(playerWinnings);
+        this.roundOver();
       }
     }
   }
 
   /**
-   * Indicates the round has ended with the player either winning or losing.
-   *
-   * @param {Number} [playerWinnings]
+   * Creates a new deck.
    */
-  roundOver(playerWinnings = null) {
+  createDeck() {
+    const {
+      numDecks,
+    } = this.props;
+
+    // Make our deck of cards.
+    makeDeck(numDecks);
+  }
+
+  /**
+   * Indicates the round has ended.
+   */
+  roundOver() {
     const {
       playerLost,
       playerWon,
     } = this.props;
+    const {
+      dealerCards,
+      playerHands,
+    } = this.state;
+    const dealerTotal = sumCards(dealerCards).high;
+    const newPlayerHands = [...playerHands];
+    let playerWinnings = 0;
+
+    playerHands.forEach(({ bet, cards }, i) => {
+      const handTotal = sumCards(cards).high;
+      let handResult = HAND_RESULTS.LOST;
+
+      // Check to see if player got blackjack.
+      if (handTotal === 21 && cards.length === 2) {
+        playerWinnings += Math.round(bet + (bet * 3 / 2));
+        handResult = HAND_RESULTS.WON;
+      } else if ((handTotal <= 21 && handTotal > dealerTotal) || dealerTotal > 21) { // Straight win or dealer bust.
+        playerWinnings += bet * 2;
+        handResult = HAND_RESULTS.WON;
+      } else if (handTotal === dealerTotal) { // A push.
+        playerWinnings += bet;
+        handResult = HAND_RESULTS.PUSH;
+      }
+
+      newPlayerHands[i].result = handResult;
+    });
 
     if (playerWinnings) {
       playerWon(playerWinnings);
@@ -159,6 +195,7 @@ class HomeContent extends Component {
 
     this.setState({
       playerDecision: false,
+      playerHands: newPlayerHands,
       roundOver: true,
     });
   }
@@ -214,6 +251,7 @@ class HomeContent extends Component {
         ...newPlayerHands[activePlayerHandIndex].cards,
         newCard,
       ],
+      result: newPlayerHands[activePlayerHandIndex].result,
     };
 
     return newPlayerHands;
@@ -287,6 +325,7 @@ class HomeContent extends Component {
             player1,
             player2,
           ],
+          result: null,
         },
       ],
       playerHasPlacedFirstBet: true,
@@ -351,11 +390,13 @@ class HomeContent extends Component {
             activePlayerHand.cards[0],
             dealCard(),
           ],
+          result: activePlayerHand.result,
         }, {
           bet: enteredBet,
           cards: [
             activePlayerHand.cards[1],
           ],
+          result: activePlayerHand.result,
         });
 
         return {
@@ -413,6 +454,7 @@ class HomeContent extends Component {
 
   render() {
     const {
+      numDecks,
       playerBalance,
     } = this.props;
     const {
@@ -435,16 +477,26 @@ class HomeContent extends Component {
 
     return (
       <div className="home-content-container">
+        {playerHasPlacedFirstBet &&
+          <div className="deck-details">
+            <span>{numDecks} deck{numDecks > 1 ? 's' : ''}</span>
+            <span className="bullet" />
+            <span>Remaining cards: {getNumCardsRemainingInDeck()}</span>
+          </div>
+        }
+
         <div className="hands">
           <Hand
-            cards={dealerCards}
+            hand={{
+              cards: dealerCards,
+            }}
             isDealer={true}
             playerActionsEnabled={playerDecision}
           />
           {playerHands.map((hand, i) => (
             <Hand
               key={i}
-              cards={hand.cards}
+              hand={hand}
               playerActionsEnabled={playerDecision}
               showActiveHandIndicator={playerDecision && playerHands.length > 1 && i === activePlayerHandIndex}
             />
@@ -511,12 +563,14 @@ class HomeContent extends Component {
 
 HomeContent.propTypes = {
   deductBalance: PropTypes.func.isRequired,
+  numDecks: PropTypes.number.isRequired,
   playerBalance: PropTypes.number.isRequired,
   playerLost: PropTypes.func.isRequired,
   playerWon: PropTypes.func.isRequired,
 };
 
 export default connect(state => ({
+  numDecks: getNumDecks(state),
   playerBalance: getPlayerBalance(state),
 }), {
   deductBalance,

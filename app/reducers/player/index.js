@@ -6,7 +6,7 @@ import {
   PLAYER_WON,
 } from '../../actions';
 
-function balance(state = 100, action) {
+function balance(state = 2000, action) {
   switch (action.type) {
     case DEDUCT_BALANCE:
       return state - action.amount;
@@ -17,7 +17,7 @@ function balance(state = 100, action) {
     case PLAYER_LOST:
       // Temporary reset of balance when you run out.
       if (state === 0) {
-        return 100;
+        return 2000;
       }
 
       return state;

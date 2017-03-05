@@ -25,6 +25,7 @@ export default function configureStore() {
 
     // Persists specified state to local storage.
     persistState([
+      'gameplay',
       'player',
       'ui',
     ]),
