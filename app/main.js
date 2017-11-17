@@ -22,8 +22,8 @@ const render = () => {
       <Root
         store={store}
       />
-    </AppContainer>
-  , document.getElementById('app'));
+    </AppContainer>, document.getElementById('app')
+  );
 };
 render();
 

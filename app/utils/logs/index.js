@@ -1,4 +1,7 @@
-import { isDevelopment } from '../environment';
+import {
+  isDebug,
+  isDevelopment,
+} from '../environment';
 
 /**
  * The logging instance.
@@ -13,7 +16,7 @@ const logger = console;
  * @param {...String} rest
  */
 export function debug(...rest) {
-  if (__DEBUG__) {
+  if (isDebug()) {
     logger.debug(...rest);
   }
 }

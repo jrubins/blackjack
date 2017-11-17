@@ -8,11 +8,12 @@ module.exports = {
   context: __dirname,
   entry: [
     'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:9005',
+    `webpack-dev-server/client?http://localhost:${buildConfig.serverPort}`,
     'webpack/hot/only-dev-server',
     buildConfig.paths.app.mainJs,
   ],
   output: {
+    chunkFilename: 'js/[name].js',
     filename: 'js/[name].js',
     path: buildConfig.paths.dist,
     publicPath: '/',
@@ -44,18 +45,37 @@ module.exports = {
   },
   plugins: [
     new DotenvPlugin({
+      // We don't really use this as different env files for different people. Just a place to keep common
+      // env variables for the project as a whole.
       sample: '.env',
       path: '.env',
-    }),
-    new webpack.DefinePlugin({
-      __DEBUG__: process.env.DEBUG,
     }),
     new HtmlWebpackPlugin({
       favicon: buildConfig.paths.app.favicon,
       template: buildConfig.paths.app.html,
     }),
     new webpack.HotModuleReplacementPlugin(),
+
+    // Allows the HMR plugin to output more legible names.
     new webpack.NamedModulesPlugin(),
+
+    // Ignore locales from moment.
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+
+    // This makes our vendor bundle from node_modules modules.
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks(module) {
+        return module.context && module.context.indexOf('node_modules') !== -1;
+      },
+    }),
+
+    // This ensures that our vendor bundle name doesn't change between builds (unless the vendor contents change)
+    // by extracting out the webpack bootstrap code into its own file.
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      minChunks: Infinity,
+    }),
   ],
   resolve: {
     modules: [
@@ -68,7 +88,10 @@ module.exports = {
     ],
   },
   devServer: {
-    historyApiFallback: true,
+    historyApiFallback: {
+      // Otherwise periods in the URL will cause this to fail.
+      disableDotRule: true,
+    },
     hot: true,
     port: buildConfig.serverPort,
   },

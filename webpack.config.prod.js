@@ -8,10 +8,11 @@ const buildConfig = require('./buildConfig');
 module.exports = {
   bail: true,
   context: __dirname,
-  entry: [
-    buildConfig.paths.app.mainJs,
-  ],
+  entry: {
+    main: buildConfig.paths.app.mainJs,
+  },
   output: {
+    chunkFilename: 'js/[name].[chunkhash].js',
     filename: 'js/[name].[chunkhash].js',
     path: buildConfig.paths.dist,
     publicPath: '/',
@@ -46,13 +47,36 @@ module.exports = {
       sample: '.env',
       path: '.env',
     }),
-    new webpack.DefinePlugin({
-      __DEBUG__: false,
-    }),
     new HtmlWebpackPlugin({
       favicon: buildConfig.paths.app.favicon,
       template: buildConfig.paths.app.html,
     }),
+
+    // Ignore locales from moment.
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+
+    // Need this to preserve the IDs of Webpack modules between builds. Otherwise having new imports in the main bundle
+    // will cache-bust the vendor bundle.
+    new webpack.HashedModuleIdsPlugin(),
+
+    // Enable scope-hoisting.
+    new webpack.optimize.ModuleConcatenationPlugin(),
+
+    // This makes our vendor bundle from node_modules modules.
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks(module) {
+        return module.context && module.context.indexOf('node_modules') !== -1;
+      },
+    }),
+
+    // This ensures that our vendor bundle name doesn't change between builds (unless the vendor contents change)
+    // by extracting out the webpack bootstrap code into its own file.
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      minChunks: Infinity,
+    }),
+
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         screw_ie8: true, // eslint-disable-line camelcase
@@ -66,6 +90,7 @@ module.exports = {
         screw_ie8: true, // eslint-disable-line camelcase
       },
     }),
+
     new ExtractTextPlugin('css/[name].[contenthash].css'),
   ],
   resolve: {
