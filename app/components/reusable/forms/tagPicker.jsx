@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import cn from 'classnames';
+import React, { PropTypes } from 'react'
+import cn from 'classnames'
 
 const TagPicker = ({
   handleChange,
@@ -19,7 +19,7 @@ const TagPicker = ({
       </div>
     ))}
   </div>
-);
+)
 
 TagPicker.propTypes = {
   handleChange: PropTypes.func.isRequired,
@@ -34,6 +34,6 @@ TagPicker.propTypes = {
     PropTypes.number,
     PropTypes.string,
   ]),
-};
+}
 
-export default TagPicker;
+export default TagPicker

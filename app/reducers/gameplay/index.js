@@ -1,11 +1,11 @@
-import { combineReducers } from 'redux';
-import _ from 'lodash';
+import { combineReducers } from 'redux'
+import _ from 'lodash'
 
 import {
   CARD_DEALT,
   CARD_REVEALED,
   NUM_DECKS_SET,
-} from '../../actions';
+} from '../../actions'
 
 /**
  * Gets the new count value given the current count and the new card value.
@@ -15,15 +15,15 @@ import {
  * @returns {Number}
  */
 function getNewCountValue(currentCount, cardValue) {
-  let countAdjustment = 0;
+  let countAdjustment = 0
 
   if (cardValue >= 10 || cardValue === 1) { // 10-Ace.
-    countAdjustment = -1;
+    countAdjustment = -1
   } else if (cardValue > 1 && cardValue < 7) { // 2-6.
-    countAdjustment = 1;
+    countAdjustment = 1
   }
 
-  return (_.isNil(currentCount) ? 0 : currentCount) + countAdjustment;
+  return (_.isNil(currentCount) ? 0 : currentCount) + countAdjustment
 }
 
 function hiLoCount(state = null, action) {
@@ -32,44 +32,44 @@ function hiLoCount(state = null, action) {
       const {
         cardValue,
         visible,
-      } = action;
+      } = action
 
       // Don't adjust the count if the card was not visible to the player (i.e. dealer hidden card).
       if (!visible) {
-        return state;
+        return state
       }
 
-      return getNewCountValue(state, cardValue);
+      return getNewCountValue(state, cardValue)
     }
 
     case CARD_REVEALED: {
       const {
         cardValue,
-      } = action;
+      } = action
 
-      return getNewCountValue(state, cardValue);
+      return getNewCountValue(state, cardValue)
     }
 
     default:
-      return state;
+      return state
   }
 }
 
 function numDecks(state = 1, action) {
   switch (action.type) {
     case NUM_DECKS_SET:
-      return action.numDecks;
+      return action.numDecks
 
     default:
-      return state;
+      return state
   }
 }
 
 export default combineReducers({
   hiLoCount,
   numDecks,
-});
+})
 
 // Selectors.
-export const getCount = state => state.hiLoCount;
-export const getNumDecks = state => state.numDecks;
+export const getCount = state => state.hiLoCount
+export const getNumDecks = state => state.numDecks

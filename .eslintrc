@@ -2,8 +2,9 @@
   "plugins": [
     "react"
   ],
+  "parser": "babel-eslint",
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 8,
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true,
@@ -11,11 +12,10 @@
     }
   },
   "env": {
-    "es6": true,
     "browser": true,
+    "es6": true,
     "jest": true,
     "node": true,
-    "commonjs": true
   },
   "globals": {
     "FB": true
@@ -87,17 +87,18 @@
     "react/jsx-equals-spacing": 2,
     "react/jsx-no-undef": 2,
     "react/jsx-pascal-case": 2,
-    "react/jsx-space-before-closing": 2,
+    "react/jsx-tag-spacing": 2,
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
     "react/no-direct-mutation-state": 2,
     "react/no-multi-comp": 2,
     "react/no-string-refs": 2,
     "react/no-unknown-property": 2,
+    "react/no-unused-prop-types": 2,
     "react/prefer-stateless-function": 2,
     "react/prop-types": 2,
     "react/sort-comp": 2,
-    "semi": 2,
+    "semi": [2, "never"],
     "space-before-blocks": 2,
     "space-in-parens": 2,
     "space-infix-ops": 2,

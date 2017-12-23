@@ -3,20 +3,29 @@
     "test": {
       "presets": [
         "react",
-        "es2015",
+        ["env", {
+          "targets": {
+            "node": "8.6"
+          }
+        }]
       ],
     },
   },
   "plugins": [
     "lodash",
-    "transform-es2015-destructuring",
+    "syntax-dynamic-import",
     "transform-object-rest-spread",
     "react-hot-loader/babel"
   ],
   "presets": [
     "react",
-    ["es2015", {
-      "modules": false
+    ["env", {
+      "modules": false,
+      "targets": {
+        "browsers": [
+          "last 2 versions"
+        ]
+      }
     }]
   ]
 }

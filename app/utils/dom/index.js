@@ -7,19 +7,19 @@
  * @param {String} [opts.async]
  */
 export function insertScript(opts) {
-  const { id, src, async = true } = opts;
+  const { id, src, async = true } = opts
 
   if (document.getElementById(id)) {
-    return;
+    return
   }
 
-  const scriptEl = document.createElement('script');
-  scriptEl.id = id;
-  scriptEl.src = src;
+  const scriptEl = document.createElement('script')
+  scriptEl.id = id
+  scriptEl.src = src
   if (async) {
-    scriptEl.async = 1;
+    scriptEl.async = 1
   }
 
-  const firstJsEl = document.getElementsByTagName('script')[0];
-  firstJsEl.parentNode.insertBefore(scriptEl, firstJsEl);
+  const firstJsEl = document.getElementsByTagName('script')[0]
+  firstJsEl.parentNode.insertBefore(scriptEl, firstJsEl)
 }

@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import cn from 'classnames';
+import React, { PropTypes } from 'react'
+import cn from 'classnames'
 
 const Button = ({
   handleClick,
@@ -18,7 +18,7 @@ const Button = ({
     type={type}
     onClick={event => {
       if (!isDisabled) {
-        handleClick(event);
+        handleClick(event)
       }
     }}
   >
@@ -26,7 +26,7 @@ const Button = ({
       {text}
     </span>
   </button>
-);
+)
 
 Button.propTypes = {
   handleClick: PropTypes.func,
@@ -35,16 +35,16 @@ Button.propTypes = {
   isLoading: PropTypes.bool,
   type: PropTypes.string,
   text: PropTypes.node.isRequired,
-};
+}
 
 Button.defaultProps = {
   handleClick(event) {
-    event.preventDefault();
+    event.preventDefault()
   },
   inverse: false,
   isDisabled: false,
   isLoading: false,
   type: 'submit',
-};
+}
 
-export default Button;
+export default Button

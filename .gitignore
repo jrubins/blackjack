@@ -1,6 +1,15 @@
+# Builds
+dist
+stats.json
+
+# Cache
 .cache
 .DS_Store
+.eslintcache
 .tmp
-dist
-node_modules
+
+# Logging
 *.log
+
+# Vendor
+node_modules

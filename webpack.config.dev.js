@@ -1,8 +1,8 @@
-const DotenvPlugin = require('webpack-dotenv-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
+const DotenvPlugin = require('webpack-dotenv-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 
-const buildConfig = require('./buildConfig');
+const buildConfig = require('./buildConfig')
 
 module.exports = {
   context: __dirname,
@@ -66,7 +66,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks(module) {
-        return module.context && module.context.indexOf('node_modules') !== -1;
+        return module.context && module.context.indexOf('node_modules') !== -1
       },
     }),
 
@@ -95,4 +95,4 @@ module.exports = {
     hot: true,
     port: buildConfig.serverPort,
   },
-};
+}

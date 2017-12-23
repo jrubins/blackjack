@@ -1,14 +1,14 @@
 import {
   debug,
   error,
-} from '../logs';
+} from '../logs'
 
 /**
  * An array holding actions that have been queued prior to the FB global object being initialized.
  *
  * @type {Array}
  */
-const actionQueue = [];
+const actionQueue = []
 
 /**
  * Opens a FB share dialog with the provided share URL.
@@ -17,12 +17,12 @@ const actionQueue = [];
  * @param {Function} handleShareComplete
  */
 function openShareDialog(shareUrl, handleShareComplete) {
-  debug('Sharing on FB:', shareUrl);
+  debug('Sharing on FB:', shareUrl)
 
   FB.ui({
     method: 'share',
     href: shareUrl,
-  }, handleShareComplete);
+  }, handleShareComplete)
 }
 
 /**
@@ -31,7 +31,7 @@ function openShareDialog(shareUrl, handleShareComplete) {
  * @const
  * @type {String}
  */
-export const FB_SDK_URL = '//connect.facebook.net/en_US/sdk.js';
+export const FB_SDK_URL = '//connect.facebook.net/en_US/sdk.js'
 
 /**
  * Available actions that can be executed using the Facebook JS SDK.
@@ -40,25 +40,25 @@ export const FB_SDK_URL = '//connect.facebook.net/en_US/sdk.js';
  */
 export const ACTION_NAMES = {
   FB_SHARE: 'fb-share',
-};
+}
 
 /**
  * Sets up the FB SDK. This will invoke the provided initialized method.
  */
 export function setupFb() {
   window.fbAsyncInit = () => {
-    debug('Initializing FB SDK:', process.env.FACEBOOK_APP_ID);
+    debug('Initializing FB SDK:', process.env.FACEBOOK_APP_ID)
 
     window.FB.init({
       appId: process.env.FACEBOOK_APP_ID,
       version: 'v2.8',
-    });
+    })
 
     // Now that our object has been initialized, let's execute any queued actions.
     actionQueue.forEach(({ actionName, args }) => {
-      executeAction(actionName, ...args);
-    });
-  };
+      executeAction(actionName, ...args)
+    })
+  }
 }
 
 /**
@@ -73,17 +73,17 @@ export function executeAction(actionName, ...args) {
   if (window.FB) {
     switch (actionName) {
       case ACTION_NAMES.FB_SHARE:
-        openShareDialog(...args);
-        break;
+        openShareDialog(...args)
+        break
 
       default:
-        error('Unrecognized FB action requested to be executed!');
-        break;
+        error('Unrecognized FB action requested to be executed!')
+        break
     }
   } else { // SDK is not loaded, queue our action.
     actionQueue.push({
       actionName,
       args,
-    });
+    })
   }
 }

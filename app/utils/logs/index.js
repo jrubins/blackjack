@@ -1,14 +1,14 @@
 import {
   isDebug,
   isDevelopment,
-} from '../environment';
+} from '../environment'
 
 /**
  * The logging instance.
  *
  * @type {?Object}
  */
-const logger = console;
+const logger = console
 
 /**
  * Outputs a debug message.
@@ -17,7 +17,7 @@ const logger = console;
  */
 export function debug(...rest) {
   if (isDebug()) {
-    logger.debug(...rest);
+    logger.debug(...rest)
   }
 }
 
@@ -28,7 +28,7 @@ export function debug(...rest) {
  */
 export function info(...rest) {
   if (isDevelopment()) {
-    logger.info(...rest);
+    logger.info(...rest)
   }
 }
 
@@ -38,5 +38,5 @@ export function info(...rest) {
  * @param {...String} rest
  */
 export function error(...rest) {
-  logger.error(...rest);
+  logger.error(...rest)
 }

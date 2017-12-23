@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('path')
 
 module.exports = {
   serverPort: 9005,
@@ -12,8 +12,8 @@ module.exports = {
     app: {
       base: path.resolve(__dirname, 'app'),
       favicon: path.resolve(__dirname, 'app/assets/images/favicon.ico'),
-      mainJs: path.resolve(__dirname, 'app/main.js'),
+      mainJs: path.resolve(__dirname, 'app/main.jsx'),
       html: path.resolve(__dirname, 'app/views/index.html'),
     },
   },
-};
+}

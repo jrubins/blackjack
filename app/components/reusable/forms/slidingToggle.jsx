@@ -1,12 +1,12 @@
-import React, { Component, PropTypes } from 'react';
-import _ from 'lodash';
-import cn from 'classnames';
+import React, { Component, PropTypes } from 'react'
+import _ from 'lodash'
+import cn from 'classnames'
 
 class SlidingToggle extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.toggleSlider = this.toggleSlider.bind(this);
+    this.toggleSlider = this.toggleSlider.bind(this)
   }
 
   /**
@@ -16,10 +16,10 @@ class SlidingToggle extends Component {
     const {
       handleChange,
       options,
-    } = this.props;
-    const newActiveOptionIndex = this.isSliderActive() ? 1 : 0;
+    } = this.props
+    const newActiveOptionIndex = this.isSliderActive() ? 1 : 0
 
-    handleChange(_.get(options[newActiveOptionIndex], 'value'));
+    handleChange(_.get(options[newActiveOptionIndex], 'value'))
   }
 
   /**
@@ -31,17 +31,17 @@ class SlidingToggle extends Component {
     const {
       options,
       value,
-    } = this.props;
+    } = this.props
 
-    return value === _.get(options[0], 'value');
+    return value === _.get(options[0], 'value')
   }
 
   render() {
     const {
       options,
-    } = this.props;
-    const activeOptionLabel = _.get(options[0], 'label');
-    const inactiveOptionLabel = _.get(options[1], 'label');
+    } = this.props
+    const activeOptionLabel = _.get(options[0], 'label')
+    const inactiveOptionLabel = _.get(options[1], 'label')
 
     return (
       <div
@@ -56,7 +56,7 @@ class SlidingToggle extends Component {
           {inactiveOptionLabel}
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -67,6 +67,6 @@ SlidingToggle.propTypes = {
     value: PropTypes.bool.isRequired,
   })).isRequired,
   value: PropTypes.bool.isRequired,
-};
+}
 
-export default SlidingToggle;
+export default SlidingToggle

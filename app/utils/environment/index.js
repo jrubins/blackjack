@@ -1,5 +1,5 @@
-export const APP_ENV_LOCAL = 'local';
-export const APP_ENV_STAGING = 'staging';
+export const APP_ENV_LOCAL = 'local'
+export const APP_ENV_STAGING = 'staging'
 
 /**
  * Returns whether we are in debug or not.
@@ -7,7 +7,7 @@ export const APP_ENV_STAGING = 'staging';
  * @returns {Boolean}
  */
 export function isDebug() {
-  return process.env.DEBUG;
+  return process.env.DEBUG
 }
 
 /**
@@ -16,5 +16,5 @@ export function isDebug() {
  * @returns {Boolean}
  */
 export function isDevelopment() {
-  return process.env.NODE_ENV === 'development';
+  return process.env.NODE_ENV === 'development'
 }

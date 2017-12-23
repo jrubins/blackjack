@@ -1,39 +1,39 @@
-import React, { PropTypes } from 'react';
-import _ from 'lodash';
+import React, { PropTypes } from 'react'
+import _ from 'lodash'
 
-import { SUITS } from '../../../utils/cards';
+import { SUITS } from '../../../utils/cards'
 
-import ClubIcon from '../icons/club';
-import DiamondIcon from '../icons/diamond';
-import HeartIcon from '../icons/heart';
-import SpadeIcon from '../icons/spade';
+import ClubIcon from '../icons/club'
+import DiamondIcon from '../icons/diamond'
+import HeartIcon from '../icons/heart'
+import SpadeIcon from '../icons/spade'
 
 const Card = ({ card, cardCovered }) => {
   const {
     number,
     suit,
-  } = card;
-  let cardNumber = number;
-  let CardIcon;
+  } = card
+  let cardNumber = number
+  let CardIcon
 
   if (cardNumber === 1) {
-    cardNumber = 'A';
+    cardNumber = 'A'
   } else if (cardNumber === 11) {
-    cardNumber = 'J';
+    cardNumber = 'J'
   } else if (cardNumber === 12) {
-    cardNumber = 'Q';
+    cardNumber = 'Q'
   } else if (cardNumber === 13) {
-    cardNumber = 'K';
+    cardNumber = 'K'
   }
 
   if (suit === SUITS.CLUBS) {
-    CardIcon = ClubIcon;
+    CardIcon = ClubIcon
   } else if (suit === SUITS.DIAMONDS) {
-    CardIcon = DiamondIcon;
+    CardIcon = DiamondIcon
   } else if (suit === SUITS.HEARTS) {
-    CardIcon = HeartIcon;
+    CardIcon = HeartIcon
   } else {
-    CardIcon = SpadeIcon;
+    CardIcon = SpadeIcon
   }
 
   return (
@@ -60,8 +60,8 @@ const Card = ({ card, cardCovered }) => {
         </span>
       </div>
     </div>
-  );
-};
+  )
+}
 
 Card.propTypes = {
   card: PropTypes.shape({
@@ -69,6 +69,6 @@ Card.propTypes = {
     suit: PropTypes.oneOf(_.values(SUITS)).isRequired,
   }).isRequired,
   cardCovered: PropTypes.bool,
-};
+}
 
-export default Card;
+export default Card

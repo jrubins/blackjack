@@ -1,17 +1,17 @@
 // Polyfills for IE11.
-import 'core-js/fn/number/is-nan';
-import 'core-js/fn/number/parse-int';
-import 'core-js/es6/promise';
+import 'core-js/fn/number/is-nan'
+import 'core-js/fn/number/parse-int'
+import 'core-js/es6/promise'
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { AppContainer } from 'react-hot-loader'
 
-import configureStore from './store/configureStore';
+import configureStore from './store/configureStore'
 
-import Root from './root';
+import Root from './root'
 
-const store = configureStore();
+const store = configureStore()
 
 /**
  * Renders our React root wrapped with a hot-reloading component (NOTE: That component is a no-op in prod).
@@ -23,13 +23,13 @@ const render = () => {
         store={store}
       />
     </AppContainer>, document.getElementById('app')
-  );
-};
-render();
+  )
+}
+render()
 
 // Hot Module Replacement API
 if (module.hot) {
   module.hot.accept('./root', () => {
-    render();
-  });
+    render()
+  })
 }

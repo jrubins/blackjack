@@ -1,8 +1,8 @@
-import sizeOf from 'object-sizeof';
+import sizeOf from 'object-sizeof'
 
-import { formatBytes } from '../../utils/text';
-import { debug } from '../../utils/logs';
-import { isDevelopment } from '../../utils/environment';
+import { formatBytes } from '../../utils/text'
+import { debug } from '../../utils/logs'
+import { isDevelopment } from '../../utils/environment'
 
 /**
  * This is a middleware to output the size of the Redux store in bytes. Useful to keep an
@@ -13,10 +13,10 @@ import { isDevelopment } from '../../utils/environment';
  */
 const ReduxStoreSize = store => next => action => {
   if (isDevelopment()) {
-    debug('Store Size:', formatBytes(sizeOf(store.getState())));
+    debug('Store Size:', formatBytes(sizeOf(store.getState())))
   }
 
-  return next(action);
-};
+  return next(action)
+}
 
-export default ReduxStoreSize;
+export default ReduxStoreSize

@@ -8,7 +8,7 @@ export const PLAYER_DECISIONS = {
   HIT: 'hit',
   SPLIT: 'split',
   STAND: 'stand',
-};
+}
 
 /**
  * The different types of result for a player's hand.
@@ -19,4 +19,4 @@ export const HAND_RESULTS = {
   LOST: 'lost',
   PUSH: 'push',
   WON: 'won',
-};
+}

@@ -1,11 +1,11 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import cn from 'classnames';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import cn from 'classnames'
 
 import {
   formatCurrency,
   formatThousands,
-} from '../../../utils/text';
+} from '../../../utils/text'
 
 import {
   getNumDecks,
@@ -13,7 +13,7 @@ import {
   isBasicStrategyOpen,
   isCardCounterOpen,
   isMobileNavOpen,
-} from '../../../reducers';
+} from '../../../reducers'
 import {
   closeBasicStrategy,
   closeCardCounter,
@@ -21,22 +21,22 @@ import {
   openBasicStrategy,
   openCardCounter,
   openMobileNav,
-} from '../../../actions/ui';
-import { setNumDecks } from '../../../actions/gameplay';
+} from '../../../actions/ui'
+import { setNumDecks } from '../../../actions/gameplay'
 
-import FacebookShare from '../forms/fbShare';
-import HamburgerIcon from '../icons/hamburger';
-import SlidingToggle from '../forms/slidingToggle';
-import TagPicker from '../forms/tagPicker';
+import FacebookShare from '../forms/fbShare'
+import HamburgerIcon from '../icons/hamburger'
+import SlidingToggle from '../forms/slidingToggle'
+import TagPicker from '../forms/tagPicker'
 
 class Header extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.toggleBasicStrategy = this.toggleBasicStrategy.bind(this);
-    this.toggleCardCounter = this.toggleCardCounter.bind(this);
-    this.toggleMobileNav = this.toggleMobileNav.bind(this);
-    this.setNumDecks = this.setNumDecks.bind(this);
+    this.toggleBasicStrategy = this.toggleBasicStrategy.bind(this)
+    this.toggleCardCounter = this.toggleCardCounter.bind(this)
+    this.toggleMobileNav = this.toggleMobileNav.bind(this)
+    this.setNumDecks = this.setNumDecks.bind(this)
   }
 
   /**
@@ -47,12 +47,12 @@ class Header extends Component {
       closeBasicStrategy,
       isBasicStrategyOpen,
       openBasicStrategy,
-    } = this.props;
+    } = this.props
 
     if (isBasicStrategyOpen) {
-      closeBasicStrategy();
+      closeBasicStrategy()
     } else {
-      openBasicStrategy();
+      openBasicStrategy()
     }
   }
 
@@ -64,12 +64,12 @@ class Header extends Component {
       closeCardCounter,
       isCardCounterOpen,
       openCardCounter,
-    } = this.props;
+    } = this.props
 
     if (isCardCounterOpen) {
-      closeCardCounter();
+      closeCardCounter()
     } else {
-      openCardCounter();
+      openCardCounter()
     }
   }
 
@@ -81,12 +81,12 @@ class Header extends Component {
       closeMobileNav,
       isMobileNavOpen,
       openMobileNav,
-    } = this.props;
+    } = this.props
 
     if (isMobileNavOpen) {
-      closeMobileNav();
+      closeMobileNav()
     } else {
-      openMobileNav();
+      openMobileNav()
     }
   }
 
@@ -98,9 +98,9 @@ class Header extends Component {
   setNumDecks(numDecks) {
     const {
       setNumDecks,
-    } = this.props;
+    } = this.props
 
-    setNumDecks(numDecks);
+    setNumDecks(numDecks)
   }
 
   render() {
@@ -110,7 +110,7 @@ class Header extends Component {
       isMobileNavOpen,
       numDecks,
       playerBalance,
-    } = this.props;
+    } = this.props
 
     return (
       <header>
@@ -222,7 +222,7 @@ class Header extends Component {
           </div>
         </div>
       </header>
-    );
+    )
   }
 }
 
@@ -239,7 +239,7 @@ Header.propTypes = {
   openMobileNav: PropTypes.func.isRequired,
   playerBalance: PropTypes.number.isRequired,
   setNumDecks: PropTypes.func.isRequired,
-};
+}
 
 export default connect(state => ({
   isBasicStrategyOpen: isBasicStrategyOpen(state),
@@ -255,4 +255,4 @@ export default connect(state => ({
   openCardCounter,
   openMobileNav,
   setNumDecks,
-})(Header);
+})(Header)

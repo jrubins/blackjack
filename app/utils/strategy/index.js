@@ -1,8 +1,8 @@
-import _ from 'lodash';
+import _ from 'lodash'
 
-import { PLAYER_DECISIONS } from '../constants';
-import { debug } from '../logs';
-import { sumCards } from '../cards';
+import { PLAYER_DECISIONS } from '../constants'
+import { debug } from '../logs'
+import { sumCards } from '../cards'
 
 /**
  * The basic strategy chart for a player's hard totals.
@@ -72,7 +72,7 @@ const HARD_STRATEGY = [
     action: PLAYER_DECISIONS.STAND,
     error: 'Always stand on 17-21.',
   },
-];
+]
 
 /**
  * The basic strategy chart for a player's soft totals (hand contains an ace).
@@ -137,7 +137,7 @@ const SOFT_STRATEGY = [
     action: PLAYER_DECISIONS.STAND,
     error: 'Always stand on soft 19-21.',
   },
-];
+]
 
 /**
  * The basic strategy chart for when a player can split.
@@ -194,7 +194,7 @@ const SPLIT_STRATEGY = [
     ],
     error: 'Split with 9s. Stand when dealer shows 7, 10 or Ace.',
   },
-];
+]
 
 /**
  * Checks a player action against the basic strategy chart given the dealer's up card.
@@ -215,55 +215,55 @@ export function checkBasicStrategy({
   hasEnoughToSplit,
 }) {
   // Have to adjust dealer up card to make J, Q and K values worth 10.
-  const adjustedDealerUpCardValue = Math.min(dealerUpCardValue, 10);
-  const playerTotal = sumCards(playerCards);
-  let strategy;
+  const adjustedDealerUpCardValue = Math.min(dealerUpCardValue, 10)
+  const playerTotal = sumCards(playerCards)
+  let strategy
 
   // Check if we should be splitting.
   if (playerCards.length === 2 && playerCards[0].number === playerCards[1].number && hasEnoughToSplit) {
-    debug('Using split basic strategy chart...');
+    debug('Using split basic strategy chart...')
 
-    strategy = _.find(SPLIT_STRATEGY, ({ player }) => _.includes(player, playerCards[0].number));
+    strategy = _.find(SPLIT_STRATEGY, ({ player }) => _.includes(player, playerCards[0].number))
   }
 
   // See if we shouldn't split or couldn't find a strategy for splitting with the player cards.
   if (!strategy) {
-    let strategyTable = HARD_STRATEGY;
+    let strategyTable = HARD_STRATEGY
 
     // If the totals do not equal each other, there's an Ace in the player hand.
     if (playerTotal.low !== playerTotal.high) {
-      debug('Using soft total basic strategy chart...');
-      strategyTable = SOFT_STRATEGY;
+      debug('Using soft total basic strategy chart...')
+      strategyTable = SOFT_STRATEGY
     } else {
-      debug('Using hard total basic strategy chart...');
+      debug('Using hard total basic strategy chart...')
     }
 
-    strategy = _.find(strategyTable, ({ player }) => _.includes(player, playerTotal.high));
+    strategy = _.find(strategyTable, ({ player }) => _.includes(player, playerTotal.high))
   }
 
   if (strategy) {
-    debug('Found strategy:', strategy);
+    debug('Found strategy:', strategy)
 
     // See if this strategy has exceptions and the dealer up card qualifies to use an exception.
-    const exception = strategy.exceptions && _.find(strategy.exceptions, ({ dealer }) => _.includes(dealer, adjustedDealerUpCardValue));
+    const exception = strategy.exceptions && _.find(strategy.exceptions, ({ dealer }) => _.includes(dealer, adjustedDealerUpCardValue))
 
-    debug('Strategy exception applies:', exception);
+    debug('Strategy exception applies:', exception)
 
-    let correctAction = exception ? exception.action : strategy.action;
+    let correctAction = exception ? exception.action : strategy.action
 
     // The user can't double if they have more than two cards or in some other scenarios (not
     // enough money to double).
     if (correctAction === PLAYER_DECISIONS.DOUBLE && (playerCards.length > 2 || !hasEnoughToDouble)) {
-      debug('Player cannot double, suggesting hit. Num cards:', playerCards.length, 'Enough to double:', hasEnoughToDouble);
+      debug('Player cannot double, suggesting hit. Num cards:', playerCards.length, 'Enough to double:', hasEnoughToDouble)
 
-      correctAction = exception ? exception.noDoubleAction : strategy.noDoubleAction;
+      correctAction = exception ? exception.noDoubleAction : strategy.noDoubleAction
     }
 
     return {
       correct: playerAction === correctAction,
       error: strategy.error,
-    };
+    }
   }
 
-  debug('No strategy found for cards:', playerCards, adjustedDealerUpCardValue, playerAction);
+  debug('No strategy found for cards:', playerCards, adjustedDealerUpCardValue, playerAction)
 }

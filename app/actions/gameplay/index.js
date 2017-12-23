@@ -2,7 +2,7 @@ import {
   CARD_DEALT,
   CARD_REVEALED,
   NUM_DECKS_SET,
-} from '../';
+} from '../'
 
 /**
  * Indicates a card has been dealt.
@@ -13,13 +13,13 @@ import {
  * @returns {Object}
  */
 export function cardDealt(cardValue, opts = {}) {
-  const { visible } = opts;
+  const { visible } = opts
 
   return {
     type: CARD_DEALT,
     cardValue,
     visible,
-  };
+  }
 }
 
 /**
@@ -32,7 +32,7 @@ export function cardRevealed(cardValue) {
   return {
     type: CARD_REVEALED,
     cardValue,
-  };
+  }
 }
 
 /**
@@ -45,5 +45,5 @@ export function setNumDecks(numDecks) {
   return {
     type: NUM_DECKS_SET,
     numDecks,
-  };
+  }
 }

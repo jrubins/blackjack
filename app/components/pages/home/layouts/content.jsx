@@ -1,48 +1,48 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import _ from 'lodash';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import _ from 'lodash'
 
 import {
   EVENT_NAMES,
   customEvent,
-} from '../../../../utils/analytics';
+} from '../../../../utils/analytics'
 import {
   HAND_RESULTS,
   PLAYER_DECISIONS,
-} from '../../../../utils/constants';
+} from '../../../../utils/constants'
 import {
   dealCard,
   getNumCardsRemainingInDeck,
   makeDeck,
   sumCards,
-} from '../../../../utils/cards';
+} from '../../../../utils/cards'
 import {
   checkBasicStrategy,
-} from '../../../../utils/strategy';
+} from '../../../../utils/strategy'
 
 import {
   getNumDecks,
   getPlayerBalance,
-} from '../../../../reducers';
+} from '../../../../reducers'
 import {
   cardDealt,
   cardRevealed,
-} from '../../../../actions/gameplay';
+} from '../../../../actions/gameplay'
 import {
   deductBalance,
   playerLost,
   playerWon,
-} from '../../../../actions/player';
+} from '../../../../actions/player'
 
-import BasicStrategyAdvice from '../../../reusable/advice/basicStrategy';
-import CardCounterAdvice from '../../../reusable/advice/cardCounter';
-import Button from '../../../reusable/forms/button';
-import Hand from '../../../reusable/cards/hand';
-import Input from '../../../reusable/forms/input';
+import BasicStrategyAdvice from '../../../reusable/advice/basicStrategy'
+import CardCounterAdvice from '../../../reusable/advice/cardCounter'
+import Button from '../../../reusable/forms/button'
+import Hand from '../../../reusable/cards/hand'
+import Input from '../../../reusable/forms/input'
 
 class HomeContent extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       activePlayerHandIndex: 0,
@@ -62,61 +62,61 @@ class HomeContent extends Component {
       ],
       playerHasPlacedFirstBet: false,
       roundOver: true,
-    };
+    }
 
-    this.deal = this.deal.bind(this);
-    this.handleBetChange = this.handleBetChange.bind(this);
-    this.handlePlayerAction = this.handlePlayerAction.bind(this);
-    this.handleCountGuess = this.handleCountGuess.bind(this);
+    this.deal = this.deal.bind(this)
+    this.handleBetChange = this.handleBetChange.bind(this)
+    this.handlePlayerAction = this.handlePlayerAction.bind(this)
+    this.handleCountGuess = this.handleCountGuess.bind(this)
   }
 
   componentDidMount() {
-    this.createDeck();
+    this.createDeck()
   }
 
   componentDidUpdate(prevProps, prevState) {
     const {
       cardRevealed,
       numDecks,
-    } = this.props;
+    } = this.props
     const {
       numDecks: prevNumDecks,
-    } = prevProps;
+    } = prevProps
     const {
       dealerCards,
       enteredBet,
       playerDecision,
       roundOver,
-    } = this.state;
+    } = this.state
     const {
       playerDecision: prevPlayerDecision,
       roundOver: prevRoundOver,
-    } = prevState;
+    } = prevState
 
     // Create a new deck if they changed the number of decks to use.
     if (numDecks !== prevNumDecks) {
-      this.createDeck();
+      this.createDeck()
     }
 
     // If it's no longer the player's decision, the dealer card has been revealed.
     if (!playerDecision && playerDecision !== prevPlayerDecision) {
-      cardRevealed(dealerCards[1].number);
+      cardRevealed(dealerCards[1].number)
     }
 
     if (roundOver) {
       if (roundOver !== prevRoundOver) {
         // Make sure the automatic bet is adjusted properly with the player's new balance.
-        this.handleBetChange(enteredBet);
+        this.handleBetChange(enteredBet)
       }
 
-      return;
+      return
     }
 
-    const activePlayerHand = this.getActivePlayerHand();
+    const activePlayerHand = this.getActivePlayerHand()
 
     // Nothing to check if the player doesn't yet have a hand.
     if (!activePlayerHand) {
-      return;
+      return
     }
 
     // The active hand could have less than two cards if we're moving on to the second hand
@@ -125,33 +125,33 @@ class HomeContent extends Component {
       this.setState(prevState => ({
         countGuess: null,
         playerHands: this.getNewCardPlayerHandState(prevState, this.getNextCard()),
-      }));
+      }))
     }
 
-    const dealerTotal = sumCards(dealerCards).high;
-    const playerTotal = sumCards(activePlayerHand.cards).high;
+    const dealerTotal = sumCards(dealerCards).high
+    const playerTotal = sumCards(activePlayerHand.cards).high
 
     if (playerDecision) {
       // If either the dealer or player got 21, it's no longer the player's decision.
       if (dealerTotal === 21) {
         this.setState({
           playerDecision: false,
-        });
+        })
       } else if (playerTotal === 21) { // They may have split and gotten 21, so they may not be definitively done.
-        this.playerDoneWithCurrentHand();
+        this.playerDoneWithCurrentHand()
       } else if (playerTotal > 21) { // Check if the player bust in all their hands.
         if (this.playerBustedOnAllHands()) {
-          this.roundOver();
+          this.roundOver()
         } else {
-          this.playerDoneWithCurrentHand();
+          this.playerDoneWithCurrentHand()
         }
       }
     } else { // Not the player's decision.
       // Check if we need to keep adding cards to the dealer's hand.
       if (dealerTotal < 17) {
-        this.addCardToHand(true);
+        this.addCardToHand(true)
       } else { // Dealer is done hitting.
-        this.roundOver();
+        this.roundOver()
       }
     }
   }
@@ -162,10 +162,10 @@ class HomeContent extends Component {
   createDeck() {
     const {
       numDecks,
-    } = this.props;
+    } = this.props
 
     // Make our deck of cards.
-    makeDeck(numDecks);
+    makeDeck(numDecks)
   }
 
   /**
@@ -178,21 +178,21 @@ class HomeContent extends Component {
   getNextCard(opts = {}) {
     const {
       cardDealt,
-    } = this.props;
+    } = this.props
     const {
       visible = true,
-    } = opts;
-    const newCard = dealCard();
+    } = opts
+    const newCard = dealCard()
 
     cardDealt(newCard.number, {
       visible,
-    });
+    })
 
     this.setState({
       countGuess: null,
-    });
+    })
 
-    return newCard;
+    return newCard
   }
 
   /**
@@ -202,38 +202,38 @@ class HomeContent extends Component {
     const {
       playerLost,
       playerWon,
-    } = this.props;
+    } = this.props
     const {
       dealerCards,
       playerHands,
-    } = this.state;
-    const dealerTotal = sumCards(dealerCards).high;
-    const newPlayerHands = [...playerHands];
-    let playerWinnings = 0;
+    } = this.state
+    const dealerTotal = sumCards(dealerCards).high
+    const newPlayerHands = [...playerHands]
+    let playerWinnings = 0
 
     playerHands.forEach(({ bet, cards }, i) => {
-      const handTotal = sumCards(cards).high;
-      let handResult = HAND_RESULTS.LOST;
+      const handTotal = sumCards(cards).high
+      let handResult = HAND_RESULTS.LOST
 
       // Check to see if player got blackjack.
       if (handTotal === 21 && cards.length === 2) {
-        playerWinnings += Math.round(bet + (bet * 3 / 2));
-        handResult = HAND_RESULTS.WON;
+        playerWinnings += Math.round(bet + (bet * 3 / 2))
+        handResult = HAND_RESULTS.WON
       } else if ((handTotal <= 21 && handTotal > dealerTotal) || dealerTotal > 21) { // Straight win or dealer bust.
-        playerWinnings += bet * 2;
-        handResult = HAND_RESULTS.WON;
+        playerWinnings += bet * 2
+        handResult = HAND_RESULTS.WON
       } else if (handTotal === dealerTotal) { // A push.
-        playerWinnings += bet;
-        handResult = HAND_RESULTS.PUSH;
+        playerWinnings += bet
+        handResult = HAND_RESULTS.PUSH
       }
 
-      newPlayerHands[i].result = handResult;
-    });
+      newPlayerHands[i].result = handResult
+    })
 
     if (playerWinnings) {
-      playerWon(playerWinnings);
+      playerWon(playerWinnings)
     } else {
-      playerLost();
+      playerLost()
     }
 
     this.setState({
@@ -241,7 +241,7 @@ class HomeContent extends Component {
       playerDecision: false,
       playerHands: newPlayerHands,
       roundOver: true,
-    });
+    })
   }
 
   /**
@@ -250,24 +250,24 @@ class HomeContent extends Component {
    * @param {Boolean} [isDealer]
    */
   addCardToHand(isDealer = false) {
-    const newCard = this.getNextCard();
+    const newCard = this.getNextCard()
 
     this.setState(prevState => {
       if (isDealer) {
-        const dealerCards = prevState.dealerCards;
+        const dealerCards = prevState.dealerCards
 
         return {
           dealerCards: [
             ...dealerCards,
             newCard,
           ],
-        };
+        }
       }
 
       return {
         playerHands: this.getNewCardPlayerHandState(prevState, newCard),
-      };
-    });
+      }
+    })
   }
 
   /**
@@ -284,9 +284,9 @@ class HomeContent extends Component {
     const {
       playerHands,
       activePlayerHandIndex,
-    } = state;
-    const newPlayerHands = [...playerHands];
-    const activePlayerHandBet = newPlayerHands[activePlayerHandIndex].bet;
+    } = state
+    const newPlayerHands = [...playerHands]
+    const activePlayerHandBet = newPlayerHands[activePlayerHandIndex].bet
 
     // Add the new card to the active player hand.
     newPlayerHands[activePlayerHandIndex] = {
@@ -296,9 +296,9 @@ class HomeContent extends Component {
         newCard,
       ],
       result: newPlayerHands[activePlayerHandIndex].result,
-    };
+    }
 
-    return newPlayerHands;
+    return newPlayerHands
   }
 
   /**
@@ -309,23 +309,23 @@ class HomeContent extends Component {
   handleBetChange(value) {
     const {
       playerBalance,
-    } = this.props;
+    } = this.props
 
     // Parse whatever they entered into a number.
-    const parsedBet = Number.parseInt(value, 10);
+    const parsedBet = Number.parseInt(value, 10)
 
     // If the value couldn't be parsed, don't use it.
-    let resolvedBet = Number.isNaN(parsedBet) ? null : parsedBet;
+    let resolvedBet = Number.isNaN(parsedBet) ? null : parsedBet
 
     // Don't let the bet be less than zero.
-    resolvedBet = Math.max(resolvedBet, 0);
+    resolvedBet = Math.max(resolvedBet, 0)
 
     // Don't let the bet be more than the player's remaining balance.
-    resolvedBet = Math.min(resolvedBet, playerBalance);
+    resolvedBet = Math.min(resolvedBet, playerBalance)
 
     this.setState({
       enteredBet: resolvedBet ? resolvedBet : null,
-    });
+    })
   }
 
   /**
@@ -334,27 +334,27 @@ class HomeContent extends Component {
   deal() {
     const {
       deductBalance,
-    } = this.props;
+    } = this.props
     const {
       enteredBet,
-    } = this.state;
+    } = this.state
 
     // Can't deal if the player hasn't entered a bet yet.
     if (!enteredBet) {
-      return;
+      return
     }
 
     // Order here to mimic an actual deal at a casino.
-    const player1 = this.getNextCard();
-    const dealer1 = this.getNextCard();
-    const player2 = this.getNextCard();
+    const player1 = this.getNextCard()
+    const dealer1 = this.getNextCard()
+    const player2 = this.getNextCard()
     const dealer2 = this.getNextCard({
       visible: false,
-    });
+    })
 
-    deductBalance(enteredBet);
+    deductBalance(enteredBet)
 
-    customEvent(EVENT_NAMES.SET_BET(enteredBet));
+    customEvent(EVENT_NAMES.SET_BET(enteredBet))
 
     this.setState({
       activePlayerHandIndex: 0,
@@ -377,7 +377,7 @@ class HomeContent extends Component {
       ],
       playerHasPlacedFirstBet: true,
       roundOver: false,
-    });
+    })
   }
 
   /**
@@ -389,47 +389,47 @@ class HomeContent extends Component {
     const {
       deductBalance,
       playerBalance,
-    } = this.props;
+    } = this.props
     const {
       activePlayerHandIndex,
       dealerCards,
       enteredBet,
-    } = this.state;
-    const activePlayerHand = this.getActivePlayerHand();
+    } = this.state
+    const activePlayerHand = this.getActivePlayerHand()
     const basicStrategyResult = checkBasicStrategy({
       playerCards: activePlayerHand.cards,
       dealerUpCardValue: dealerCards[0].number,
       playerAction: action,
       hasEnoughToDouble: playerBalance >= enteredBet,
       hasEnoughToSplit: playerBalance >= enteredBet,
-    });
+    })
 
     if (basicStrategyResult) {
       this.setState(prevState => ({
         basicStrategyStreak: basicStrategyResult.correct ? prevState.basicStrategyStreak + 1 : 0,
         basicStrategyError: basicStrategyResult.correct ? null : basicStrategyResult.error,
-      }));
+      }))
     }
 
     if (action === PLAYER_DECISIONS.HIT) {
-      this.addCardToHand();
+      this.addCardToHand()
     } else if (action === PLAYER_DECISIONS.STAND) {
-      this.playerDoneWithCurrentHand();
+      this.playerDoneWithCurrentHand()
     } else if (action === PLAYER_DECISIONS.DOUBLE) {
-      deductBalance(enteredBet);
+      deductBalance(enteredBet)
 
       this.setState(prevState => ({
         countGuess: null,
         playerHands: this.getNewCardPlayerHandState(prevState, this.getNextCard(), true),
-      }));
+      }))
 
       // Once you double, you're done with deciding anything else.
-      this.playerDoneWithCurrentHand();
+      this.playerDoneWithCurrentHand()
     } else if (action === PLAYER_DECISIONS.SPLIT) {
-      deductBalance(enteredBet);
+      deductBalance(enteredBet)
 
       this.setState(prevState => {
-        const newPlayerHands = [...prevState.playerHands];
+        const newPlayerHands = [...prevState.playerHands]
 
         // Remove the current active hand and insert the split hands in its place.
         newPlayerHands.splice(activePlayerHandIndex, 1, {
@@ -445,13 +445,13 @@ class HomeContent extends Component {
             activePlayerHand.cards[1],
           ],
           result: activePlayerHand.result,
-        });
+        })
 
         return {
           countGuess: null,
           playerHands: newPlayerHands,
-        };
-      });
+        }
+      })
     }
   }
 
@@ -465,9 +465,9 @@ class HomeContent extends Component {
     const {
       activePlayerHandIndex,
       playerHands,
-    } = this.state;
+    } = this.state
 
-    return playerHands[activePlayerHandIndex];
+    return playerHands[activePlayerHandIndex]
   }
 
   /**
@@ -478,14 +478,14 @@ class HomeContent extends Component {
       const {
         activePlayerHandIndex,
         playerHands,
-      } = prevState;
-      const playerHasMoreHands = activePlayerHandIndex !== playerHands.length - 1;
+      } = prevState
+      const playerHasMoreHands = activePlayerHandIndex !== playerHands.length - 1
 
       return {
         activePlayerHandIndex: playerHasMoreHands ? prevState.activePlayerHandIndex + 1 : prevState.activePlayerHandIndex,
         playerDecision: playerHasMoreHands,
-      };
-    });
+      }
+    })
   }
 
   /**
@@ -496,9 +496,9 @@ class HomeContent extends Component {
   playerBustedOnAllHands() {
     const {
       playerHands,
-    } = this.state;
+    } = this.state
 
-    return _.every(playerHands, playerHand => sumCards(playerHand.cards).low > 21);
+    return _.every(playerHands, playerHand => sumCards(playerHand.cards).low > 21)
   }
 
   /**
@@ -509,14 +509,14 @@ class HomeContent extends Component {
   handleCountGuess(countGuess) {
     this.setState({
       countGuess,
-    });
+    })
   }
 
   render() {
     const {
       numDecks,
       playerBalance,
-    } = this.props;
+    } = this.props
     const {
       activePlayerHandIndex,
       basicStrategyError,
@@ -527,14 +527,14 @@ class HomeContent extends Component {
       playerDecision,
       playerHands,
       playerHasPlacedFirstBet,
-    } = this.state;
-    const activePlayerHand = this.getActivePlayerHand();
-    const canDoubleActiveHand = activePlayerHand.cards.length === 2 && playerBalance >= enteredBet;
+    } = this.state
+    const activePlayerHand = this.getActivePlayerHand()
+    const canDoubleActiveHand = activePlayerHand.cards.length === 2 && playerBalance >= enteredBet
     const canSplitActiveHand = (
       activePlayerHand.cards.length === 2 &&
       activePlayerHand.cards[0].number === activePlayerHand.cards[1].number &&
       playerBalance >= enteredBet
-    );
+    )
 
     return (
       <div className="home-content-container">
@@ -625,7 +625,7 @@ class HomeContent extends Component {
           />
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -637,7 +637,7 @@ HomeContent.propTypes = {
   playerBalance: PropTypes.number.isRequired,
   playerLost: PropTypes.func.isRequired,
   playerWon: PropTypes.func.isRequired,
-};
+}
 
 export default connect(state => ({
   numDecks: getNumDecks(state),
@@ -648,4 +648,4 @@ export default connect(state => ({
   deductBalance,
   playerLost,
   playerWon,
-})(HomeContent);
+})(HomeContent)

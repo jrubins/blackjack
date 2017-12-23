@@ -1,9 +1,9 @@
-const DotenvPlugin = require('webpack-dotenv-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
+const DotenvPlugin = require('webpack-dotenv-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 
-const buildConfig = require('./buildConfig');
+const buildConfig = require('./buildConfig')
 
 module.exports = {
   bail: true,
@@ -66,7 +66,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks(module) {
-        return module.context && module.context.indexOf('node_modules') !== -1;
+        return module.context && module.context.indexOf('node_modules') !== -1
       },
     }),
 
@@ -103,4 +103,4 @@ module.exports = {
       '.jsx',
     ],
   },
-};
+}

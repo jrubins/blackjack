@@ -1,15 +1,15 @@
-import { createStore, applyMiddleware, compose } from 'redux';
-import ReduxThunk from 'redux-thunk';
-import persistState from 'redux-localstorage';
+import { createStore, applyMiddleware, compose } from 'redux'
+import ReduxThunk from 'redux-thunk'
+import persistState from 'redux-localstorage'
 
-import ReduxStoreSize from './middleware/reduxStoreSize';
+import ReduxStoreSize from './middleware/reduxStoreSize'
 import {
   APP_ENV_LOCAL,
   APP_ENV_STAGING,
-} from '../utils/environment';
-import reducers from '../reducers';
+} from '../utils/environment'
+import reducers from '../reducers'
 
-let store;
+let store
 
 /**
  * Creates the redux store.
@@ -47,9 +47,9 @@ export default function configureStore() {
     ((process.env.APP_ENV === APP_ENV_LOCAL || process.env.APP_ENV === APP_ENV_STAGING) &&
       typeof window === 'object' &&
       typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : f => f)
-  ));
+  ))
 
-  return store;
+  return store
 }
 
 /**
@@ -59,5 +59,5 @@ export default function configureStore() {
  * @returns {Object}
  */
 export function getStoreState() {
-  return store ? store.getState() : {};
+  return store ? store.getState() : {}
 }

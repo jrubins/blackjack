@@ -1,7 +1,7 @@
 import {
   EVENT_NAMES,
   customEvent,
-} from '../../utils/analytics';
+} from '../../utils/analytics'
 
 import {
   BASIC_STRATEGY_CLOSE,
@@ -10,7 +10,7 @@ import {
   CARD_COUNTER_OPEN,
   MOBILE_NAV_CLOSE,
   MOBILE_NAV_OPEN,
-} from '../';
+} from '../'
 
 /**
  * Turns off the basic strategy advisor.
@@ -18,11 +18,11 @@ import {
  * @returns {Object}
  */
 export function closeBasicStrategy() {
-  customEvent(EVENT_NAMES.BASIC_STRATEGY_OFF);
+  customEvent(EVENT_NAMES.BASIC_STRATEGY_OFF)
 
   return {
     type: BASIC_STRATEGY_CLOSE,
-  };
+  }
 }
 
 /**
@@ -33,7 +33,7 @@ export function closeBasicStrategy() {
 export function closeCardCounter() {
   return {
     type: CARD_COUNTER_CLOSE,
-  };
+  }
 }
 
 /**
@@ -42,11 +42,11 @@ export function closeCardCounter() {
  * @returns {Object}
  */
 export function closeMobileNav() {
-  customEvent(EVENT_NAMES.MOBILE_NAV_CLOSE);
+  customEvent(EVENT_NAMES.MOBILE_NAV_CLOSE)
 
   return {
     type: MOBILE_NAV_CLOSE,
-  };
+  }
 }
 
 /**
@@ -55,11 +55,11 @@ export function closeMobileNav() {
  * @returns {Object}
  */
 export function openBasicStrategy() {
-  customEvent(EVENT_NAMES.BASIC_STRATEGY_ON);
+  customEvent(EVENT_NAMES.BASIC_STRATEGY_ON)
 
   return {
     type: BASIC_STRATEGY_OPEN,
-  };
+  }
 }
 
 /**
@@ -70,7 +70,7 @@ export function openBasicStrategy() {
 export function openCardCounter() {
   return {
     type: CARD_COUNTER_OPEN,
-  };
+  }
 }
 
 /**
@@ -79,9 +79,9 @@ export function openCardCounter() {
  * @returns {Object}
  */
 export function openMobileNav() {
-  customEvent(EVENT_NAMES.MOBILE_NAV_OPEN);
+  customEvent(EVENT_NAMES.MOBILE_NAV_OPEN)
 
   return {
     type: MOBILE_NAV_OPEN,
-  };
+  }
 }

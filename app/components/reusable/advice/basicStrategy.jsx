@@ -1,14 +1,14 @@
-import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React, { PropTypes } from 'react'
+import { connect } from 'react-redux'
 
 import {
   isBasicStrategyOpen,
-} from '../../../reducers';
+} from '../../../reducers'
 import {
   closeBasicStrategy,
-} from '../../../actions/ui';
+} from '../../../actions/ui'
 
-import CloseIcon from '../icons/close';
+import CloseIcon from '../icons/close'
 
 const BasicStrategyAdvice = ({
   basicStrategyError,
@@ -17,7 +17,7 @@ const BasicStrategyAdvice = ({
   closeBasicStrategy,
 }) => {
   if (!basicStrategyOpen) {
-    return null;
+    return null
   }
 
   return (
@@ -43,8 +43,8 @@ const BasicStrategyAdvice = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 BasicStrategyAdvice.propTypes = {
   basicStrategyOpen: PropTypes.bool.isRequired,
@@ -52,14 +52,14 @@ BasicStrategyAdvice.propTypes = {
 
   basicStrategyError: PropTypes.string,
   basicStrategyStreak: PropTypes.number,
-};
+}
 
 BasicStrategyAdvice.defaultProps = {
   basicStrategyStreak: 0,
-};
+}
 
 export default connect(state => ({
   basicStrategyOpen: isBasicStrategyOpen(state),
 }), {
   closeBasicStrategy,
-})(BasicStrategyAdvice);
+})(BasicStrategyAdvice)

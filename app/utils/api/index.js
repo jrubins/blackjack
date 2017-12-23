@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'lodash'
 
 /**
  * A mapping of API response codes to be more semantic.
@@ -7,7 +7,7 @@ import _ from 'lodash';
  */
 export const STATUS_CODES = {
   UNAUTHORIZED: 401,
-};
+}
 
 /**
  * Transforms data into the format the API expects using the provided mapping and data.
@@ -18,19 +18,19 @@ export const STATUS_CODES = {
  * @returns {Object}
  */
 export function transformFieldsForAPI({ mapping, data, onlyWithValue = false }) {
-  const apiData = {};
+  const apiData = {}
 
   _.forEach(mapping, (apiId, appId) => {
     if (onlyWithValue) {
       if (data[appId]) {
-        apiData[apiId] = data[appId];
+        apiData[apiId] = data[appId]
       }
     } else {
-      apiData[apiId] = data[appId];
+      apiData[apiId] = data[appId]
     }
-  });
+  })
 
-  return apiData;
+  return apiData
 }
 
 /**
@@ -42,14 +42,14 @@ export function transformFieldsForAPI({ mapping, data, onlyWithValue = false }) 
  */
 export function transformApiResponseForApp({ mapping, apiData }) {
   return apiData.map(apiResponse => {
-    const appData = {};
+    const appData = {}
 
     _.forEach(mapping, (apiId, appId) => {
-      appData[appId] = _.get(apiResponse, apiId);
-    });
+      appData[appId] = _.get(apiResponse, apiId)
+    })
 
-    return appData;
-  });
+    return appData
+  })
 }
 
 /**
@@ -61,11 +61,11 @@ export function transformApiResponseForApp({ mapping, apiData }) {
 export function queryStringify(obj) {
   return _.reduce(obj, (result, value, key) => {
     if (value) {
-      result.push(`${key}=${value}`);
+      result.push(`${key}=${value}`)
     }
 
-    return result;
-  }, []).join('&');
+    return result
+  }, []).join('&')
 }
 
 /**
@@ -76,8 +76,8 @@ export function queryStringify(obj) {
  * @returns {Error}
  */
 export function makeApiResponseError({ statusCode, json }) {
-  const error = new Error(_.isArray(json.errors) ? json.errors[0] : 'Internal server error');
-  error.statusCode = statusCode;
+  const error = new Error(_.isArray(json.errors) ? json.errors[0] : 'Internal server error')
+  error.statusCode = statusCode
 
-  return error;
+  return error
 }

@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import _ from 'lodash';
+import React, { PropTypes } from 'react'
+import _ from 'lodash'
 
 const Input = ({
   handleChange,
@@ -15,7 +15,7 @@ const Input = ({
     type={type}
     value={_.isNil(value) ? '' : value}
   />
-);
+)
 
 Input.propTypes = {
   handleChange: PropTypes.func.isRequired,
@@ -25,6 +25,6 @@ Input.propTypes = {
     PropTypes.string,
     PropTypes.number,
   ]),
-};
+}
 
-export default Input;
+export default Input

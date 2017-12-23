@@ -1,13 +1,13 @@
-import React, { PropTypes } from 'react';
-import _ from 'lodash';
-import cn from 'classnames';
+import React, { PropTypes } from 'react'
+import _ from 'lodash'
+import cn from 'classnames'
 
-import { HAND_RESULTS } from '../../../utils/constants';
-import { formatCurrency } from '../../../utils/text';
-import { sumCards } from '../../../utils/cards';
+import { HAND_RESULTS } from '../../../utils/constants'
+import { formatCurrency } from '../../../utils/text'
+import { sumCards } from '../../../utils/cards'
 
-import Card from './card';
-import ChevronLeft from '../icons/chevronLeft';
+import Card from './card'
+import ChevronLeft from '../icons/chevronLeft'
 
 const Hand = ({
   hand,
@@ -19,31 +19,31 @@ const Hand = ({
     bet,
     cards,
     result,
-  } = hand;
-  const handTotal = sumCards(hand.cards);
-  const formattedBet = formatCurrency(bet);
-  let handTotalDisplay;
-  let resultDisplay;
+  } = hand
+  const handTotal = sumCards(hand.cards)
+  const formattedBet = formatCurrency(bet)
+  let handTotalDisplay
+  let resultDisplay
 
   // Always show the highest value for the dealer. Also, show the highest value for the player
   // when they are done deciding.
   if (isDealer || !playerActionsEnabled) {
-    handTotalDisplay = handTotal.high;
+    handTotalDisplay = handTotal.high
   } else if (playerActionsEnabled) { // Show both values when the player is still deciding.
     handTotalDisplay = (
       handTotal.low !== handTotal.high
         ? `${handTotal.low}/${handTotal.high}`
         : handTotal.low
-    );
+    )
   }
 
   // Set the display of our result.
   if (result === HAND_RESULTS.WON) {
-    resultDisplay = `won: +${formattedBet}`;
+    resultDisplay = `won: +${formattedBet}`
   } else if (result === HAND_RESULTS.PUSH) {
-    resultDisplay = `push: ${formattedBet}`;
+    resultDisplay = `push: ${formattedBet}`
   } else if (result === HAND_RESULTS.LOST) {
-    resultDisplay = `lost: -${formattedBet}`;
+    resultDisplay = `lost: -${formattedBet}`
   }
 
   return (
@@ -104,8 +104,8 @@ const Hand = ({
         </div>
       }
     </div>
-  );
-};
+  )
+}
 
 Hand.propTypes = {
   hand: PropTypes.shape({
@@ -116,11 +116,11 @@ Hand.propTypes = {
   isDealer: PropTypes.bool,
   playerActionsEnabled: PropTypes.bool.isRequired,
   showActiveHandIndicator: PropTypes.bool,
-};
+}
 
 Hand.defaultProps = {
   isDealer: false,
   showActiveHandIndicator: false,
-};
+}
 
-export default Hand;
+export default Hand

@@ -1,28 +1,28 @@
-import React, { Component, PropTypes } from 'react';
-import _ from 'lodash';
+import React, { Component, PropTypes } from 'react'
+import _ from 'lodash'
 
 import {
   ACTION_NAMES,
   executeAction,
-} from '../../../utils/fb';
+} from '../../../utils/fb'
 import {
   EVENT_NAMES,
   customEvent,
-} from '../../../utils/analytics';
+} from '../../../utils/analytics'
 
-import Button from './button';
-import FacebookIcon from '../icons/facebook';
+import Button from './button'
+import FacebookIcon from '../icons/facebook'
 
 class FacebookShare extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       isSharing: false,
-    };
+    }
 
-    this.doFacebookShare = this.doFacebookShare.bind(this);
-    this.handleShareComplete = this.handleShareComplete.bind(this);
+    this.doFacebookShare = this.doFacebookShare.bind(this)
+    this.handleShareComplete = this.handleShareComplete.bind(this)
   }
 
   /**
@@ -31,15 +31,15 @@ class FacebookShare extends Component {
    * @param {SyntheticEvent} event
    */
   doFacebookShare(event) {
-    event.preventDefault();
+    event.preventDefault()
 
-    const { shareUrl } = this.props;
+    const { shareUrl } = this.props
 
     this.setState({
       isSharing: true,
     }, () => {
-      executeAction(ACTION_NAMES.FB_SHARE, shareUrl, this.handleShareComplete);
-    });
+      executeAction(ACTION_NAMES.FB_SHARE, shareUrl, this.handleShareComplete)
+    })
   }
 
   /**
@@ -52,13 +52,13 @@ class FacebookShare extends Component {
       isSharing: false,
     }, () => {
       if (!_.isNil(response)) {
-        customEvent(EVENT_NAMES.SHARE_FACEBOOK);
+        customEvent(EVENT_NAMES.SHARE_FACEBOOK)
       }
-    });
+    })
   }
 
   render() {
-    const { isSharing } = this.state;
+    const { isSharing } = this.state
 
     return (
       <div
@@ -71,12 +71,12 @@ class FacebookShare extends Component {
           isLoading={isSharing}
         />
       </div>
-    );
+    )
   }
 }
 
 FacebookShare.propTypes = {
   shareUrl: PropTypes.string.isRequired,
-};
+}
 
-export default FacebookShare;
+export default FacebookShare

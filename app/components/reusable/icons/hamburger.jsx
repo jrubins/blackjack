@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import cn from 'classnames';
+import React, { PropTypes } from 'react'
+import cn from 'classnames'
 
 const HamburgerIcon = ({ handleClick, isOpen }) => (
   <div
@@ -11,11 +11,11 @@ const HamburgerIcon = ({ handleClick, isOpen }) => (
     <div className="hamburger-middle" />
     <div className="hamburger-hidden-middle" />
   </div>
-);
+)
 
 HamburgerIcon.propTypes = {
   handleClick: PropTypes.func,
   isOpen: PropTypes.bool.isRequired,
-};
+}
 
-export default HamburgerIcon;
+export default HamburgerIcon

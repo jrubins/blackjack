@@ -1,4 +1,4 @@
-import numeral from 'numeral';
+import numeral from 'numeral'
 
 /**
  * Formats the provided value into a string of how many KBs it represents.
@@ -7,7 +7,7 @@ import numeral from 'numeral';
  * @returns {String}
  */
 export function formatBytes(value) {
-  return numeral(value).format('0.0 b');
+  return numeral(value).format('0.0 b')
 }
 
 /**
@@ -17,7 +17,7 @@ export function formatBytes(value) {
  * @returns {String}
  */
 export function formatCurrency(value) {
-  return numeral(value).format('$0,0');
+  return numeral(value).format('$0,0')
 }
 
 /**
@@ -27,5 +27,5 @@ export function formatCurrency(value) {
  * @returns {String}
  */
 export function formatThousands(value) {
-  return numeral(value).format('0[.]00a');
+  return numeral(value).format('0[.]00a')
 }

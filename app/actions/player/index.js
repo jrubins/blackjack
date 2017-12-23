@@ -2,7 +2,7 @@ import {
   DEDUCT_BALANCE,
   PLAYER_LOST,
   PLAYER_WON,
-} from '../';
+} from '../'
 
 /**
  * Deducts an amount from the player's balance.
@@ -14,7 +14,7 @@ export function deductBalance(amount) {
   return {
     type: DEDUCT_BALANCE,
     amount,
-  };
+  }
 }
 
 /**
@@ -25,7 +25,7 @@ export function deductBalance(amount) {
 export function playerLost() {
   return {
     type: PLAYER_LOST,
-  };
+  }
 }
 
 /**
@@ -38,5 +38,5 @@ export function playerWon(amount) {
   return {
     type: PLAYER_WON,
     amount,
-  };
+  }
 }

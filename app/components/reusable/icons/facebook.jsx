@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const Facebook = () => (
   <svg
@@ -20,6 +20,6 @@ const Facebook = () => (
       v99.803H182.409z"
     />
   </svg>
-);
+)
 
-export default Facebook;
+export default Facebook

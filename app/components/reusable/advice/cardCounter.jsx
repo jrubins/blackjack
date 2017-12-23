@@ -1,42 +1,42 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import _ from 'lodash';
-import cn from 'classnames';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import _ from 'lodash'
+import cn from 'classnames'
 
-import { debug } from '../../../utils/logs';
+import { debug } from '../../../utils/logs'
 
 import {
   getCount,
   isCardCounterOpen,
-} from '../../../reducers';
+} from '../../../reducers'
 import {
   closeCardCounter,
-} from '../../../actions/ui';
+} from '../../../actions/ui'
 
-import CloseIcon from '../icons/close';
-import TagPicker from '../forms/tagPicker';
+import CloseIcon from '../icons/close'
+import TagPicker from '../forms/tagPicker'
 
 class CardCounter extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       countOptions: [],
-    };
+    }
   }
 
   componentDidMount() {
-    const { count } = this.props;
+    const { count } = this.props
 
-    this.setCountOptions(count);
+    this.setCountOptions(count)
   }
 
   componentWillReceiveProps(nextProps) {
-    const { count } = this.props;
-    const { count: nextCount } = nextProps;
+    const { count } = this.props
+    const { count: nextCount } = nextProps
 
     if (count !== nextCount) {
-      this.setCountOptions(nextCount);
+      this.setCountOptions(nextCount)
     }
   }
 
@@ -47,26 +47,26 @@ class CardCounter extends Component {
    */
   setCountOptions(trueCount) {
     if (_.isNil(trueCount)) {
-      return;
+      return
     }
 
     // Choose random increments for the count between 1-4.
-    const countIncrement1 = _.random(1, 4);
-    let countIncrement2 = _.random(1, 4);
+    const countIncrement1 = _.random(1, 4)
+    let countIncrement2 = _.random(1, 4)
 
     // Make sure our count alternative increments are not the same value.
     if (countIncrement2 === countIncrement1) {
-      countIncrement2 += 1;
+      countIncrement2 += 1
     }
 
-    debug('Count increments:', countIncrement1, countIncrement2);
+    debug('Count increments:', countIncrement1, countIncrement2)
 
     // Randomly choose whether to add or subtract the random values to the true count.
-    const countAlternative1 = (_.random(0, 1) === 1) ? (trueCount + countIncrement1) : (trueCount - countIncrement1);
-    const countAlternative2 = (_.random(0, 1) === 1) ? (trueCount + countIncrement2) : (trueCount - countIncrement2);
+    const countAlternative1 = (_.random(0, 1) === 1) ? (trueCount + countIncrement1) : (trueCount - countIncrement1)
+    const countAlternative2 = (_.random(0, 1) === 1) ? (trueCount + countIncrement2) : (trueCount - countIncrement2)
 
-    debug('True count value:', trueCount);
-    debug('Count alternative values:', countAlternative1, countAlternative2);
+    debug('True count value:', trueCount)
+    debug('Count alternative values:', countAlternative1, countAlternative2)
 
     const countOptions = _.sortBy([
       {
@@ -81,11 +81,11 @@ class CardCounter extends Component {
         label: `${countAlternative2}`,
         value: countAlternative2,
       },
-    ], 'value');
+    ], 'value')
 
     this.setState({
       countOptions,
-    });
+    })
   }
 
   render() {
@@ -95,12 +95,12 @@ class CardCounter extends Component {
       count,
       countGuess,
       handleCountGuess,
-    } = this.props;
-    const { countOptions } = this.state;
-    const correctCountGuess = countGuess === count;
+    } = this.props
+    const { countOptions } = this.state
+    const correctCountGuess = countGuess === count
 
     if (!cardCounterOpen) {
-      return null;
+      return null
     }
 
     return (
@@ -143,7 +143,7 @@ class CardCounter extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -154,11 +154,11 @@ CardCounter.propTypes = {
 
   countGuess: PropTypes.number,
   handleCountGuess: PropTypes.func.isRequired,
-};
+}
 
 export default connect(state => ({
   cardCounterOpen: isCardCounterOpen(state),
   count: getCount(state),
 }), {
   closeCardCounter,
-})(CardCounter);
+})(CardCounter)
