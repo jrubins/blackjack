@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
@@ -10,6 +11,9 @@ import {
   HAND_RESULTS,
   PLAYER_DECISIONS,
 } from '../../../../utils/constants'
+import {
+  KEYCODES,
+} from '../../../../utils/keyboard'
 import {
   dealCard,
   getNumCardsRemainingInDeck,
@@ -66,12 +70,15 @@ class HomeContent extends Component {
 
     this.deal = this.deal.bind(this)
     this.handleBetChange = this.handleBetChange.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
     this.handlePlayerAction = this.handlePlayerAction.bind(this)
     this.handleCountGuess = this.handleCountGuess.bind(this)
   }
 
   componentDidMount() {
     this.createDeck()
+
+    document.addEventListener('keydown', this.handleKeyDown)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -154,6 +161,10 @@ class HomeContent extends Component {
         this.roundOver()
       }
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown)
   }
 
   /**
@@ -396,26 +407,17 @@ class HomeContent extends Component {
       enteredBet,
     } = this.state
     const activePlayerHand = this.getActivePlayerHand()
-    const basicStrategyResult = checkBasicStrategy({
-      playerCards: activePlayerHand.cards,
-      dealerUpCardValue: dealerCards[0].number,
-      playerAction: action,
-      hasEnoughToDouble: playerBalance >= enteredBet,
-      hasEnoughToSplit: playerBalance >= enteredBet,
-    })
-
-    if (basicStrategyResult) {
-      this.setState(prevState => ({
-        basicStrategyStreak: basicStrategyResult.correct ? prevState.basicStrategyStreak + 1 : 0,
-        basicStrategyError: basicStrategyResult.correct ? null : basicStrategyResult.error,
-      }))
-    }
+    let userHadValidAction = false
 
     if (action === PLAYER_DECISIONS.HIT) {
+      userHadValidAction = true
       this.addCardToHand()
     } else if (action === PLAYER_DECISIONS.STAND) {
+      userHadValidAction = true
       this.playerDoneWithCurrentHand()
-    } else if (action === PLAYER_DECISIONS.DOUBLE) {
+    } else if (action === PLAYER_DECISIONS.DOUBLE && this.canDoubleActiveHand()) {
+      userHadValidAction = true
+
       deductBalance(enteredBet)
 
       this.setState(prevState => ({
@@ -425,7 +427,9 @@ class HomeContent extends Component {
 
       // Once you double, you're done with deciding anything else.
       this.playerDoneWithCurrentHand()
-    } else if (action === PLAYER_DECISIONS.SPLIT) {
+    } else if (action === PLAYER_DECISIONS.SPLIT && this.canSplitActiveHand()) {
+      userHadValidAction = true
+
       deductBalance(enteredBet)
 
       this.setState(prevState => {
@@ -452,6 +456,23 @@ class HomeContent extends Component {
           playerHands: newPlayerHands,
         }
       })
+    }
+
+    if (userHadValidAction) {
+      const basicStrategyResult = checkBasicStrategy({
+        playerCards: activePlayerHand.cards,
+        dealerUpCardValue: dealerCards[0].number,
+        playerAction: action,
+        hasEnoughToDouble: playerBalance >= enteredBet,
+        hasEnoughToSplit: playerBalance >= enteredBet,
+      })
+
+      if (basicStrategyResult) {
+        this.setState(prevState => ({
+          basicStrategyStreak: basicStrategyResult.correct ? prevState.basicStrategyStreak + 1 : 0,
+          basicStrategyError: basicStrategyResult.correct ? null : basicStrategyResult.error,
+        }))
+      }
     }
   }
 
@@ -512,10 +533,77 @@ class HomeContent extends Component {
     })
   }
 
+  /**
+   * Handles a key down event. Use this for convenience of making a decision without clicking on buttons.
+   *
+   * @param {SyntheticEvent} event
+   */
+  handleKeyDown(event) {
+    const {
+      playerDecision,
+    } = this.state
+    const {
+      keyCode,
+    } = event
+
+    if (playerDecision) {
+      if (keyCode === KEYCODES.D) {
+        this.handlePlayerAction(PLAYER_DECISIONS.DOUBLE)
+      } else if (keyCode === KEYCODES.H) {
+        this.handlePlayerAction(PLAYER_DECISIONS.HIT)
+      } else if (keyCode === KEYCODES.S) {
+        this.handlePlayerAction(PLAYER_DECISIONS.STAND)
+      } else if (keyCode === KEYCODES.P) {
+        this.handlePlayerAction(PLAYER_DECISIONS.SPLIT)
+      }
+    } else {
+      if (keyCode === KEYCODES.D || keyCode === KEYCODES.ENTER) {
+        this.deal()
+      }
+    }
+  }
+
+  /**
+   * Returns if the user can double the active hand.
+   *
+   * @returns {Boolean}
+   */
+  canDoubleActiveHand() {
+    const {
+      playerBalance,
+    } = this.props
+    const {
+      enteredBet,
+    } = this.state
+    const activePlayerHand = this.getActivePlayerHand()
+
+    return activePlayerHand.cards.length === 2 && playerBalance >= enteredBet
+  }
+
+  /**
+   * Returns if the user can split the active hand.
+   *
+   * @returns {Boolean}
+   */
+  canSplitActiveHand() {
+    const {
+      playerBalance,
+    } = this.props
+    const {
+      enteredBet,
+    } = this.state
+    const activePlayerHand = this.getActivePlayerHand()
+
+    return (
+      activePlayerHand.cards.length === 2 &&
+      activePlayerHand.cards[0].number === activePlayerHand.cards[1].number &&
+      playerBalance >= enteredBet
+    )
+  }
+
   render() {
     const {
       numDecks,
-      playerBalance,
     } = this.props
     const {
       activePlayerHandIndex,
@@ -528,13 +616,8 @@ class HomeContent extends Component {
       playerHands,
       playerHasPlacedFirstBet,
     } = this.state
-    const activePlayerHand = this.getActivePlayerHand()
-    const canDoubleActiveHand = activePlayerHand.cards.length === 2 && playerBalance >= enteredBet
-    const canSplitActiveHand = (
-      activePlayerHand.cards.length === 2 &&
-      activePlayerHand.cards[0].number === activePlayerHand.cards[1].number &&
-      playerBalance >= enteredBet
-    )
+    const canDoubleActiveHand = this.canDoubleActiveHand()
+    const canSplitActiveHand = this.canSplitActiveHand()
 
     return (
       <div className="home-content-container">
