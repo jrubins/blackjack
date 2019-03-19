@@ -1,6 +1,0 @@
-{
-  "projects": {
-    "default": "aceten-blackjack",
-    "production": "aceten-blackjack"
-  }
-}
