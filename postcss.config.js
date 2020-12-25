@@ -1,9 +1,7 @@
-const autoprefixer = require('autoprefixer')
-
 module.exports = {
   plugins: [
-    autoprefixer({
-      browsers: ['> 5%'],
+    require('tailwindcss'),
+    require('autoprefixer')({
       cascade: false,
     }),
   ],

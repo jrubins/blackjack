@@ -1,9 +1,0 @@
-.page-container {
-  max-width: $max-width;
-  margin: 0 auto;
-  padding: 0 $mobile-padding 150px;
-
-  @media (max-width: $screen-md-max) {
-    padding: 0 $mobile-padding 60px;
-  }
-}

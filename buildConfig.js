@@ -1,19 +1,17 @@
 const path = require('path')
 
 module.exports = {
-  serverPort: 9005,
-  paths: {
-    base: path.resolve(__dirname, '.'),
-
-    cache: path.resolve(__dirname, '.cache'),
-
-    dist: path.resolve(__dirname, 'dist'),
-
-    app: {
-      base: path.resolve(__dirname, 'app'),
-      favicon: path.resolve(__dirname, 'app/assets/images/favicon.ico'),
-      mainJs: path.resolve(__dirname, 'app/main.jsx'),
-      html: path.resolve(__dirname, 'app/views/index.html'),
-    },
+  caches: {
+    babel: path.resolve(__dirname, '.babel-cache'),
   },
+  paths: {
+    dist: path.resolve(__dirname, 'dist'),
+    entry: path.resolve(__dirname, 'src/main.tsx'),
+    public: {
+      favicon: path.resolve(__dirname, 'public/img/favicon.ico'),
+      html: path.resolve(__dirname, 'public/index.html'),
+    },
+    src: path.resolve(__dirname, 'src'),
+  },
+  webpackDevServerPort: 9005,
 }

@@ -1,4 +1,4 @@
-const DotenvPlugin = require('webpack-dotenv-plugin')
+const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
@@ -6,93 +6,64 @@ const buildConfig = require('./buildConfig')
 
 module.exports = {
   context: __dirname,
+  devServer: {
+    clientLogLevel: 'error', // The default value for this outputs too much in DevTools.
+    contentBase: buildConfig.paths.src,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
+    host: '0.0.0.0',
+    hot: true,
+    port: buildConfig.webpackDevServerPort,
+  },
+  devtool: 'eval-cheap-module-source-map',
   entry: [
     'react-hot-loader/patch',
-    `webpack-dev-server/client?http://localhost:${buildConfig.serverPort}`,
+    `webpack-dev-server/client?http://localhost:${buildConfig.webpackDevServerPort}`,
     'webpack/hot/only-dev-server',
-    buildConfig.paths.app.mainJs,
+    buildConfig.paths.entry,
   ],
+  mode: 'development',
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        include: [buildConfig.paths.src],
+        loader: 'babel-loader',
+        options: {
+          cacheDirectory: buildConfig.caches.babel,
+        },
+      },
+      {
+        test: /\.css$/,
+        include: [buildConfig.paths.src],
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
+      },
+    ],
+  },
   output: {
     chunkFilename: 'js/[name].js',
     filename: 'js/[name].js',
     path: buildConfig.paths.dist,
     publicPath: '/',
   },
-  module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        include: [
-          buildConfig.paths.app.base,
-        ],
-        loader: 'babel-loader',
-        options: {
-          cacheDirectory: buildConfig.paths.cache,
-        },
-      },
-      {
-        test: /\.scss$/,
-        include: [
-          buildConfig.paths.app.base,
-        ],
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader',
-        ],
-      },
-    ],
-  },
   plugins: [
-    new DotenvPlugin({
-      // We don't really use this as different env files for different people. Just a place to keep common
-      // env variables for the project as a whole.
-      sample: '.env',
-      path: '.env',
-    }),
+    new Dotenv(),
+
     new HtmlWebpackPlugin({
-      favicon: buildConfig.paths.app.favicon,
-      template: buildConfig.paths.app.html,
+      favicon: buildConfig.paths.public.favicon,
+      // "inject: true" places all JavaScript resources at the bottom of the body element.
+      inject: true,
+      template: buildConfig.paths.public.html,
     }),
+
     new webpack.HotModuleReplacementPlugin(),
-
-    // Allows the HMR plugin to output more legible names.
-    new webpack.NamedModulesPlugin(),
-
-    // Ignore locales from moment.
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-
-    // This makes our vendor bundle from node_modules modules.
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks(module) {
-        return module.context && module.context.indexOf('node_modules') !== -1
-      },
-    }),
-
-    // This ensures that our vendor bundle name doesn't change between builds (unless the vendor contents change)
-    // by extracting out the webpack bootstrap code into its own file.
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      minChunks: Infinity,
-    }),
   ],
   resolve: {
-    modules: [
-      'node_modules',
-      buildConfig.paths.base,
-    ],
-    extensions: [
-      '.js',
-      '.jsx',
-    ],
-  },
-  devServer: {
-    historyApiFallback: {
-      // Otherwise periods in the URL will cause this to fail.
-      disableDotRule: true,
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
     },
-    hot: true,
-    port: buildConfig.serverPort,
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    modules: ['node_modules', buildConfig.paths.src],
   },
 }

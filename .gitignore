@@ -3,7 +3,7 @@ dist
 stats.json
 
 # Cache
-.cache
+.babel-cache
 .DS_Store
 .eslintcache
 .tmp
