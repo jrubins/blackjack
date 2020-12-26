@@ -6,7 +6,7 @@
   "scripts": {
     "build": "NODE_ENV=production webpack --progress --config webpack.config.prod.js",
     "compile": "tsc",
-    "start": "yarn && webpack serve --progress --config webpack.config.dev.js"
+    "start": "webpack serve --progress --config webpack.config.dev.js"
   },
   "engines": {
     "node": "14.15.1",
