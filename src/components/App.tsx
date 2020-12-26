@@ -14,7 +14,7 @@ import {
   STATES,
 } from './machines/gameMachine'
 import { useConfigSync } from '../hooks/config'
-import { useFacebookSDK, useGoogleAnalytics } from '../hooks/scripts'
+import { useGoogleAnalytics } from '../hooks/scripts'
 import Header from './Header'
 import HomePage from './pages/HomePage'
 
@@ -28,7 +28,6 @@ const App: React.FC = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
 
   useGoogleAnalytics()
-  useFacebookSDK()
 
   const [gameState, gameSend] = useMachine<Context, Events>(gameMachine, {
     devTools: true,
@@ -51,6 +50,7 @@ const App: React.FC = () => {
   } = gameState.context
   const numRemainingCards = getNumCardsRemainingInDeck({ deck, deckIndex })
   const isPlayerTurn = gameState.matches(STATES.PLAYER_TURN)
+  const isTakingBets = gameState.matches(STATES.TAKING_BETS)
 
   useConfigSync({
     balance: playerBalance,
@@ -129,6 +129,7 @@ const App: React.FC = () => {
             enteredBet={enteredBet}
             isBasicStrategyOpen={isBasicStrategyOpen}
             isPlayerTurn={isPlayerTurn}
+            isTakingBets={isTakingBets}
             numDecks={numDecks}
             numRemainingCards={numRemainingCards}
             onChangeBet={(bet) => {

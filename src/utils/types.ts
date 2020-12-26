@@ -15,6 +15,7 @@ export enum HAND_RESULTS {
 }
 
 export interface Hand {
+  // Need this field since the bet may change during the round (double, split, etc.).
   bet: number | null
   cards: Card[]
   result: HAND_RESULTS | null

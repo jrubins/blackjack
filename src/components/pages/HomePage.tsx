@@ -23,6 +23,7 @@ const HomePage: React.FC<{
   enteredBet: number | null
   isBasicStrategyOpen: boolean
   isPlayerTurn: boolean
+  isTakingBets: boolean
   numDecks: number
   numRemainingCards: number
   onChangeBet: (value: string) => void
@@ -49,6 +50,7 @@ const HomePage: React.FC<{
   enteredBet,
   isBasicStrategyOpen,
   isPlayerTurn,
+  isTakingBets,
   numDecks,
   numRemainingCards,
   onChangeBet,
@@ -81,7 +83,7 @@ const HomePage: React.FC<{
           <Hand
             cards={dealerCards}
             isDealer={true}
-            playerActionsEnabled={isPlayerTurn}
+            isPlayerTurn={isPlayerTurn}
           />
         </div>
         {playerHands.map((hand, i) => {
@@ -90,7 +92,7 @@ const HomePage: React.FC<{
               <Hand
                 bet={hand.bet}
                 cards={hand.cards}
-                playerActionsEnabled={isPlayerTurn}
+                isPlayerTurn={isPlayerTurn}
                 result={hand.result}
                 showActiveHandIndicator={
                   isPlayerTurn &&
@@ -110,16 +112,27 @@ const HomePage: React.FC<{
       </div>
 
       <div className="grid grid-cols-2 gap-4 w-full mt-8 text-lg">
-        {isPlayerTurn && (
+        {!isTakingBets && (
           <>
-            <Button isInverse={true} onClick={onHit} type="button">
+            <Button
+              isDisabled={!isPlayerTurn}
+              isInverse={true}
+              onClick={onHit}
+              type="button"
+            >
               Hit
             </Button>
-            <Button isInverse={true} onClick={onStand} type="button">
+            <Button
+              isDisabled={!isPlayerTurn}
+              isInverse={true}
+              onClick={onStand}
+              type="button"
+            >
               Stand
             </Button>
             <Button
               isDisabled={
+                !isPlayerTurn ||
                 !canDouble({
                   balance: playerBalance,
                   bet: enteredBet || 0,
@@ -134,6 +147,7 @@ const HomePage: React.FC<{
             </Button>
             <Button
               isDisabled={
+                !isPlayerTurn ||
                 !canSplit({
                   balance: playerBalance,
                   bet: enteredBet || 0,
@@ -148,7 +162,7 @@ const HomePage: React.FC<{
             </Button>
           </>
         )}
-        {!isPlayerTurn && (
+        {isTakingBets && (
           <>
             <div className="h-12">
               <Input
@@ -168,21 +182,26 @@ const HomePage: React.FC<{
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-8">
-        <BasicStrategy
-          basicStrategyError={basicStrategyError}
-          basicStrategyOpen={isBasicStrategyOpen}
-          basicStrategyStreak={basicStrategyStreak}
-          closeBasicStrategy={closeBasicStrategy}
-        />
-
-        <CardCounter
-          cardCounterOpen={cardCounterOpen}
-          closeCardCounter={closeCardCounter}
-          count={count}
-          countGuess={countGuess}
-          countOptions={countOptions}
-          onCountGuess={onCountGuess}
-        />
+        {isBasicStrategyOpen && (
+          <div className="h-32">
+            <BasicStrategy
+              basicStrategyError={basicStrategyError}
+              basicStrategyStreak={basicStrategyStreak}
+              closeBasicStrategy={closeBasicStrategy}
+            />
+          </div>
+        )}
+        {cardCounterOpen && (
+          <div className="h-32">
+            <CardCounter
+              closeCardCounter={closeCardCounter}
+              count={count}
+              countGuess={countGuess}
+              countOptions={countOptions}
+              onCountGuess={onCountGuess}
+            />
+          </div>
+        )}
       </div>
     </div>
   )

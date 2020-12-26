@@ -9,8 +9,7 @@ import SpadeIcon from '../icons/SpadeIcon'
 
 const Card: React.FC<{
   card: CardInterface
-  cardCovered: boolean
-}> = ({ card, cardCovered }) => {
+}> = ({ card }) => {
   const { number, suit } = card
   let cardNumber: CardInterface['number'] | 'A' | 'J' | 'K' | 'Q' = number
   let CardIcon: React.FC
@@ -36,28 +35,40 @@ const Card: React.FC<{
   }
 
   return (
-    <div className="flex w-card h-card p-1 rounded bg-white shadow-card">
-      {cardCovered && (
-        <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-white to-blue" />
-      )}
+    <div className="relative w-card h-card rounded shadow-card">
+      <div
+        className="flex absolute inset-0 w-full h-full p-1 rounded bg-white"
+        style={{
+          backfaceVisibility: 'hidden',
+        }}
+      >
+        <div className="flex flex-col items-center w-4">
+          <span>{cardNumber}</span>
+          <div className="w-3 h-3">
+            <CardIcon />
+          </div>
+        </div>
+        <div className="flex-grow flex items-center">
+          <div className="w-full">
+            <CardIcon />
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-end w-4">
+          <span>{cardNumber}</span>
+          <div className="w-3 h-3">
+            <CardIcon />
+          </div>
+        </div>
+      </div>
 
-      <div className="flex flex-col items-center w-4">
-        <span>{cardNumber}</span>
-        <div className="w-3 h-3">
-          <CardIcon />
-        </div>
-      </div>
-      <div className="flex-grow flex items-center">
-        <div className="w-full">
-          <CardIcon />
-        </div>
-      </div>
-      <div className="flex flex-col items-center justify-end w-4">
-        <span>{cardNumber}</span>
-        <div className="w-3 h-3">
-          <CardIcon />
-        </div>
-      </div>
+      {/* This is the back of the card */}
+      <div
+        className="absolute inset-0 w-full h-full rounded bg-gradient-to-b from-white to-blue"
+        style={{
+          transform: 'rotateY(180deg)',
+          backfaceVisibility: 'hidden',
+        }}
+      />
     </div>
   )
 }

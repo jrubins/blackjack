@@ -3,7 +3,6 @@ import cn from 'classnames'
 
 import { formatCurrency, formatThousands } from '../utils/text'
 
-import FacebookShare from './reusable/forms/FacebookShare'
 import HamburgerIcon from './reusable/icons/HamburgerIcon'
 import SlidingToggle from './reusable/forms/SlidingToggle'
 import TagPicker from './reusable/forms/TagPicker'
@@ -31,12 +30,7 @@ const Header: React.FC<{
 }) => {
   return (
     <header className="flex items-center justify-between h-header max-w-screen-md mx-auto px-4">
-      <div className="flex items-center">
-        <div className="text-blue text-lg uppercase">Blackjack</div>
-        <div className="w-6 h-6 ml-2">
-          <FacebookShare />
-        </div>
-      </div>
+      <h1 className="text-blue text-lg uppercase">Blackjack</h1>
 
       <div className="flex items-center">
         <div className="mr-4 text-light-black">
@@ -54,7 +48,7 @@ const Header: React.FC<{
         )}
       >
         <div>
-          <h3 className="my-4 text-light-grey uppercase">Gameplay</h3>
+          <h2 className="my-4 text-light-grey uppercase">Gameplay</h2>
           <div className="flex items-center mb-2">
             <span className="w-48">Balance:</span>
             <span className="text-blue font-bold">
@@ -91,7 +85,7 @@ const Header: React.FC<{
             />
           </div>
 
-          <h3 className="my-4 text-light-grey uppercase">Customize UI</h3>
+          <h2 className="my-4 text-light-grey uppercase">Customize UI</h2>
           <div className="flex items-center mb-2">
             <span className="w-48">Basic Strategy</span>
             <SlidingToggle

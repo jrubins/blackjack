@@ -20,17 +20,21 @@ enum ACTIONS {
   ADD_PLAYER_CARD = 'ADD_PLAYER_CARD',
   ADD_PLAYER_WINNINGS = 'ADD_PLAYER_WINNINGS',
   ADJUST_BET_FOR_BALANCE = 'ADJUST_BET_FOR_BALANCE',
-  DEAL_CARDS = 'DEAL_CARDS',
+  DEAL_CARD = 'DEAL_CARD',
   DEDUCT_BALANCE = 'DEDUCT_BALANCE',
   GO_TO_NEXT_PLAYER_HAND = 'GO_TO_NEXT_PLAYER_HAND',
   MARK_FIRST_BET_PLACED = 'MARK_FIRST_BET_PLACED',
-  RESET_ACTIVE_HAND_INDEX = 'RESET_ACTIVE_HAND_INDEX',
+  RESET_HANDS = 'RESET_HANDS',
   SPLIT_ACTIVE_HAND = 'SPLIT_ACTIVE_HAND',
   TRACK_BET_PLACED = 'TRACK_BET_PLACED',
   UPDATE_BASIC_STRATEGY = 'UPDATE_BASIC_STRATEGY',
   UPDATE_BET = 'UPDATE_BET',
   UPDATE_COUNT_GUESS = 'UPDATE_COUNT_GUESS',
   UPDATE_DECKS = 'UPDATE_DECKS',
+}
+
+enum DELAYS {
+  DEAL_CARD_DELAY = 300,
 }
 
 export enum EVENTS {
@@ -59,6 +63,7 @@ enum GUARDS {
   DEALER_HAS_21 = 'DEALER_HAS_21',
   DEALER_NEEDS_MORE_CARDS = 'DEALER_NEEDS_MORE_CARDS',
   HAS_ENTERED_BET = 'HAS_ENTERED_BET',
+  INITIAL_CARDS_DEALT = 'INITIAL_CARDS_DEALT',
   PLAYER_HAS_NO_MORE_HANDS = 'PLAYER_HAS_NO_MORE_HANDS',
 }
 
@@ -67,9 +72,12 @@ export enum STATES {
   DEALER_TURN = 'DEALER_TURN',
   DEALING_CARDS = 'DEALING_CARDS',
   DONE_WITH_HAND = 'DONE_WITH_HAND',
+  FINISHED_DEALING = 'FINISHED_DEALING',
   PLAYER_TURN = 'PLAYER_TURN',
   ROUND_OVER = 'ROUND_OVER',
   TAKING_BETS = 'TAKING_BETS',
+  WAITING_TO_DEAL = 'WAITING_TO_DEAL',
+  WAITING_TO_DEAL_DEALER = 'WAITING_TO_DEAL_DEALER',
 }
 
 export interface Context {
@@ -163,6 +171,18 @@ function getCountOptions(trueCount: number | null): CountOption[] {
     ],
     'value'
   )
+}
+
+function getPlayerHand({
+  initialBet = null,
+}: {
+  initialBet?: number | null
+} = {}): Hand {
+  return {
+    bet: initialBet,
+    cards: [],
+    result: null,
+  }
 }
 
 /**
@@ -279,14 +299,7 @@ export const gameMachine = Machine<Context, Events>(
       enteredBet: null,
       numDecks: getConfigValue('numDecks', 1),
       playerBalance: getConfigValue('balance', 2000),
-      playerHands: [
-        {
-          // Need this field since the bet may change during the round (double, split, etc.).
-          bet: null,
-          cards: [],
-          result: null,
-        },
-      ],
+      playerHands: [getPlayerHand()],
       playerHasPlacedFirstBet: false,
     },
     initial: STATES.TAKING_BETS,
@@ -303,16 +316,30 @@ export const gameMachine = Machine<Context, Events>(
             actions: [
               ACTIONS.DEDUCT_BALANCE,
               ACTIONS.MARK_FIRST_BET_PLACED,
-              ACTIONS.RESET_ACTIVE_HAND_INDEX,
+              ACTIONS.RESET_HANDS,
             ],
             // Can't deal if the player hasn't entered a bet yet.
             cond: GUARDS.HAS_ENTERED_BET,
-            target: STATES.DEALING_CARDS,
+            target: STATES.WAITING_TO_DEAL,
           },
         },
       },
       [STATES.DEALING_CARDS]: {
-        entry: [ACTIONS.DEAL_CARDS],
+        entry: [ACTIONS.DEAL_CARD],
+        always: [
+          {
+            cond: GUARDS.INITIAL_CARDS_DEALT,
+            target: STATES.FINISHED_DEALING,
+          },
+          {
+            target: STATES.WAITING_TO_DEAL,
+          },
+        ],
+      },
+      [STATES.WAITING_TO_DEAL]: {
+        after: { [DELAYS.DEAL_CARD_DELAY]: { target: STATES.DEALING_CARDS } },
+      },
+      [STATES.FINISHED_DEALING]: {
         always: [
           {
             cond: GUARDS.DEALER_HAS_21,
@@ -375,7 +402,7 @@ export const gameMachine = Machine<Context, Events>(
             // so the user can add it to their mental count.
             actions: [ACTIONS.ADD_DEALER_CARD_TO_COUNT],
             cond: GUARDS.PLAYER_HAS_NO_MORE_HANDS,
-            target: STATES.DEALER_TURN,
+            target: STATES.WAITING_TO_DEAL_DEALER,
           },
           {
             actions: [ACTIONS.GO_TO_NEXT_PLAYER_HAND],
@@ -384,16 +411,19 @@ export const gameMachine = Machine<Context, Events>(
         ],
       },
       [STATES.DEALER_TURN]: {
-        entry: [ACTIONS.ADD_DEALER_CARD],
         always: [
           {
+            actions: [ACTIONS.ADD_DEALER_CARD],
             cond: GUARDS.DEALER_NEEDS_MORE_CARDS,
-            target: STATES.DEALER_TURN,
+            target: STATES.WAITING_TO_DEAL_DEALER,
           },
           {
             target: STATES.ROUND_OVER,
           },
         ],
+      },
+      [STATES.WAITING_TO_DEAL_DEALER]: {
+        after: { [DELAYS.DEAL_CARD_DELAY]: STATES.DEALER_TURN },
       },
       [STATES.ROUND_OVER]: {
         entry: [
@@ -486,52 +516,41 @@ export const gameMachine = Machine<Context, Events>(
           })
         },
       }),
-      [ACTIONS.DEAL_CARDS]: assign((context) => {
-        let newCount = context.count
-        let newCountOptions = context.countOptions
-        let newDeckIndex = context.deckIndex
-        let newDeck = [...context.deck]
+      [ACTIONS.DEAL_CARD]: assign((context) => {
+        const { activePlayerHandIndex, dealerCards, playerHands } = context
+        const { card, ...rest } = getNewCardWithCount(context)
+        const activePlayerHand = playerHands[activePlayerHandIndex]
 
-        // Order here to mimic an actual deal at a casino.
-        const dealerCards: Card[] = []
-        const playerCards: Card[] = []
-        for (let i = 0; i < 4; i++) {
-          const newCardResult = getNewCardWithCount({
-            count: newCount,
-            deck: newDeck,
-            deckIndex: newDeckIndex,
-          })
-
-          if (i === 0 || i === 2) {
-            playerCards.push(newCardResult.card)
-          } else {
-            dealerCards.push(newCardResult.card)
+        if (
+          activePlayerHand.cards.length !== 2 &&
+          (activePlayerHand.cards.length === 0 || dealerCards.length === 1)
+        ) {
+          return {
+            ...rest,
+            playerHands: getNewCardPlayerHandState({
+              activePlayerHandIndex,
+              isDouble: false,
+              newCard: card,
+              playerHands,
+            }),
           }
-
-          // We adjust the count for every card except for the second dealer card which
-          // is not yet revealed to the player.
-          if (i !== 3) {
-            newCount = newCardResult.count
-            newCountOptions = newCardResult.countOptions
-          }
-          newDeck = newCardResult.deck
-          newDeckIndex = newCardResult.deckIndex
         }
 
+        // If this is the second card we're dealing to the dealer, then it will be a hidden card and we
+        // want to override the count with the existing count since the player won't have seen the dealer's
+        // hidden card yet.
+        const countOverrides =
+          context.dealerCards.length === 1
+            ? {
+                count: context.count,
+                countOptions: context.countOptions,
+              }
+            : {}
+
         return {
-          count: newCount,
-          countGuess: null,
-          countOptions: newCountOptions,
-          dealerCards,
-          deck: newDeck,
-          deckIndex: newDeckIndex,
-          playerHands: [
-            {
-              bet: context.enteredBet,
-              cards: playerCards,
-              result: null,
-            },
-          ],
+          ...rest,
+          ...countOverrides,
+          dealerCards: [...context.dealerCards, card],
         }
       }),
       [ACTIONS.DEDUCT_BALANCE]: assign({
@@ -569,8 +588,12 @@ export const gameMachine = Machine<Context, Events>(
       [ACTIONS.MARK_FIRST_BET_PLACED]: assign<Context>({
         playerHasPlacedFirstBet: true,
       }),
-      [ACTIONS.RESET_ACTIVE_HAND_INDEX]: assign<Context>({
+      [ACTIONS.RESET_HANDS]: assign<Context>({
         activePlayerHandIndex: 0,
+        dealerCards: [],
+        playerHands: (context) => {
+          return [getPlayerHand({ initialBet: context.enteredBet })]
+        },
       }),
       [ACTIONS.SPLIT_ACTIVE_HAND]: assign((context) => {
         const { activePlayerHandIndex, enteredBet, playerHands } = context
@@ -706,6 +729,12 @@ export const gameMachine = Machine<Context, Events>(
       },
       [GUARDS.HAS_ENTERED_BET]: (context) => {
         return (context.enteredBet || 0) > 0
+      },
+      [GUARDS.INITIAL_CARDS_DEALT]: (context) => {
+        return (
+          context.dealerCards.length === 2 &&
+          context.playerHands[0].cards.length === 2
+        )
       },
       [GUARDS.PLAYER_HAS_NO_MORE_HANDS]: (context) => {
         return context.activePlayerHandIndex === context.playerHands.length - 1

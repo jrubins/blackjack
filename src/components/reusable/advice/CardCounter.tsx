@@ -7,28 +7,16 @@ import CloseIcon from '../icons/CloseIcon'
 import TagPicker from '../forms/TagPicker'
 
 const CardCounter: React.FC<{
-  cardCounterOpen: boolean
   closeCardCounter: () => void
   count: number | null
   countGuess: number | null
   countOptions: CountOption[]
   onCountGuess: (countGuess: number) => void
-}> = ({
-  cardCounterOpen,
-  closeCardCounter,
-  count,
-  countGuess,
-  countOptions,
-  onCountGuess,
-}) => {
+}> = ({ closeCardCounter, count, countGuess, countOptions, onCountGuess }) => {
   const correctCountGuess = countGuess === count
 
-  if (!cardCounterOpen) {
-    return null
-  }
-
   return (
-    <div className="flex relative flex-wrap p-2 shadow-md">
+    <div className="relative h-full p-2 shadow-md">
       <div
         className="absolute top-0 right-0 cursor-pointer p-2 pb-0 text-light-grey"
         onClick={closeCardCounter}
@@ -37,9 +25,10 @@ const CardCounter: React.FC<{
           <CloseIcon />
         </div>
       </div>
-      <div className="w-full">
-        <h3>Card Counter</h3>
-      </div>
+      <h2 className="mb-2">Card Counter</h2>
+      {count === null && (
+        <p className="text-sm">Start a round to guess the current count.</p>
+      )}
       {count !== null && (
         <div>
           <div className="mb-2 text-dark-grey text-xs font-bold uppercase">

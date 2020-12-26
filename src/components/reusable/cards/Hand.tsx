@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import cn from 'classnames'
 
 import { HAND_RESULTS, Card as CardInterface } from '../../../utils/types'
@@ -12,25 +13,27 @@ const Hand: React.FC<{
   bet?: number | null
   cards: CardInterface[]
   isDealer?: boolean
-  playerActionsEnabled: boolean
+  isPlayerTurn: boolean
   result?: HAND_RESULTS | null
   showActiveHandIndicator?: boolean
 }> = ({
   bet,
   cards,
   isDealer = false,
-  playerActionsEnabled,
+  isPlayerTurn,
   result,
   showActiveHandIndicator = false,
 }) => {
-  // Always show the highest value for the dealer. Also, show the highest value for the player
-  // when they are done deciding.
-  const handTotal = sumCards(cards)
+  // While it's the player's turn, we only show one of the dealer's cards.
+  const cardsToSum = isDealer && isPlayerTurn ? cards.slice(0, 1) : cards
+  const handTotal = sumCards(cardsToSum)
   let handTotalDisplay = ''
-  if (isDealer || !playerActionsEnabled) {
+  if (isDealer || !isPlayerTurn) {
+    // Always show the highest value for the dealer. Also, show the highest value for the player
+    // when they are done deciding.
     handTotalDisplay = `${handTotal.high}`
-  } else if (playerActionsEnabled) {
-    // Show both values when the player is still deciding.
+  } else if (isPlayerTurn) {
+    // Show both potential hand values when the player is still deciding.
     handTotalDisplay =
       handTotal.low !== handTotal.high
         ? `${handTotal.low}/${handTotal.high}`
@@ -51,22 +54,30 @@ const Hand: React.FC<{
   return (
     <div className="flex">
       <div className="flex-grow relative h-card">
-        {cards.map((card, i) => (
-          <div
-            key={i}
-            className="relative"
-            style={{
-              left: 20 * i,
-            }}
-          >
-            <div className="absolute top-0 left-0">
-              <Card
-                card={card}
-                cardCovered={isDealer && playerActionsEnabled && i === 1}
-              />
+        {cards.map((card, i) => {
+          const isHidden = isDealer && isPlayerTurn && i === 1
+
+          return (
+            <div
+              key={i}
+              className="relative"
+              style={{
+                left: 20 * i,
+              }}
+            >
+              <motion.div
+                animate={{ rotateY: isHidden ? 180 : 0, x: 0 }}
+                className="absolute top-0 left-0"
+                initial={{ rotateY: isHidden ? 180 : 0, x: 100 }}
+                style={{
+                  transformStyle: 'preserve-3d',
+                }}
+              >
+                <Card card={card} />
+              </motion.div>
             </div>
-          </div>
-        ))}
+          )
+        })}
 
         {showActiveHandIndicator && (
           <div
@@ -82,27 +93,34 @@ const Hand: React.FC<{
           </div>
         )}
       </div>
-      {cards.length > 0 && (!isDealer || !playerActionsEnabled) && (
+      {cards.length > 0 && (
         <div className="flex flex-col justify-center w-28">
           <span className="mb-1 text-sm font-bold uppercase">
             Total: <span className="text-blue text-md">{handTotalDisplay}</span>
           </span>
 
-          {bet && !result && (
-            <span className="text-dark-grey text-sm uppercase">
-              At Risk: {formattedBet}
-            </span>
-          )}
+          {!isDealer && (
+            <>
+              {bet && !result && (
+                <span className="text-dark-grey text-sm uppercase">
+                  At Risk: {formattedBet}
+                </span>
+              )}
 
-          {result && (
-            <span
-              className={cn('text-dark-grey text-sm uppercase', {
-                'text-red': result === HAND_RESULTS.LOST,
-                'text-blue': result === HAND_RESULTS.WON,
-              })}
-            >
-              {resultDisplay}
-            </span>
+              {result && (
+                <motion.span
+                  animate={{ opacity: 1 }}
+                  className={cn('text-sm uppercase', {
+                    'text-dark-grey': !result || result === HAND_RESULTS.PUSH,
+                    'text-red': result === HAND_RESULTS.LOST,
+                    'text-blue': result === HAND_RESULTS.WON,
+                  })}
+                  initial={{ opacity: 0 }}
+                >
+                  {resultDisplay}
+                </motion.span>
+              )}
+            </>
           )}
         </div>
       )}
