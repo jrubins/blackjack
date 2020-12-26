@@ -74,7 +74,6 @@ const App: React.FC = () => {
     }
   }, [isPlayerTurn, gameSend])
 
-  console.log(countOptions)
   return (
     <>
       <Header

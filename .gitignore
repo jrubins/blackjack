@@ -11,5 +11,13 @@ stats.json
 # Logging
 *.log
 
+# Yarn
+.yarn/*
+!.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
 # Vendor
 node_modules
