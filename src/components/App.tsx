@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { useMachine } from '@xstate/react'
 
+import { getConfigValue } from '../utils/config'
 import { getNumCardsRemainingInDeck } from '../utils/cards'
 
 import {
@@ -12,13 +13,18 @@ import {
   gameMachine,
   STATES,
 } from './machines/gameMachine'
+import { useConfigSync } from '../hooks/config'
 import { useFacebookSDK, useGoogleAnalytics } from '../hooks/scripts'
 import Header from './Header'
 import HomePage from './pages/HomePage'
 
 const App: React.FC = () => {
-  const [isBasicStrategyOpen, setIsBasicStrategyOpen] = useState(true)
-  const [isCardCounterOpen, setIsCardCounterOpen] = useState(true)
+  const [isBasicStrategyOpen, setIsBasicStrategyOpen] = useState(
+    getConfigValue('isBasicStrategyOpen', true)
+  )
+  const [isCardCounterOpen, setIsCardCounterOpen] = useState(
+    getConfigValue('isCardCounterOpen', true)
+  )
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
 
   useGoogleAnalytics()
@@ -45,6 +51,13 @@ const App: React.FC = () => {
   } = gameState.context
   const numRemainingCards = getNumCardsRemainingInDeck({ deck, deckIndex })
   const isPlayerTurn = gameState.matches(STATES.PLAYER_TURN)
+
+  useConfigSync({
+    balance: playerBalance,
+    isBasicStrategyOpen,
+    isCardCounterOpen,
+    numDecks,
+  })
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -148,26 +161,5 @@ const App: React.FC = () => {
     </>
   )
 }
-
-/**
- * persistState([
-      'gameplay',
-      'player',
-      'ui',
-    ], {
-      slicer: () => state => ({
-        gameplay: {
-          numDecks: state.gameplay.numDecks,
-        },
-        player: {
-          balance: state.player.balance,
-        },
-        ui: {
-          basicStrategyOpen: state.ui.basicStrategyOpen,
-          cardCounterOpen: state.ui.cardCounterOpen,
-        },
-      }),
-    }),
- */
 
 export default hot(App)

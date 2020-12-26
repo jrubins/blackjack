@@ -12,6 +12,7 @@ import { canDouble, canSplit } from '../../utils/rules'
 import { checkBasicStrategy } from '../../utils/strategy'
 import { customEvent, EVENT_NAMES } from '../../utils/analytics'
 import { dealCard, makeDeck, sumCards } from '../../utils/cards'
+import { getConfigValue } from '../../utils/config'
 
 enum ACTIONS {
   ADD_DEALER_CARD = 'ADD_DEALER_CARD',
@@ -276,8 +277,8 @@ export const gameMachine = Machine<Context, Events>(
       deck: makeDeck(1),
       deckIndex: 0,
       enteredBet: null,
-      numDecks: 1,
-      playerBalance: 2000,
+      numDecks: getConfigValue('numDecks', 1),
+      playerBalance: getConfigValue('balance', 2000),
       playerHands: [
         {
           // Need this field since the bet may change during the round (double, split, etc.).
