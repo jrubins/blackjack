@@ -106,8 +106,6 @@ const App: React.FC = () => {
 
   return (
     <>
-      <button onClick={() => doesNotExist}>click</button>
-
       <Header
         isBasicStrategyOpen={isBasicStrategyOpen}
         isCardCounterOpen={isCardCounterOpen}
