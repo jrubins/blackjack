@@ -1,4 +1,5 @@
 # Builds
+build
 dist
 stats.json
 
@@ -7,6 +8,7 @@ stats.json
 .DS_Store
 .eslintcache
 .tmp
+.tsbuildinfo
 
 # Logging
 *.log

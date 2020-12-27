@@ -10,8 +10,8 @@ import {
 } from '../../utils/types'
 import { canDouble, canSplit } from '../../utils/rules'
 import { checkBasicStrategy } from '../../utils/strategy'
-import { customEvent, EVENT_NAMES } from '../../utils/analytics'
 import { dealCard, makeDeck, sumCards } from '../../utils/cards'
+import { EVENT_NAMES, track } from '../../hooks/analytics'
 import { getConfigValue } from '../../utils/config'
 
 enum ACTIONS {
@@ -317,6 +317,7 @@ export const gameMachine = Machine<Context, Events>(
               ACTIONS.DEDUCT_BALANCE,
               ACTIONS.MARK_FIRST_BET_PLACED,
               ACTIONS.RESET_HANDS,
+              ACTIONS.TRACK_BET_PLACED,
             ],
             // Can't deal if the player hasn't entered a bet yet.
             cond: GUARDS.HAS_ENTERED_BET,
@@ -623,7 +624,7 @@ export const gameMachine = Machine<Context, Events>(
         }
       }),
       [ACTIONS.TRACK_BET_PLACED]: (context) => {
-        customEvent(EVENT_NAMES.SET_BET(context.enteredBet || 0))
+        track(EVENT_NAMES.SET_BET, { label: context.enteredBet || 0 })
       },
       [ACTIONS.UPDATE_BASIC_STRATEGY]: assign((context, event) => {
         const {

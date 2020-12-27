@@ -8,6 +8,10 @@ export interface CountOption {
   value: number
 }
 
+export interface GenericObject {
+  [fieldName: string]: any
+}
+
 export enum HAND_RESULTS {
   LOST = 'lost',
   PUSH = 'push',

@@ -30,6 +30,8 @@
     ]
   },
   "dependencies": {
+    "@sentry/react": "5.29.2",
+    "@sentry/tracing": "5.29.2",
     "@xstate/react": "1.2.1",
     "classnames": "2.2.6",
     "framer-motion": "3.1.1",
@@ -56,10 +58,12 @@
     "@types/classnames": "2.2.11",
     "@types/jest": "26.0.19",
     "@types/lodash": "4.14.166",
+    "@types/node": "14.14.16",
     "@types/numeral": "0.0.28",
     "@types/react": "17.0.0",
     "@types/react-dom": "17.0.0",
     "@types/react-router-dom": "5.1.6",
+    "@types/segment-analytics": "0.0.33",
     "@typescript-eslint/eslint-plugin": "4.11.0",
     "@typescript-eslint/parser": "4.11.0",
     "autoprefixer": "10.1.0",

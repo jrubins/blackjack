@@ -13,12 +13,15 @@ import {
   gameMachine,
   STATES,
 } from './machines/gameMachine'
+import { EVENT_NAMES, track, useSegmentTracking } from '../hooks/analytics'
 import { useConfigSync } from '../hooks/config'
-import { useGoogleAnalytics } from '../hooks/scripts'
+import { useDeferredEffect } from '../hooks/general'
 import Header from './Header'
 import HomePage from './pages/HomePage'
 
 const App: React.FC = () => {
+  useSegmentTracking()
+
   const [isBasicStrategyOpen, setIsBasicStrategyOpen] = useState(
     getConfigValue('isBasicStrategyOpen', true)
   )
@@ -27,7 +30,21 @@ const App: React.FC = () => {
   )
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
 
-  useGoogleAnalytics()
+  useDeferredEffect(() => {
+    track(
+      isBasicStrategyOpen
+        ? EVENT_NAMES.BASIC_STRATEGY_ON
+        : EVENT_NAMES.BASIC_STRATEGY_OFF
+    )
+  }, [isBasicStrategyOpen])
+
+  useDeferredEffect(() => {
+    track(
+      isMobileNavOpen
+        ? EVENT_NAMES.MOBILE_NAV_OPEN
+        : EVENT_NAMES.MOBILE_NAV_CLOSE
+    )
+  }, [isMobileNavOpen])
 
   const [gameState, gameSend] = useMachine<Context, Events>(gameMachine, {
     devTools: true,
@@ -89,6 +106,8 @@ const App: React.FC = () => {
 
   return (
     <>
+      <button onClick={() => doesNotExist}>click</button>
+
       <Header
         isBasicStrategyOpen={isBasicStrategyOpen}
         isCardCounterOpen={isCardCounterOpen}
