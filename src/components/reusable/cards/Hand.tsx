@@ -73,7 +73,7 @@ const Hand: React.FC<{
                   transformStyle: 'preserve-3d',
                 }}
               >
-                <Card card={card} />
+                <Card card={card} isHidden={isHidden} />
               </motion.div>
             </div>
           )

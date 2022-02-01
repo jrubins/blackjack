@@ -9,7 +9,8 @@ import SpadeIcon from '../icons/SpadeIcon'
 
 const Card: React.FC<{
   card: CardInterface
-}> = ({ card }) => {
+  isHidden?: boolean
+}> = ({ card, isHidden = false }) => {
   const { number, suit } = card
   let cardNumber: CardInterface['number'] | 'A' | 'J' | 'K' | 'Q' = number
   let CardIcon: React.FC
@@ -66,7 +67,7 @@ const Card: React.FC<{
         className="absolute inset-0 w-full h-full rounded bg-gradient-to-b from-white to-blue"
         style={{
           transform: 'rotateY(180deg)',
-          backfaceVisibility: 'hidden',
+          backfaceVisibility: isHidden ? undefined : 'hidden',
         }}
       />
     </div>
