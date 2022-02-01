@@ -67,6 +67,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["dotenv-webpack", "virtual:249275e7739cd0ab09e822dc6dd25bce1dfeb30acb86d6b07cee4ac46a4f4135c957b6a3f8579f60524e50158b2a42c93807d28b2023a3961c0ec07ddf4ae514#npm:7.1.0"],\
             ["eslint", "npm:8.8.0"],\
             ["eslint-plugin-import", "virtual:249275e7739cd0ab09e822dc6dd25bce1dfeb30acb86d6b07cee4ac46a4f4135c957b6a3f8579f60524e50158b2a42c93807d28b2023a3961c0ec07ddf4ae514#npm:2.25.4"],\
+            ["eslint-plugin-jest-dom", "virtual:249275e7739cd0ab09e822dc6dd25bce1dfeb30acb86d6b07cee4ac46a4f4135c957b6a3f8579f60524e50158b2a42c93807d28b2023a3961c0ec07ddf4ae514#npm:4.0.1"],\
             ["eslint-plugin-react", "virtual:249275e7739cd0ab09e822dc6dd25bce1dfeb30acb86d6b07cee4ac46a4f4135c957b6a3f8579f60524e50158b2a42c93807d28b2023a3961c0ec07ddf4ae514#npm:7.28.0"],\
             ["eslint-plugin-react-hooks", "virtual:249275e7739cd0ab09e822dc6dd25bce1dfeb30acb86d6b07cee4ac46a4f4135c957b6a3f8579f60524e50158b2a42c93807d28b2023a3961c0ec07ddf4ae514#npm:4.3.0"],\
             ["eslint-plugin-require-path-exists", "npm:1.1.9"],\
@@ -5619,6 +5620,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["dotenv-webpack", "virtual:249275e7739cd0ab09e822dc6dd25bce1dfeb30acb86d6b07cee4ac46a4f4135c957b6a3f8579f60524e50158b2a42c93807d28b2023a3961c0ec07ddf4ae514#npm:7.1.0"],\
             ["eslint", "npm:8.8.0"],\
             ["eslint-plugin-import", "virtual:249275e7739cd0ab09e822dc6dd25bce1dfeb30acb86d6b07cee4ac46a4f4135c957b6a3f8579f60524e50158b2a42c93807d28b2023a3961c0ec07ddf4ae514#npm:2.25.4"],\
+            ["eslint-plugin-jest-dom", "virtual:249275e7739cd0ab09e822dc6dd25bce1dfeb30acb86d6b07cee4ac46a4f4135c957b6a3f8579f60524e50158b2a42c93807d28b2023a3961c0ec07ddf4ae514#npm:4.0.1"],\
             ["eslint-plugin-react", "virtual:249275e7739cd0ab09e822dc6dd25bce1dfeb30acb86d6b07cee4ac46a4f4135c957b6a3f8579f60524e50158b2a42c93807d28b2023a3961c0ec07ddf4ae514#npm:7.28.0"],\
             ["eslint-plugin-react-hooks", "virtual:249275e7739cd0ab09e822dc6dd25bce1dfeb30acb86d6b07cee4ac46a4f4135c957b6a3f8579f60524e50158b2a42c93807d28b2023a3961c0ec07ddf4ae514#npm:4.3.0"],\
             ["eslint-plugin-require-path-exists", "npm:1.1.9"],\
@@ -7504,6 +7506,31 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "@types/eslint",\
             "@types/typescript-eslint__parser",\
             "@typescript-eslint/parser",\
+            "eslint"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["eslint-plugin-jest-dom", [\
+        ["npm:4.0.1", {\
+          "packageLocation": "./.yarn/cache/eslint-plugin-jest-dom-npm-4.0.1-e7c3ad6e93-5144fbd0e6.zip/node_modules/eslint-plugin-jest-dom/",\
+          "packageDependencies": [\
+            ["eslint-plugin-jest-dom", "npm:4.0.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:249275e7739cd0ab09e822dc6dd25bce1dfeb30acb86d6b07cee4ac46a4f4135c957b6a3f8579f60524e50158b2a42c93807d28b2023a3961c0ec07ddf4ae514#npm:4.0.1", {\
+          "packageLocation": "./.yarn/__virtual__/eslint-plugin-jest-dom-virtual-d49e304a17/0/cache/eslint-plugin-jest-dom-npm-4.0.1-e7c3ad6e93-5144fbd0e6.zip/node_modules/eslint-plugin-jest-dom/",\
+          "packageDependencies": [\
+            ["eslint-plugin-jest-dom", "virtual:249275e7739cd0ab09e822dc6dd25bce1dfeb30acb86d6b07cee4ac46a4f4135c957b6a3f8579f60524e50158b2a42c93807d28b2023a3961c0ec07ddf4ae514#npm:4.0.1"],\
+            ["@babel/runtime", "npm:7.16.7"],\
+            ["@testing-library/dom", "npm:8.11.3"],\
+            ["@types/eslint", null],\
+            ["eslint", "npm:8.8.0"],\
+            ["requireindex", "npm:1.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/eslint",\
             "eslint"\
           ],\
           "linkType": "HARD"\
@@ -12498,6 +12525,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/require-package-name-npm-2.0.1-ac9a206b63-00f4e9e467.zip/node_modules/require-package-name/",\
           "packageDependencies": [\
             ["require-package-name", "npm:2.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["requireindex", [\
+        ["npm:1.2.0", {\
+          "packageLocation": "./.yarn/cache/requireindex-npm-1.2.0-483c52ddaf-50d8b10a1f.zip/node_modules/requireindex/",\
+          "packageDependencies": [\
+            ["requireindex", "npm:1.2.0"]\
           ],\
           "linkType": "HARD"\
         }]\
