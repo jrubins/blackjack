@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { useMachine } from '@xstate/react'
 
 import { getConfigValue } from '../utils/config'
@@ -119,56 +119,59 @@ const App = (): JSX.Element => {
         playerBalance={playerBalance}
       />
 
-      <Switch>
-        <Route exact={true} path="/">
-          <HomePage
-            activePlayerHandIndex={activePlayerHandIndex}
-            basicStrategyError={basicStrategyError}
-            basicStrategyStreak={basicStrategyStreak}
-            cardCounterOpen={isCardCounterOpen}
-            closeBasicStrategy={() => {
-              setIsBasicStrategyOpen(false)
-            }}
-            closeCardCounter={() => {
-              setIsCardCounterOpen(false)
-            }}
-            count={count}
-            countGuess={countGuess}
-            countOptions={countOptions}
-            dealerCards={dealerCards}
-            enteredBet={enteredBet}
-            isBasicStrategyOpen={isBasicStrategyOpen}
-            isPlayerTurn={isPlayerTurn}
-            isTakingBets={isTakingBets}
-            numDecks={numDecks}
-            numRemainingCards={numRemainingCards}
-            onChangeBet={(bet) => {
-              gameSend({ bet, type: EVENTS.ENTER_BET })
-            }}
-            onClickDeal={() => {
-              gameSend({ type: EVENTS.PLACE_BET })
-            }}
-            onCountGuess={(countGuess) => {
-              gameSend({ countGuess, type: EVENTS.GUESS_COUNT })
-            }}
-            onDouble={() => {
-              gameSend({ type: EVENTS.PLAYER_DOUBLE })
-            }}
-            onHit={() => {
-              gameSend({ type: EVENTS.PLAYER_HIT })
-            }}
-            onSplit={() => {
-              gameSend({ type: EVENTS.PLAYER_SPLIT })
-            }}
-            onStand={() => {
-              gameSend({ type: EVENTS.PLAYER_STAND })
-            }}
-            playerBalance={playerBalance}
-            playerHands={playerHands}
-            playerHasPlacedFirstBet={playerHasPlacedFirstBet}
-          />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route
+          element={
+            <HomePage
+              activePlayerHandIndex={activePlayerHandIndex}
+              basicStrategyError={basicStrategyError}
+              basicStrategyStreak={basicStrategyStreak}
+              cardCounterOpen={isCardCounterOpen}
+              closeBasicStrategy={() => {
+                setIsBasicStrategyOpen(false)
+              }}
+              closeCardCounter={() => {
+                setIsCardCounterOpen(false)
+              }}
+              count={count}
+              countGuess={countGuess}
+              countOptions={countOptions}
+              dealerCards={dealerCards}
+              enteredBet={enteredBet}
+              isBasicStrategyOpen={isBasicStrategyOpen}
+              isPlayerTurn={isPlayerTurn}
+              isTakingBets={isTakingBets}
+              numDecks={numDecks}
+              numRemainingCards={numRemainingCards}
+              onChangeBet={(bet) => {
+                gameSend({ bet, type: EVENTS.ENTER_BET })
+              }}
+              onClickDeal={() => {
+                gameSend({ type: EVENTS.PLACE_BET })
+              }}
+              onCountGuess={(countGuess) => {
+                gameSend({ countGuess, type: EVENTS.GUESS_COUNT })
+              }}
+              onDouble={() => {
+                gameSend({ type: EVENTS.PLAYER_DOUBLE })
+              }}
+              onHit={() => {
+                gameSend({ type: EVENTS.PLAYER_HIT })
+              }}
+              onSplit={() => {
+                gameSend({ type: EVENTS.PLAYER_SPLIT })
+              }}
+              onStand={() => {
+                gameSend({ type: EVENTS.PLAYER_STAND })
+              }}
+              playerBalance={playerBalance}
+              playerHands={playerHands}
+              playerHasPlacedFirstBet={playerHasPlacedFirstBet}
+            />
+          }
+          path=""
+        />
+      </Routes>
     </>
   )
 }
