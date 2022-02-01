@@ -33,7 +33,7 @@
     "@sentry/tracing": "6.17.3",
     "@xstate/react": "2.0.0",
     "clsx": "1.1.1",
-    "framer-motion": "3.10.6",
+    "framer-motion": "6.2.3",
     "lodash": "4.17.21",
     "numeral": "2.0.6",
     "react": "17.0.2",
