@@ -1,14 +1,15 @@
 const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const webpack = require('webpack')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 
 const buildConfig = require('./buildConfig')
 
 module.exports = {
   context: __dirname,
   devServer: {
-    clientLogLevel: 'error', // The default value for this outputs too much in DevTools.
-    contentBase: buildConfig.paths.src,
+    client: {
+      logging: 'error', // The default value for this outputs too much in DevTools.
+    },
     historyApiFallback: {
       disableDotRule: true,
     },
@@ -17,21 +18,16 @@ module.exports = {
     port: buildConfig.webpackDevServerPort,
   },
   devtool: 'eval-cheap-module-source-map',
-  entry: [
-    'react-hot-loader/patch',
-    `webpack-dev-server/client?http://localhost:${buildConfig.webpackDevServerPort}`,
-    'webpack/hot/only-dev-server',
-    buildConfig.paths.entry,
-  ],
+  entry: { main: buildConfig.paths.entry },
   mode: 'development',
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(js|ts)x?$/,
         include: [buildConfig.paths.src],
         loader: 'babel-loader',
         options: {
-          cacheDirectory: buildConfig.caches.babel,
+          cacheDirectory: buildConfig.paths.babelCache,
         },
       },
       {
@@ -57,12 +53,9 @@ module.exports = {
       template: buildConfig.paths.public.html,
     }),
 
-    new webpack.HotModuleReplacementPlugin(),
+    new ReactRefreshWebpackPlugin(),
   ],
   resolve: {
-    alias: {
-      'react-dom': '@hot-loader/react-dom',
-    },
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     modules: ['node_modules', buildConfig.paths.src],
   },

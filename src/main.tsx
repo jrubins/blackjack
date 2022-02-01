@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { init as SentryInit } from '@sentry/react'
 import { Integrations as SentryIntegrations } from '@sentry/tracing'
-import { setConfig } from 'react-hot-loader'
 
 import { getEnvironment, isProduction } from './utils/environment'
 
@@ -21,10 +20,6 @@ if (isProduction()) {
     tracesSampleRate: 1,
   })
 }
-
-setConfig({
-  reloadHooks: false,
-})
 
 ReactDOM.render(
   <ErrorBoundary>

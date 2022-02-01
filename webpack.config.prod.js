@@ -16,9 +16,9 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(js|ts)x?$/,
         include: [buildConfig.paths.src],
-        loader: 'babel-loader',
+        use: ['babel-loader'],
       },
       {
         test: /\.css$/,
@@ -26,10 +26,11 @@ module.exports = {
         use: [
           MiniCssExtractPlugin.loader,
           {
+            // Applies postcss-loader to @imported resources.
             loader: 'css-loader',
             options: {
-              // Applies postcss-loader to @imported resources.
               importLoaders: 1,
+              modules: false,
             },
           },
           'postcss-loader',
@@ -44,8 +45,8 @@ module.exports = {
     publicPath: '/',
   },
   plugins: [
-    // This is a shorthand plugin for the DefinePlugin.
     new webpack.EnvironmentPlugin(['NODE_ENV', 'SEGMENT_KEY', 'SENTRY_DSN']),
+
     new HtmlWebpackPlugin({
       favicon: buildConfig.paths.public.favicon,
       // "inject: true" places all JavaScript resources at the bottom of the body element.

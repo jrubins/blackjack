@@ -1,4 +1,3 @@
-import { hot } from 'react-hot-loader/root'
 import React, { useEffect, useState } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { useMachine } from '@xstate/react'
@@ -180,4 +179,4 @@ const App: React.FC = () => {
   )
 }
 
-export default hot(App)
+export default App

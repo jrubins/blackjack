@@ -1,11 +1,17 @@
 module.exports = {
-  plugins: [
-    '@babel/plugin-proposal-class-properties',
-    'lodash',
-    'react-hot-loader/babel',
-  ],
+  env: {
+    development: {
+      plugins: ['react-refresh/babel'],
+    },
+  },
+  plugins: ['@babel/plugin-proposal-class-properties', 'lodash'],
   presets: [
-    '@babel/react',
+    [
+      '@babel/preset-react',
+      {
+        runtime: 'automatic',
+      },
+    ],
     [
       '@babel/env',
       {
