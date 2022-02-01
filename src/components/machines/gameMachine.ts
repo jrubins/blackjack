@@ -1,4 +1,4 @@
-import { assign, Machine } from 'xstate'
+import { assign, createMachine } from 'xstate'
 import _ from 'lodash'
 
 import {
@@ -284,7 +284,7 @@ function getResolvedBet({
   return resolvedBet
 }
 
-export const gameMachine = Machine<Context, Events>(
+export const gameMachine = createMachine<Context, Events>(
   {
     context: {
       activePlayerHandIndex: 0,
@@ -586,15 +586,19 @@ export const gameMachine = Machine<Context, Events>(
           activePlayerHandIndex: newActivePlayerHandIndex,
         }
       }),
-      [ACTIONS.MARK_FIRST_BET_PLACED]: assign<Context>({
-        playerHasPlacedFirstBet: true,
+      [ACTIONS.MARK_FIRST_BET_PLACED]: assign({
+        // This is an XState bug that will be fixed in v5.
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        playerHasPlacedFirstBet: (_context) => true,
       }),
-      [ACTIONS.RESET_HANDS]: assign<Context>({
-        activePlayerHandIndex: 0,
-        dealerCards: [],
-        playerHands: (context) => {
-          return [getPlayerHand({ initialBet: context.enteredBet })]
-        },
+      [ACTIONS.RESET_HANDS]: assign((context) => {
+        const playerHands = [getPlayerHand({ initialBet: context.enteredBet })]
+
+        return {
+          activePlayerHandIndex: 0,
+          dealerCards: [],
+          playerHands,
+        }
       }),
       [ACTIONS.SPLIT_ACTIVE_HAND]: assign((context) => {
         const { activePlayerHandIndex, enteredBet, playerHands } = context
@@ -654,30 +658,40 @@ export const gameMachine = Machine<Context, Events>(
             : basicStrategyResult.error,
         }
       }),
-      [ACTIONS.UPDATE_BET]: assign<Context>({
-        enteredBet: (context, event: EnterBet) => {
+      [ACTIONS.UPDATE_BET]: assign({
+        enteredBet: (context, event) => {
+          if (!('bet' in event)) {
+            return context.enteredBet
+          }
+
           return getResolvedBet({
             bet: Number(event.bet),
             playerBalance: context.playerBalance,
           })
         },
       }),
-      [ACTIONS.UPDATE_COUNT_GUESS]: assign<Context>({
-        countGuess: (_context, event: GuessCount) => {
+      [ACTIONS.UPDATE_COUNT_GUESS]: assign({
+        countGuess: (context, event) => {
+          if (!('countGuess' in event)) {
+            return context.countGuess
+          }
+
           return event.countGuess
         },
       }),
-      [ACTIONS.UPDATE_DECKS]: assign<Context>(
-        (_context, event: ChangeNumDecks) => {
-          const { numDecks } = event
-
-          return {
-            deck: makeDeck(numDecks),
-            deckIndex: 0,
-            numDecks,
-          }
+      [ACTIONS.UPDATE_DECKS]: assign((context, event) => {
+        if (!('numDecks' in event)) {
+          return context
         }
-      ),
+
+        const { numDecks } = event
+
+        return {
+          deck: makeDeck(numDecks),
+          deckIndex: 0,
+          numDecks,
+        }
+      }),
     },
     guards: {
       [GUARDS.ALL_HANDS_BUST]: (context) => {

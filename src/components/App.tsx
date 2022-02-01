@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { useMachine } from '@xstate/react'
 
 import { getConfigValue } from '../utils/config'
 import { getNumCardsRemainingInDeck } from '../utils/cards'
 
-import {
-  Context,
-  EVENTS,
-  Events,
-  gameMachine,
-  STATES,
-} from './machines/gameMachine'
 import { EVENT_NAMES, track, useSegmentTracking } from '../hooks/analytics'
+import { EVENTS, gameMachine, STATES } from './machines/gameMachine'
 import { useConfigSync } from '../hooks/config'
 import { useDeferredEffect } from '../hooks/general'
 import Header from './Header'
@@ -45,7 +39,7 @@ const App = (): JSX.Element => {
     )
   }, [isMobileNavOpen])
 
-  const [gameState, gameSend] = useMachine<Context, Events>(gameMachine, {
+  const [gameState, gameSend] = useMachine(gameMachine, {
     devTools: true,
   })
   const {

@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react'
+import { DependencyList, useEffect, useRef } from 'react'
 
 /**
  * A custom hook that only runs the provided callback function after the initial render.
  */
-export function useDeferredEffect(cb: () => void, deps: React.DependencyList) {
+export function useDeferredEffect(cb: () => void, deps: DependencyList) {
   const hasMounted = useRef(false)
 
   useEffect(() => {
