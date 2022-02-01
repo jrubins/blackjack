@@ -1,4 +1,3 @@
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
@@ -56,14 +55,6 @@ module.exports = {
 
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash].css',
-    }),
-
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: './_redirects',
-        },
-      ],
     }),
   ],
   resolve: {
