@@ -1,5 +1,5 @@
 import React from 'react'
-import cn from 'classnames'
+import clsx from 'clsx'
 
 const TagPicker: React.FC<{
   onChange: (value: number) => void
@@ -15,7 +15,7 @@ const TagPicker: React.FC<{
         return (
           <div
             key={i}
-            className={cn(
+            className={clsx(
               'flex items-center justify-center w-12 h-12 transition duration-500 border cursor-pointer',
               {
                 'border-light-grey text-light-grey hover:border-blue hover:text-blue': !isSelected,

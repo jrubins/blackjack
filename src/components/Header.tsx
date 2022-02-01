@@ -1,5 +1,5 @@
 import React from 'react'
-import cn from 'classnames'
+import clsx from 'clsx'
 
 import { formatCurrency, formatThousands } from '../utils/text'
 
@@ -40,7 +40,7 @@ const Header: React.FC<{
       </div>
 
       <div
-        className={cn(
+        className={clsx(
           'absolute top-header right-0 bottom-0 left-0 w-full max-w-screen-md mx-auto px-4 transition duration-200 bg-white opacity-1 visible z-40',
           {
             'opacity-0 invisible': !isMobileNavOpen,

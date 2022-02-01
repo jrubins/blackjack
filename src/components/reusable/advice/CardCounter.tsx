@@ -1,5 +1,5 @@
 import React from 'react'
-import cn from 'classnames'
+import clsx from 'clsx'
 
 import { CountOption } from '../../../utils/types'
 
@@ -45,7 +45,7 @@ const CardCounter: React.FC<{
 
             {countGuess !== null && (
               <div
-                className={cn('ml-4 text-xs font-bold uppercase', {
+                className={clsx('ml-4 text-xs font-bold uppercase', {
                   'text-blue': correctCountGuess,
                   'text-red': !correctCountGuess,
                 })}

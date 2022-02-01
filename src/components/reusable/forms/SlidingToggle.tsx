@@ -1,5 +1,5 @@
 import React from 'react'
-import cn from 'classnames'
+import clsx from 'clsx'
 
 interface SliderOption {
   label: string
@@ -20,7 +20,7 @@ const SlidingToggle: React.FC<{
 
   return (
     <div
-      className={cn(
+      className={clsx(
         'flex relative items-center justify-between w-20 h-8 transition rounded-full text-white uppercase cursor-pointer select-none',
         {
           'bg-blue': isSliderActive,

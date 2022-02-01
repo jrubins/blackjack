@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import cn from 'classnames'
+import clsx from 'clsx'
 
 import { HAND_RESULTS, Card as CardInterface } from '../../../utils/types'
 import { formatCurrency } from '../../../utils/text'
@@ -110,7 +110,7 @@ const Hand: React.FC<{
               {result && (
                 <motion.span
                   animate={{ opacity: 1 }}
-                  className={cn('text-sm uppercase', {
+                  className={clsx('text-sm uppercase', {
                     'text-dark-grey': !result || result === HAND_RESULTS.PUSH,
                     'text-red': result === HAND_RESULTS.LOST,
                     'text-blue': result === HAND_RESULTS.WON,

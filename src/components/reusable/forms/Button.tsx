@@ -1,5 +1,5 @@
 import React, { MouseEvent, ReactNode } from 'react'
-import cn from 'classnames'
+import clsx from 'clsx'
 
 const Button: React.FC<{
   children: ReactNode
@@ -16,7 +16,7 @@ const Button: React.FC<{
 }) => {
   return (
     <button
-      className={cn(
+      className={clsx(
         'relative w-full h-10 px-4 border border-light-grey rounded uppercase',
         {
           'bg-blue text-white': !isDisabled && !isInverse,
