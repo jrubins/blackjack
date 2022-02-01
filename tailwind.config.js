@@ -1,5 +1,5 @@
 module.exports = {
-  purge: ['./public/index.html', './src/**/*.ts', './src/**/*.tsx'],
+  content: ['./public/index.html', './src/**/*.ts', './src/**/*.tsx'],
   theme: {
     colors: {
       blue: '#42b4e6',
