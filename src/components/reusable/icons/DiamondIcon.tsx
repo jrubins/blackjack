@@ -1,6 +1,4 @@
-import React from 'react'
-
-const DiamondIcon: React.FC = () => {
+const DiamondIcon = (): JSX.Element => {
   return (
     <svg className="w-full" fill="#f00" viewBox="0 0 127 175">
       <g transform="translate(0,-877.36216)">

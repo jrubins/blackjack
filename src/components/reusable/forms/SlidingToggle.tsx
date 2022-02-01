@@ -1,4 +1,3 @@
-import React from 'react'
 import clsx from 'clsx'
 
 interface SliderOption {
@@ -6,11 +5,15 @@ interface SliderOption {
   value: boolean
 }
 
-const SlidingToggle: React.FC<{
+const SlidingToggle = ({
+  onChange,
+  options,
+  value,
+}: {
   onChange: (value: boolean) => void
   options: [SliderOption, SliderOption]
   value: boolean
-}> = ({ onChange, options, value }) => {
+}): JSX.Element => {
   const { label: activeOptionLabel, value: activeOptionValue } = options[0]
   const inactiveOptionLabel = options[1].label
   const isSliderActive = value === activeOptionValue

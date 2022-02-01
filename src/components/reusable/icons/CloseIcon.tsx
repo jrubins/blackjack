@@ -1,6 +1,4 @@
-import React from 'react'
-
-const CloseIcon: React.FC = () => {
+const CloseIcon = (): JSX.Element => {
   return (
     <svg
       fill="none"

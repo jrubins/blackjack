@@ -18,7 +18,7 @@ import { useDeferredEffect } from '../hooks/general'
 import Header from './Header'
 import HomePage from './pages/HomePage'
 
-const App: React.FC = () => {
+const App = (): JSX.Element => {
   useSegmentTracking()
 
   const [isBasicStrategyOpen, setIsBasicStrategyOpen] = useState(

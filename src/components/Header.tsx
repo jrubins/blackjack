@@ -1,4 +1,3 @@
-import React from 'react'
 import clsx from 'clsx'
 
 import { formatCurrency, formatThousands } from '../utils/text'
@@ -7,17 +6,7 @@ import HamburgerIcon from './reusable/icons/HamburgerIcon'
 import SlidingToggle from './reusable/forms/SlidingToggle'
 import TagPicker from './reusable/forms/TagPicker'
 
-const Header: React.FC<{
-  isBasicStrategyOpen: boolean
-  isCardCounterOpen: boolean
-  isMobileNavOpen: boolean
-  numDecks: number
-  onNumDecksChanged: (numDecks: number) => void
-  onToggleBasicStrategy: () => void
-  onToggleCardCounter: () => void
-  onToggleMobileNav: () => void
-  playerBalance: number
-}> = ({
+const Header = ({
   isBasicStrategyOpen,
   isCardCounterOpen,
   isMobileNavOpen,
@@ -27,7 +16,17 @@ const Header: React.FC<{
   onToggleCardCounter,
   onToggleMobileNav,
   playerBalance,
-}) => {
+}: {
+  isBasicStrategyOpen: boolean
+  isCardCounterOpen: boolean
+  isMobileNavOpen: boolean
+  numDecks: number
+  onNumDecksChanged: (numDecks: number) => void
+  onToggleBasicStrategy: () => void
+  onToggleCardCounter: () => void
+  onToggleMobileNav: () => void
+  playerBalance: number
+}): JSX.Element => {
   return (
     <header className="flex items-center justify-between h-header max-w-screen-md mx-auto px-4">
       <h1 className="text-blue text-lg uppercase">Blackjack</h1>

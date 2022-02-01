@@ -1,6 +1,4 @@
-import React from 'react'
-
-const ChevronDoubleLeftIcon: React.FC = () => {
+const ChevronDoubleLeftIcon = (): JSX.Element => {
   return (
     <svg
       fill="none"

@@ -1,4 +1,3 @@
-import React from 'react'
 import clsx from 'clsx'
 
 import { CountOption } from '../../../utils/types'
@@ -6,13 +5,19 @@ import { CountOption } from '../../../utils/types'
 import CloseIcon from '../icons/CloseIcon'
 import TagPicker from '../forms/TagPicker'
 
-const CardCounter: React.FC<{
+const CardCounter = ({
+  closeCardCounter,
+  count,
+  countGuess,
+  countOptions,
+  onCountGuess,
+}: {
   closeCardCounter: () => void
   count: number | null
   countGuess: number | null
   countOptions: CountOption[]
   onCountGuess: (countGuess: number) => void
-}> = ({ closeCardCounter, count, countGuess, countOptions, onCountGuess }) => {
+}): JSX.Element => {
   const correctCountGuess = countGuess === count
 
   return (

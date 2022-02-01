@@ -1,12 +1,16 @@
-import React from 'react'
 import clsx from 'clsx'
 
-const TagPicker: React.FC<{
+const TagPicker = ({
+  onChange,
+  options,
+  selectedColor = 'blue',
+  value: curValue,
+}: {
   onChange: (value: number) => void
   options: { label: string; value: number }[]
   selectedColor?: 'blue' | 'red'
   value: number | null
-}> = ({ onChange, options, selectedColor = 'blue', value: curValue }) => {
+}): JSX.Element => {
   return (
     <div className="flex space-x-2">
       {options.map(({ label, value }, i) => {
@@ -18,7 +22,8 @@ const TagPicker: React.FC<{
             className={clsx(
               'flex items-center justify-center w-12 h-12 transition duration-500 border cursor-pointer',
               {
-                'border-light-grey text-light-grey hover:border-blue hover:text-blue': !isSelected,
+                'border-light-grey text-light-grey hover:border-blue hover:text-blue':
+                  !isSelected,
                 [`border-${selectedColor} text-${selectedColor}`]: isSelected,
               }
             )}

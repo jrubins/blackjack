@@ -1,4 +1,4 @@
-import React from 'react'
+import { FunctionComponent } from 'react'
 
 import { Card as CardInterface, SUITS } from '../../../utils/types'
 
@@ -7,13 +7,16 @@ import DiamondIcon from '../icons/DiamondIcon'
 import HeartIcon from '../icons/HeartIcon'
 import SpadeIcon from '../icons/SpadeIcon'
 
-const Card: React.FC<{
+const Card = ({
+  card,
+  isHidden = false,
+}: {
   card: CardInterface
   isHidden?: boolean
-}> = ({ card, isHidden = false }) => {
+}): JSX.Element => {
   const { number, suit } = card
   let cardNumber: CardInterface['number'] | 'A' | 'J' | 'K' | 'Q' = number
-  let CardIcon: React.FC
+  let CardIcon: FunctionComponent
 
   if (cardNumber === 1) {
     cardNumber = 'A'

@@ -1,11 +1,13 @@
-import React, { InputHTMLAttributes } from 'react'
+import { InputHTMLAttributes } from 'react'
 import _ from 'lodash'
 
-const Input: React.FC<
-  Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
-    onChange: (value: string) => void
-  }
-> = ({ onChange, value, ...rest }) => {
+const Input = ({
+  onChange,
+  value,
+  ...rest
+}: Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
+  onChange: (value: string) => void
+}): JSX.Element => {
   return (
     <input
       {...rest}

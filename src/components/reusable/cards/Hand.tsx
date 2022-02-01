@@ -1,4 +1,3 @@
-import React from 'react'
 import { motion } from 'framer-motion'
 import clsx from 'clsx'
 
@@ -9,21 +8,21 @@ import { sumCards } from '../../../utils/cards'
 import Card from './Card'
 import ChevronDoubleLeftIcon from '../icons/ChevronDoubleLeftIcon'
 
-const Hand: React.FC<{
-  bet?: number | null
-  cards: CardInterface[]
-  isDealer?: boolean
-  isPlayerTurn: boolean
-  result?: HAND_RESULTS | null
-  showActiveHandIndicator?: boolean
-}> = ({
+const Hand = ({
   bet,
   cards,
   isDealer = false,
   isPlayerTurn,
   result,
   showActiveHandIndicator = false,
-}) => {
+}: {
+  bet?: number | null
+  cards: CardInterface[]
+  isDealer?: boolean
+  isPlayerTurn: boolean
+  result?: HAND_RESULTS | null
+  showActiveHandIndicator?: boolean
+}): JSX.Element => {
   // While it's the player's turn, we only show one of the dealer's cards.
   const cardsToSum = isDealer && isPlayerTurn ? cards.slice(0, 1) : cards
   const handTotal = sumCards(cardsToSum)

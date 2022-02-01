@@ -1,6 +1,4 @@
-import React from 'react'
-
-const SpadeIcon: React.FC = () => {
+const SpadeIcon = (): JSX.Element => {
   return (
     <svg className="w-full" viewBox="0 0 134 175">
       <g transform="translate(0,-877.36216)">

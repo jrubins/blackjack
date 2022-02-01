@@ -1,9 +1,10 @@
-import React from 'react'
-
-const HamburgerIcon: React.FC<{ onClick: () => void; isOpen: boolean }> = ({
+const HamburgerIcon = ({
   onClick,
   isOpen,
-}) => {
+}: {
+  onClick: () => void
+  isOpen: boolean
+}): JSX.Element => {
   const hamburgerBarCommonClasses =
     'absolute top-0 left-0 w-full h-hamburger-bar transition-all duration-200 ease-in-out bg-light-grey'
   const topBottomClasses = isOpen ? 'top-1/2 left-1/2 w-0-per' : ''

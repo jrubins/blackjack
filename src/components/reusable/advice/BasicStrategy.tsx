@@ -1,12 +1,14 @@
-import React from 'react'
-
 import CloseIcon from '../icons/CloseIcon'
 
-const BasicStrategy: React.FC<{
+const BasicStrategy = ({
+  basicStrategyError,
+  basicStrategyStreak = 0,
+  closeBasicStrategy,
+}: {
   basicStrategyError: string
   basicStrategyStreak?: number
   closeBasicStrategy: () => void
-}> = ({ basicStrategyError, basicStrategyStreak = 0, closeBasicStrategy }) => {
+}): JSX.Element => {
   return (
     <div className="relative h-full p-2 shadow-md">
       <div

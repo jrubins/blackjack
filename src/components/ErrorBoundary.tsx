@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { ErrorBoundary as SentryErrorBounday } from '@sentry/react'
 
-const ErrorBoundary: React.FC<{ children: ReactNode }> = ({ children }) => {
+const ErrorBoundary = ({ children }: { children: ReactNode }): JSX.Element => {
   return (
     <SentryErrorBounday fallback={<p>Something went wrong :(</p>}>
       {children}

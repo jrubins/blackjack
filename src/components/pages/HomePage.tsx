@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Card, CountOption, Hand as HandInterface } from '../../utils/types'
 import { canDouble, canSplit } from '../../utils/rules'
 
@@ -9,34 +7,7 @@ import CardCounter from '../reusable/advice/CardCounter'
 import Hand from '../reusable/cards/Hand'
 import Input from '../reusable/forms/Input'
 
-const HomePage: React.FC<{
-  activePlayerHandIndex: number
-  basicStrategyError: string
-  basicStrategyStreak: number
-  cardCounterOpen: boolean
-  closeBasicStrategy: () => void
-  closeCardCounter: () => void
-  count: number | null
-  countGuess: number | null
-  countOptions: CountOption[]
-  dealerCards: Card[]
-  enteredBet: number | null
-  isBasicStrategyOpen: boolean
-  isPlayerTurn: boolean
-  isTakingBets: boolean
-  numDecks: number
-  numRemainingCards: number
-  onChangeBet: (value: string) => void
-  onClickDeal: () => void
-  onCountGuess: (countGuess: number) => void
-  onDouble: () => void
-  onHit: () => void
-  onSplit: () => void
-  onStand: () => void
-  playerBalance: number
-  playerHands: HandInterface[]
-  playerHasPlacedFirstBet: boolean
-}> = ({
+const HomePage = ({
   activePlayerHandIndex,
   basicStrategyError,
   basicStrategyStreak,
@@ -63,7 +34,34 @@ const HomePage: React.FC<{
   playerBalance,
   playerHands,
   playerHasPlacedFirstBet,
-}) => {
+}: {
+  activePlayerHandIndex: number
+  basicStrategyError: string
+  basicStrategyStreak: number
+  cardCounterOpen: boolean
+  closeBasicStrategy: () => void
+  closeCardCounter: () => void
+  count: number | null
+  countGuess: number | null
+  countOptions: CountOption[]
+  dealerCards: Card[]
+  enteredBet: number | null
+  isBasicStrategyOpen: boolean
+  isPlayerTurn: boolean
+  isTakingBets: boolean
+  numDecks: number
+  numRemainingCards: number
+  onChangeBet: (value: string) => void
+  onClickDeal: () => void
+  onCountGuess: (countGuess: number) => void
+  onDouble: () => void
+  onHit: () => void
+  onSplit: () => void
+  onStand: () => void
+  playerBalance: number
+  playerHands: HandInterface[]
+  playerHasPlacedFirstBet: boolean
+}): JSX.Element => {
   const activeCards = playerHands[activePlayerHandIndex].cards
 
   return (
