@@ -44,6 +44,7 @@ const Card = ({
         className="flex absolute inset-0 w-full h-full p-1 rounded bg-white"
         style={{
           backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
         }}
       >
         <div className="flex flex-col items-center w-4">
@@ -71,6 +72,7 @@ const Card = ({
         style={{
           transform: 'rotateY(180deg)',
           backfaceVisibility: isHidden ? undefined : 'hidden',
+          WebkitBackfaceVisibility: isHidden ? undefined : 'hidden',
         }}
       />
     </div>
