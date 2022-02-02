@@ -62,6 +62,7 @@ const Hand = ({
               className="relative"
               style={{
                 left: 20 * i,
+                zIndex: i,
               }}
             >
               <motion.div
