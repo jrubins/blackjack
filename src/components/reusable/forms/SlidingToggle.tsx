@@ -26,7 +26,7 @@ const SlidingToggle = ({
       className={clsx(
         'flex relative items-center justify-between w-20 h-8 transition rounded-full text-white uppercase cursor-pointer select-none',
         {
-          'bg-blue': isSliderActive,
+          'bg-primary': isSliderActive,
           'bg-light-grey': !isSliderActive,
         }
       )}

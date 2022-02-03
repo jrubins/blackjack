@@ -2,11 +2,14 @@ module.exports = {
   content: ['./public/index.html', './src/**/*.ts', './src/**/*.tsx'],
   theme: {
     colors: {
+      black: '#000',
       blue: '#42b4e6',
       'dark-grey': '#aaa',
       'light-black': '#333',
       'light-grey': '#ddd',
       'off-white': '#fbfbfb',
+      primary: 'var(--theme-color)',
+      purple: '#6a0caf',
       red: '#a33b3b',
       transparent: 'transparent',
       white: '#fff',

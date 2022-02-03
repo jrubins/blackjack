@@ -68,7 +68,7 @@ const Card = ({
 
       {/* This is the back of the card */}
       <div
-        className="absolute inset-0 w-full h-full rounded bg-gradient-to-b from-white to-blue"
+        className="absolute inset-0 w-full h-full rounded bg-gradient-to-b from-white to-primary"
         style={{
           transform: 'rotateY(180deg)',
           backfaceVisibility: isHidden ? undefined : 'hidden',

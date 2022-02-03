@@ -19,9 +19,9 @@ const Button = ({
       className={clsx(
         'relative w-full h-10 px-4 border border-light-grey rounded uppercase',
         {
-          'bg-blue text-white': !isDisabled && !isInverse,
+          'bg-primary text-white': !isDisabled && !isInverse,
           'bg-off-white text-light-grey cursor-not-allowed': isDisabled,
-          'bg-white text-blue': isInverse && !isDisabled,
+          'bg-white text-primary': isInverse && !isDisabled,
         }
       )}
       onClick={(event) => {

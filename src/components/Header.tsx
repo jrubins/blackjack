@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 
 import { formatCurrency, formatThousands } from '../utils/text'
+import { ThemeColor } from '../utils/types'
 
 import HamburgerIcon from './reusable/icons/HamburgerIcon'
 import SlidingToggle from './reusable/forms/SlidingToggle'
@@ -11,25 +12,29 @@ const Header = ({
   isCardCounterOpen,
   isMobileNavOpen,
   numDecks,
+  onChangeThemeColor,
   onNumDecksChanged,
   onToggleBasicStrategy,
   onToggleCardCounter,
   onToggleMobileNav,
   playerBalance,
+  themeColor,
 }: {
   isBasicStrategyOpen: boolean
   isCardCounterOpen: boolean
   isMobileNavOpen: boolean
   numDecks: number
+  onChangeThemeColor(themeColor: ThemeColor): void
   onNumDecksChanged: (numDecks: number) => void
   onToggleBasicStrategy: () => void
   onToggleCardCounter: () => void
   onToggleMobileNav: () => void
   playerBalance: number
+  themeColor: ThemeColor
 }): JSX.Element => {
   return (
     <header className="flex items-center justify-between h-header max-w-screen-md mx-auto px-4">
-      <h1 className="text-blue text-lg uppercase">Blackjack</h1>
+      <h1 className="text-primary text-lg uppercase">Blackjack</h1>
 
       <div className="flex items-center">
         <div className="mr-4 text-light-black">
@@ -50,7 +55,7 @@ const Header = ({
           <h2 className="my-4 text-light-grey uppercase">Gameplay</h2>
           <div className="flex items-center mb-2">
             <span className="w-48">Balance:</span>
-            <span className="text-blue font-bold">
+            <span className="text-primary font-bold">
               {formatCurrency(playerBalance)}
             </span>
           </div>
@@ -85,6 +90,30 @@ const Header = ({
           </div>
 
           <h2 className="my-4 text-light-grey uppercase">Customize UI</h2>
+          <div className="flex items-center mb-2">
+            <span className="w-48">Theme Color</span>
+            <div className="flex items-center space-x-4">
+              <div
+                className={clsx('w-8 h-8 rounded-full bg-blue cursor-pointer', {
+                  'border-4 border-black': themeColor === '#42b4e6',
+                })}
+                onClick={() => {
+                  onChangeThemeColor('#42b4e6')
+                }}
+              />
+              <div
+                className={clsx(
+                  'w-8 h-8 rounded-full bg-purple cursor-pointer',
+                  {
+                    'border-4 border-black': themeColor === '#6a0caf',
+                  }
+                )}
+                onClick={() => {
+                  onChangeThemeColor('#6a0caf')
+                }}
+              />
+            </div>
+          </div>
           <div className="flex items-center mb-2">
             <span className="w-48">Basic Strategy</span>
             <SlidingToggle

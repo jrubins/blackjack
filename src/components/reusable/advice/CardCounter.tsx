@@ -44,14 +44,14 @@ const CardCounter = ({
             <TagPicker
               onChange={onCountGuess}
               options={countOptions}
-              selectedColor={correctCountGuess ? 'blue' : 'red'}
+              selectedColor={correctCountGuess ? 'primary' : 'red'}
               value={countGuess}
             />
 
             {countGuess !== null && (
               <div
                 className={clsx('ml-4 text-xs font-bold uppercase', {
-                  'text-blue': correctCountGuess,
+                  'text-primary': correctCountGuess,
                   'text-red': !correctCountGuess,
                 })}
               >

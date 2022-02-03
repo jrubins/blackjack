@@ -22,6 +22,9 @@ const App = (): JSX.Element => {
     getConfigValue('isCardCounterOpen', true)
   )
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
+  const [themeColor, setThemeColor] = useState(
+    getConfigValue('themeColor', '#42b4e6')
+  )
 
   useDeferredEffect(() => {
     track(
@@ -67,6 +70,7 @@ const App = (): JSX.Element => {
     isBasicStrategyOpen,
     isCardCounterOpen,
     numDecks,
+    themeColor,
   })
 
   useEffect(() => {
@@ -97,6 +101,10 @@ const App = (): JSX.Element => {
     }
   }, [isPlayerTurn, gameSend])
 
+  useEffect(() => {
+    document.documentElement.style.setProperty('--theme-color', themeColor)
+  }, [themeColor])
+
   return (
     <>
       <Header
@@ -104,6 +112,7 @@ const App = (): JSX.Element => {
         isCardCounterOpen={isCardCounterOpen}
         isMobileNavOpen={isMobileNavOpen}
         numDecks={numDecks}
+        onChangeThemeColor={setThemeColor}
         onNumDecksChanged={(numDecks) => {
           gameSend({ numDecks, type: EVENTS.CHANGE_NUM_DECKS })
         }}
@@ -117,6 +126,7 @@ const App = (): JSX.Element => {
           setIsMobileNavOpen((isOpen) => !isOpen)
         }}
         playerBalance={playerBalance}
+        themeColor={themeColor}
       />
 
       <Routes>

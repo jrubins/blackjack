@@ -1,3 +1,5 @@
+import { ThemeColor } from './types'
+
 const LOCALSTORAGE_KEY = 'blackjack'
 
 export interface BlackjackConfig {
@@ -5,6 +7,7 @@ export interface BlackjackConfig {
   isBasicStrategyOpen: boolean
   isCardCounterOpen: boolean
   numDecks: number
+  themeColor: ThemeColor
 }
 
 function getBlackjackConfig(): BlackjackConfig {

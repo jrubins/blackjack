@@ -50,3 +50,5 @@ export enum SUITS {
   HEARTS = 'hearts',
   SPADES = 'spades',
 }
+
+export type ThemeColor = '#42b4e6' | '#6a0caf'

@@ -87,7 +87,7 @@ const Hand = ({
               left: 80 + cards.length * 20,
             }}
           >
-            <div className="w-4 h-4 text-blue">
+            <div className="w-4 h-4 text-primary">
               <ChevronDoubleLeftIcon />
             </div>
           </div>
@@ -96,7 +96,8 @@ const Hand = ({
       {cards.length > 0 && (
         <div className="flex flex-col justify-center w-28">
           <span className="mb-1 text-sm font-bold uppercase">
-            Total: <span className="text-blue text-md">{handTotalDisplay}</span>
+            Total:{' '}
+            <span className="text-primary text-md">{handTotalDisplay}</span>
           </span>
 
           {!isDealer && (
@@ -113,7 +114,7 @@ const Hand = ({
                   className={clsx('text-sm uppercase', {
                     'text-dark-grey': !result || result === HAND_RESULTS.PUSH,
                     'text-red': result === HAND_RESULTS.LOST,
-                    'text-blue': result === HAND_RESULTS.WON,
+                    'text-primary': result === HAND_RESULTS.WON,
                   })}
                   initial={{ opacity: 0 }}
                 >
